@@ -37,6 +37,7 @@ use App\Http\Controllers\HomeController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 Route::get('/', function () {
     return view('frontend.index');
 });
@@ -84,6 +85,7 @@ Route::prefix('admin')->group(function () {
        //======================================================================//
        // ========================== company =====================================//
         Route::resource('companies',                            CompanyController::class);
+        Route::post('company-store',                            [CompanyController::class, 'store'])->name('company-store');
         Route::get('fetch/terminal/details',                    [CompanyController::class, 'fetchTerminalDetails'])->name('fetch_terminal_details');
         Route::get('change/company/status/{table_id}',          [CompanyController::class, 'changeCompanyStatus'])->name('change_company_status');
        //======================================================================//
@@ -96,7 +98,7 @@ Route::prefix('admin')->group(function () {
         Route::resource('airport',                              AirportController::class)/*->middleware(['allow_admin'])*/;
         Route::get('change/airport/status/{table_id}',         [AirportController::class, 'changeAirportStatus'])->name('change_airport_status');
         //============================= End ===================================// 
-        //============================ airport ===============================//
+        //============================ terminals ===============================//
         Route::resource('terminals',                                    AirportTerminalController::class)/*->middleware(['allow_admin'])*/;
         Route::get('change/airport/terminal/status/{table_id}',         [AirportTerminalController::class, 'changeAirportTerminalStatus'])->name('change_airport_terminal_status');
         //============================= End ===================================//
