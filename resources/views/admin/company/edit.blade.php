@@ -260,7 +260,7 @@
                     @foreach ($offer_type as $offer_type_key => $offer_type_value)
                       <div class="checker">
                         <span>
-                          <input type="checkbox" <?php echo in_array($offer_type_value->id, $company->offer_types) ? 'checked' : ''?> name="offer_types[{{$offer_type_key}}]" value="{{$offer_type_value->id}}">
+                          <input type="checkbox" <?php echo in_array($offer_type_value->id, $company->offer_types ?? []) ? 'checked' : ''?> name="offer_types[{{$offer_type_key}}]" value="{{$offer_type_value->id}}">
                         </span>
                         {{$offer_type_value->name}}
                       </div>
@@ -275,7 +275,7 @@
                     @foreach ($company_type as $company_type_key => $company_type_value)
                       <div class="checker">
                         <span>
-                          <input type="checkbox" <?php echo in_array($company_type_value->id, $company->company_types) ? 'checked' : ''?> name="company_types[{{$company_type_key}}]" value="{{$company_type_value->id}}">
+                          <input type="checkbox" <?php echo in_array($company_type_value->id, $company->company_types ?? []) ? 'checked' : ''?> name="company_types[{{$company_type_key}}]" value="{{$company_type_value->id}}">
                         </span>
                         {{$company_type_value->name}}
                       </div>
@@ -290,7 +290,7 @@
                     @foreach ($service_type as $service_type_key => $service_type_value)
                       <div class="checker">
                         <span>
-                          <input type="checkbox" <?php echo in_array($service_type_value->id, $company->service_types) ? 'checked' : ''?> name="service_types[{{$service_type_key}}]" value="{{$service_type_value->id}}">
+                          <input type="checkbox" <?php echo in_array($service_type_value->id, $company->service_types ?? []) ? 'checked' : ''?> name="service_types[{{$service_type_key}}]" value="{{$service_type_value->id}}">
                         </span>
                         {{$service_type_value->name}}
                       </div>
