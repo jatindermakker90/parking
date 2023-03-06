@@ -100,6 +100,10 @@ Route::prefix('admin')->group(function () {
         Route::resource('terminals',                                    AirportTerminalController::class)/*->middleware(['allow_admin'])*/;
         Route::get('change/airport/terminal/status/{table_id}',         [AirportTerminalController::class, 'changeAirportTerminalStatus'])->name('change_airport_terminal_status');
         //============================= End ===================================//
+        //============================ settings ===============================//
+        Route::resource('settings',                                     SettingController::class);     
+        Route::get('pages/list',                                         [SettingController::class, 'index']); 
+        //============================= End ===================================//
     });
     
 });

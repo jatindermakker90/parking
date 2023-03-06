@@ -344,6 +344,15 @@ return [
                     'role'        => 'superadmin'
                ],
             ]
+        ],[
+            'text'        => 'Settings',
+            'icon'        => 'fas fa-setting',
+            'submenu' => [
+                 [
+                    'text'        => 'Add pages',
+                    'url'         => 'admin/pages/list',
+                ],               
+            ]
         ],
       
     ],
