@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Roles;
+use App\Models\Company;
 
 
 class User extends Authenticatable
@@ -84,6 +85,12 @@ class User extends Authenticatable
         return $this->belongsToMany(Roles::class,'user_roles', 'user_id', 'role_id');
         
     }
+
+    public function companies() {
+        return $this->belongsToMany(Company::class, 'assign_admin_to_companies', 'user_id', 'company_id');
+    }
+
+
     public function authorizeRoles($roles)
     {
         if (is_array($roles)) {

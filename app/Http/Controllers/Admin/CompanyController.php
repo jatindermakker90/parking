@@ -15,6 +15,7 @@ use App\Models\Countries;
 use App\Models\OfferType;
 use App\Models\CompanyType;
 use App\Models\ServiceType;
+use App\Models\AssignAdminToCompany;
 use DataTables;
 use Validator;
 
@@ -58,7 +59,7 @@ class CompanyController extends WebController
                             // $btn = '<a href="'.$view_url.'" class="view btn btn-success btn-sm mr-2"><i class="fa fa-eye" aria-hidden="true"></i></a>';
                             $btn = '<a href="'.$edit_url.'" class="edit btn btn-warning btn-sm mr-2"><i class="fa fa-edit" aria-hidden="true"></i></a>';
                             if($user->hasRole('superadmin')){
-                            $btn .= '<a href="'.$delete_url.'" class="delete btn btn-danger btn-sm mr-2 delete_record" data-type ="'.$row->name.' User""><i class="fa fa-trash" aria-hidden="true"></i></a>';
+                            $btn .= '<a href="'.$delete_url.'" class="delete btn btn-danger btn-sm mr-2 delete_record" data-type ="'.$row->name.' Company""><i class="fa fa-trash" aria-hidden="true"></i></a>';
                             }
                            return $btn;
                     })
@@ -107,9 +108,9 @@ class CompanyController extends WebController
             'company_title'             => 'required'
         ]);
   
-        // if($validator->fails()){
-        //    return redirect()->back()->withErrors($validator);      
-        // }
+        if($validator->fails()){
+           return redirect()->back()->withErrors($validator);      
+        }
         if($request->has('offer_types') && $request->offer_types){
             $request['offer_types'] = implode(', ', $request->offer_types);
         }
@@ -289,6 +290,145 @@ class CompanyController extends WebController
         return $this->sendSuccess($response,$message,200);      
     }
 
+    public function companyOwnersView(Request $request){
+        $companies  = Company::where('company_status','!=',config('constant.STATUS.DELETED'))
+                    ->get()->toArray();
+        // dd($companies);
+        $user = Auth::user();
+        $data_query = User::with(['companies'])->get();
+        // dd($data_query->toArray());
+        if ($request->ajax()) {
+            return Datatables::of($data_query)
+                    ->addIndexColumn()
+                    ->editColumn('user_status',function($row){
+                        $modify_url = route('change_users_status',[$row->id]);
+                        if($row->user_status)
+                        $btn = '<input type="checkbox" name="change_status" checked data-bootstrap-switch data-off-color="danger" data-on-color="success"  data-on-text="ACTIVE" data-off-text="INACTIVE" data-href ="'.$modify_url.'">';
+                        else
+                        $btn = '<input type="checkbox" name="change_status" data-bootstrap-switch data-off-color="danger" data-on-color="success"  data-on-text="ACTIVE" data-off-text="INACTIVE" data-href ="'.$modify_url.'">';
+                        return $btn;
+                    })
+                    ->addColumn('assign_user', function($row) use ($user){
+                        // $assign_user_url = route('admin/company/assign-user-to-companies', [$row->id]);
 
-    
+                        // $btn = '<button class="view open-assign-modal btn btn-default btn-sm mr-2" data-toggle="modal" data-target="#modal-default">Assign Admin</button>';
+                        $btn = '<button id=user_element_'.$row->id.' class="view open-assign-modal btn btn-default btn-sm mr-2">Assign Admin</button>';
+                        return $btn;
+                    })
+                    ->addColumn('assignd_companies', function($row) use ($user){
+                        
+                        if(!empty($row) && $row->companies){
+                            $div = '<ul class="assigned-company">';
+                            foreach ($row->companies as $c_key => $c_value) {
+                                $div .= '<li>'.$c_value->company_title.'<span data-uid="'.$row->id.'" data-cid="'.$c_value->id.'" class="assign-admin-remove">x</span></li>';
+                            }
+                            $div .= '</ul>';
+                        }
+                        else{
+                            $div = '<ul class="assigned-company"></ul>';
+                        }
+                        return $div;
+                    })
+                    ->addColumn('action', function($row) use ($user){
+                            $view_url    =  route('users.show',[$row->id]);
+                            $edit_url    =  route('users.edit',[$row->id]);
+                            if($user->hasRole('superadmin')){
+                               $delete_url  =  route('users.destroy',[$row->id]);
+                            }
+                            $btn = '<a href="'.$view_url.'" class="view btn btn-success btn-sm mr-2"><i class="fa fa-eye" aria-hidden="true"></i></a>';
+                            $btn .= '<a href="'.$edit_url.'" class="edit btn btn-warning btn-sm mr-2"><i class="fa fa-edit" aria-hidden="true"></i></a>';
+                            if($user->hasRole('superadmin')){
+                            $btn .= '<a href="'.$delete_url.'" class="delete btn btn-danger btn-sm mr-2 delete_record" data-type ="'.$row->name.' Company""><i class="fa fa-trash" aria-hidden="true"></i></a>';
+                            }
+                           return $btn;
+                    })
+                    ->rawColumns(['action','assign_user','user_status', 'assignd_companies'])
+                    ->make(true);
+        }
+        return view('admin.company.owners')->with([
+            'title' => 'Customer', 
+            "header" => " Listing",
+            'companies' =>  $companies
+        ]);
+    }
+
+    public function assignUserToCompanies(Request $request){
+        if(!$request->email){
+            return response()->json([
+                'code' => 203,
+                'success' => 'Email is required !'
+            ]);
+        }
+        if(!$request->company_id){
+            return response()->json([
+                'code' => 204,
+                'success' => 'Company id is required !'
+            ]);
+        }
+
+        $user_id = User::select('id')->where('email', $request->email)->first()->id;
+        if($user_id){
+            $request->merge(['user_id' => $user_id]);
+            $company_id = $request->company_id;
+            $company = Company::select('id','company_title')->where('id', $company_id)->first()->toArray();
+            $company['user_id'] = $user_id;
+            $company['user_element'] = $request->user_element;
+            $alreadyAssingAdmin = AssignAdminToCompany::where(['user_id'=>$user_id, 'company_id'=>$company_id])->get()->toArray();
+            if(count($alreadyAssingAdmin) > 0){
+                return response()->json([
+                    'code' => 202,
+                    'success' => 'Already assigned admin!'
+                ]);
+            }
+            else{
+                $assign_admin_to_company = AssignAdminToCompany::insert($request);
+                return response()->json([
+                    'code' => 200,
+                    'success' => 'Assign admin successfully!',
+                    'data' => $company
+                ]);
+            }
+            
+        }
+        else{
+            return response()->json([
+                'code' => 201,
+                'success' => 'User id is not found!'
+            ]);
+        }
+        
+    }
+
+    public function removeUserToCompanies(Request $request){
+        if(!$request->user_id){
+            return response()->json([
+                'code' => 203,
+                'success' => 'User id is required !'
+            ]);
+        }
+        if(!$request->company_id){
+            return response()->json([
+                'code' => 204,
+                'success' => 'Company id is required !'
+            ]);
+        }
+        $removeAssingAdmin = AssignAdminToCompany::where([
+            'user_id' => $request->user_id, 
+            'company_id' => $request->company_id 
+        ])->delete();
+        if($removeAssingAdmin){
+            return response()->json([
+                'code' => 200,
+                'success' => 'Assigned admin has been removed!',
+                'data' => $request->all()
+
+            ]);
+        }
+        else{
+            return response()->json([
+                'code' => 400,
+                'success' => 'Assigned admin couldn\'t removed.'
+            ]);
+        }
+    }
 }
