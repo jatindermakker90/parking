@@ -29,11 +29,13 @@
                   <thead>
                   <tr>
                     <th>Sr No.</th>
-                    <th>Airport Name</th>
-                    <th>Company Logo</th>
                     <th>Company Title</th>
+                    <th>Company Phone</th>
                     <th>Company Email</th>
-                    <th>Company Contact</th>
+                    <th>Company URL</th>
+                    <th>Airport ID</th>
+                    <th>Terminal ID</th>
+                    <th>Logo</th>
                     <th>Company Status</th>
                     <th>Action</th>
                   </tr>
@@ -54,6 +56,11 @@
 <link rel="stylesheet" href="{{ asset('vendor/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset('vendor/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset('vendor/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+<style>
+  /* .dataTables_wrapper{
+    overflow-x: scroll;
+  } */
+</style>
 @stop
 @section('js')
 <!-- DataTables  & Plugins -->
@@ -87,37 +94,14 @@ $(document).ready(function(){
       "responsive"  : true,
       "processing"  : true,
       "serverSide"  : true,
-      "ajax"        :"{{ url('admin/service-providers') }}?country="+country,
+      
+      "ajax"        :"{{ url('admin/companies') }}",
       "columns"     : [
             {
               data: 'DT_RowIndex',         
               name: 'DT_RowIndex',   
               searchable: false,
               orderable: false
-            },
-            {
-              data: 'airport_name',
-              name: 'airport_name', 
-              orderable: true,
-              render: function ( data, type, row) {
-                if(type === 'sort'){
-                    return data;
-                }else{
-                    return  data??'NA';
-                }
-              }
-            },
-            {
-              data: 'airport_name',
-              name: 'airport_name', 
-              orderable: true,
-              render: function ( data, type, row) {
-                if(type === 'sort'){
-                    return data;
-                }else{
-                    return  data??'NA';
-                }
-              }
             },
             {
               data: 'company_title',
@@ -132,10 +116,10 @@ $(document).ready(function(){
               }
             },
             {
-              data: 'company_email',
-              name: 'company_email',
+              data: 'company_phone',
+              name: 'company_phone', 
               orderable: true,
-               render: function ( data, type, row) {
+              render: function ( data, type, row) {
                 if(type === 'sort'){
                     return data;
                 }else{
@@ -144,8 +128,56 @@ $(document).ready(function(){
               }
             },
             {
-              data: 'company_phone',
-              name: 'company_phone',
+              data: 'company_email',
+              name: 'company_email', 
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type === 'sort'){
+                    return data;
+                }else{
+                    return  data??'NA';
+                }
+              }
+            },
+            {
+              data: 'company_url',
+              name: 'company_url', 
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type === 'sort'){
+                    return data;
+                }else{
+                    return  data??'NA';
+                }
+              }
+            },
+            {
+              data: 'airport_id',
+              name: 'airport_id', 
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type === 'sort'){
+                    return data;
+                }else{
+                    return  data??'NA';
+                }
+              }
+            },
+            {
+              data: 'terminal_id',
+              name: 'terminal_id', 
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type === 'sort'){
+                    return data;
+                }else{
+                    return  data??'NA';
+                }
+              }
+            },
+            {
+              data: 'logo_id',
+              name: 'logo_id', 
               orderable: true,
               render: function ( data, type, row) {
                 if(type === 'sort'){
@@ -158,6 +190,7 @@ $(document).ready(function(){
             {
               data: 'company_status',
               name: 'company_status',
+              orderable: true,
               render: function ( data, type, row) {
                 if(type == 'display'){
                     return data;
@@ -168,6 +201,7 @@ $(document).ready(function(){
                 }
               }
             },
+             
             {
               data: 'action',
               name: 'action', 
@@ -191,10 +225,13 @@ $(document).ready(function(){
                       message = data.message;
                     }
                     Swal.fire({
-                        title: message,
-                        showDenyButton: false,
-                        showCancelButton: false,
-                        confirmButtonText: `OK`,
+                          title: message,
+                          showDenyButton: false,
+                          showCancelButton: false,
+                          confirmButtonText: `OK`,
+                          allowOutsideClick: false,
+                          allowEscapeKey: false,
+                          allowOutsideClick: false
                         }).then((result) => {
                           window.location.reload();
                        
@@ -223,6 +260,9 @@ $(document).ready(function(){
           showDenyButton: false,
           showCancelButton: true,
           confirmButtonText: `OK`,
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          allowOutsideClick: false
           }).then((result) => {
             if (result.isConfirmed) {
               $.ajax({
