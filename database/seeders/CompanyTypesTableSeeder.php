@@ -15,7 +15,7 @@ class CompanyTypesTableSeeder extends Seeder
     public function run()
     {
         $company_types = ['MEET AND GREET', 'PARK AND RIDE', 'ON SITE'];
-        
+        DB::table('company_types')->truncate();
         foreach ($company_types as $value) {
             DB::table('company_types')->insert([
                 'name' => $value,

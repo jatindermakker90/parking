@@ -25,7 +25,7 @@ class ServiceTypeTableSeeder extends Seeder
             'BPA Member',
             'Drop Keys'
         ];
-        
+        DB::table('service_types')->truncate();
         foreach ($service_type as $value) {
             DB::table('service_types')->insert([
                 'name' => $value,
