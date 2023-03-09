@@ -344,7 +344,26 @@ return [
                     'role'        => 'superadmin'
                ],
             ]
-        ],[
+        ],
+        [
+            'text'        => 'Discount',
+            'icon'        => 'fas fa-building',
+            'submenu' => [
+                [
+                    'text'        => 'Add Flat Discount',
+                    'url'         => 'discount/flat-discount'
+                ],
+                [
+                    'text'        => 'Add Affiliated',
+                    'url'         => '#'
+                ], 
+                [
+                    'text'        => 'Add Offer Type',
+                    'url'         => '#'
+                ],
+            ]
+        ],
+        [
             'text'        => 'Settings',
             'icon'        => 'fas fa-setting',
             'submenu' => [
