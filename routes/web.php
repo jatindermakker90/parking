@@ -73,9 +73,6 @@ Route::prefix('admin')->group(function () {
         Route::get('fetch/product/details',                    [ProductsController::class, 'getProductDetails'])->name('get_product_details');
 
         Route::resource('bookings',                            BookingsController::class);
-        Route::get('add/booking',                              [BookingsController::class, 'create']); 
-        Route::get('cancelled/booking',                        [BookingsController::class, 'cancelledBookingList'])->name('cancelled_booking'); 
-        Route::get('trasheded/booking',                        [BookingsController::class, 'trashededBookingList'])->name('trasheded_booking'); 
         Route::get('change/booking/status/{table_id}',         [BookingsController::class, 'changeBookingsStatus'])->name('change_booking_status');
 
         Route::resource('invoices',                            InvoiceController::class);
@@ -113,6 +110,16 @@ Route::prefix('admin')->group(function () {
         Route::resource('settings',                                     SettingController::class);     
         Route::get('pages/list',                                         [SettingController::class, 'index']); 
         //============================= End ===================================//
+
+        // ========================== company =====================================//
+        Route::resource('discount/offer-type',                  [CompanyController::class, ]);
+        Route::post('company-store',                            [CompanyController::class, 'store'])->name('company-store');
+        Route::get('fetch/terminal/details',                    [CompanyController::class, 'fetchTerminalDetails'])->name('fetch_terminal_details');
+        Route::get('company/owners',                            [CompanyController::class, 'companyOwnersView'])->name('company-owners');
+        Route::get('change/company/status/{table_id}',          [CompanyController::class, 'changeCompanyStatus'])->name('change_company_status');
+        Route::post('company/assign-user-to-companies',         [CompanyController::class, 'assignUserToCompanies'])->name('assign-user-to-companies');
+        Route::post('company/remove-user-to-companies',         [CompanyController::class, 'removeUserToCompanies'])->name('remove-user-to-companies');
+       //======================================================================//
     });
     
 });
