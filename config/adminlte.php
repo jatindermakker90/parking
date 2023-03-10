@@ -359,8 +359,28 @@ return [
                 ], 
                 [
                     'text'        => 'Add Offer Type',
+                    'url'         => 'discount/offer-type'
+                ],
+                [
+                    'text'        => 'Add Discount',
                     'url'         => '#'
                 ],
+                [
+                    'text'        => 'Assign Discount',
+                    'url'         => '#'
+                ],
+                [
+                    'text'        => 'Discount List',
+                    'url'         => '#'
+                ],
+                [
+                    'text'        => 'Discount Report',
+                    'url'         => '#'
+                ],
+                [
+                    'text'        => 'Discount Code Report',
+                    'url'         => '#'
+                ]
             ]
         ],
         [
