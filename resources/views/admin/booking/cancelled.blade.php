@@ -5,14 +5,7 @@
         <div class="row mb-2">
           <div class="col-sm-6">
             <h1>{{ $title }}</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <a href ="{{ route('bookings.create') }}">
-              <button type="button" class="btn btn-block btn-primary"> + Add Booking</button>
-              </a>
-            </ol>
-          </div>
+          </div>         
         </div>
         <div class="row">
             <div class="col-sm-2">
@@ -30,44 +23,44 @@
                 <div class="form-group">
                     <label>Airport:</label>
                     <select class="form-control select2" name ="select_airport" id ="select_airport">
-                    <option value="">All</option>
-                    @foreach ($airports as $airport_key => $airport_value)
-                      <option value="{{ $airport_value->id }}">{{ $airport_value->airport_name }}</option>
-                    @endforeach               
-                </select>
+		                <option value="">All</option>
+		                @foreach ($airports as $airport_key => $airport_value)
+		                  <option value="{{ $airport_value->id }}">{{ $airport_value->airport_name }}</option>
+		                @endforeach               
+		            </select>
                 </div>
             </div>
             <div class="col-sm-2">
                 <div class="form-group">
                     <label>Company:</label>
                     <select class="form-control select2" name ="select_airport" id ="select_airport">
-                    <option value="">All</option>
-                    @foreach ($companies as $company_key => $company_value)
-                      <option value="{{ $company_value->id }}">{{ $company_value->company_title }}</option>
-                    @endforeach               
-                </select>
+		                <option value="">All</option>
+		                @foreach ($companies as $company_key => $company_value)
+		                  <option value="{{ $company_value->id }}">{{ $company_value->company_title }}</option>
+		                @endforeach               
+		            </select>
                 </div>
             </div>
             <div class="col-sm-1">
                 <div class="form-group">
                     <label>Type:</label>
                     <select class="form-control select2" name ="select_airport" id ="select_airport">
-                    <option value="">All</option>
-                    <option value="">Booking Date</option>
-                    <option value="">Departure Date</option>
-                    <option value="">Arrival Date</option>                               
-                </select>
+		                <option value="">All</option>
+		                <option value="">Booking Date</option>
+		                <option value="">Departure Date</option>
+		                <option value="">Arrival Date</option>		                           
+		            </select>
                 </div>
             </div>
             <div class="col-sm-1">
                 <div class="form-group">
                     <label>Status:</label>
                     <select class="form-control select2" name ="select_airport" id ="select_airport">
-                    <option value="">All</option>
-                    <option value="">Active</option>
-                    <option value="">InActive</option>
-                    <option value="">Cancelled</option>                              
-                </select>
+		                <option value="">All</option>
+		                <option value="">Active</option>
+		                <option value="">InActive</option>
+		                <option value="">Cancelled</option>		                           
+		            </select>
                 </div>
             </div>
             <div class="col-sm-2">
