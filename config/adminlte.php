@@ -373,7 +373,7 @@ return [
             'submenu' => [
                 [
                     'text'        => 'Add Flat Discount',
-                    'url'         => 'discount/flat-discount'
+                    'url'         => 'admin/discount/flat-discount'
                 ],
                 [
                     'text'        => 'Add Affiliated',
@@ -381,7 +381,7 @@ return [
                 ], 
                 [
                     'text'        => 'Add Offer Type',
-                    'url'         => 'discount/offer-type'
+                    'url'         => 'admin/discount/offer-type'
                 ],
                 [
                     'text'        => 'Add Discount',

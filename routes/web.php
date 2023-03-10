@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\DriverController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\OfferTypeController;
 
 
 use App\Http\Controllers\HomeController;
@@ -111,14 +112,11 @@ Route::prefix('admin')->group(function () {
         Route::get('pages/list',                                         [SettingController::class, 'index']); 
         //============================= End ===================================//
 
-        // ========================== company =====================================//
-        Route::resource('discount/offer-type',                  [CompanyController::class, ]);
-        Route::post('company-store',                            [CompanyController::class, 'store'])->name('company-store');
-        Route::get('fetch/terminal/details',                    [CompanyController::class, 'fetchTerminalDetails'])->name('fetch_terminal_details');
-        Route::get('company/owners',                            [CompanyController::class, 'companyOwnersView'])->name('company-owners');
-        Route::get('change/company/status/{table_id}',          [CompanyController::class, 'changeCompanyStatus'])->name('change_company_status');
-        Route::post('company/assign-user-to-companies',         [CompanyController::class, 'assignUserToCompanies'])->name('assign-user-to-companies');
-        Route::post('company/remove-user-to-companies',         [CompanyController::class, 'removeUserToCompanies'])->name('remove-user-to-companies');
+        // ========================== discount =====================================//
+        Route::prefix('discount')->group(function () {
+            Route::resource('offer-type',                           OfferTypeController::class);
+            Route::get('offer-type-create',                         [OfferTypeController::class, 'create'])->name('offer-type-create');
+        });
        //======================================================================//
     });
     
