@@ -8,7 +8,7 @@
           </div>
           <div class="col-sm-6">
            <ol class="breadcrumb float-sm-right">
-              <a href ="{{ route('offer-type-create') }}"> 
+              <a href ="{{ route('offer-type.create') }}"> 
                <button type="button" class="btn btn-block btn-primary"> + Add {{ $title }}</button> 
               </a>
             </ol>
@@ -17,33 +17,33 @@
       </div>
 @stop
 @section('content')
-  <div class="row">
-          <div class="col-12">
+    <div class="row">
+        <div class="col-12">
             <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">{{ $header }}</h3>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-                <table id="data_collection" class="table table-bordered table-striped">
-                  <thead>
-                  <tr>
-                    <th>Sr No.</th>
-                    <th>Offer Name</th>
-                    <th>Offer Status</th>
-                    <th>Action</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  </tbody>
-                </table>
-              </div>
-              <!-- /.card-body -->
+                <div class="card-header">
+                    <h3 class="card-title">{{ $header }}</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <table id="data_collection" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Sr No.</th>
+                                <th>Name</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.card-body -->
             </div>
             <!-- /.card -->
-          </div>
-          <!-- /.col -->
         </div>
+        <!-- /.col -->
+    </div>
 @stop
 @section('css')
 <link rel="stylesheet" href="{{ asset('vendor/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
@@ -51,9 +51,7 @@
 <link rel="stylesheet" href="{{ asset('vendor/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset('vendor/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 <style>
-  /* .dataTables_wrapper{
-    overflow-x: scroll;
-  } */
+ 
 </style>
 @stop
 @section('js')
@@ -73,10 +71,8 @@
 <script src="{{ asset('vendor/bootstrap-switch/js/bootstrap-switch.min.js') }}"></script>
 <script src="{{ asset('vendor/moment/moment.min.js') }}"></script> 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-<script type="text/javascript">
-$(document).ready(function(){
-    $('.select2').select2();
-    $('#data_collection').DataTable({
+<script>
+     $('#data_collection').DataTable({
       "paging"      : true,
       "pageLength"  : 10,
       "lengthChange": false,
@@ -113,18 +109,6 @@ $(document).ready(function(){
               name: 'status', 
               orderable: true,
               render: function ( data, type, row) {
-                if(type === 'sort'){
-                    return data;
-                }else{
-                    return  data??'NA';
-                }
-              }
-            },
-            {
-              data: 'action',
-              name: 'action',
-              orderable: true,
-              render: function ( data, type, row) {
                 if(type == 'display'){
                     return data;
                 }else if(type === 'sort'){
@@ -134,13 +118,12 @@ $(document).ready(function(){
                 }
               }
             },
-             
-            // {
-            //   data: 'action',
-            //   name: 'action', 
-            //   orderable: false,
+            {
+              data: 'action',
+              name: 'action', 
+              orderable: false,
             
-            // }
+            },
       ],
       fnDrawCallback: function (oSettings, json) {
 
@@ -175,45 +158,5 @@ $(document).ready(function(){
           
       } 
   });
-  $(document).on('change','#country',function(e){
-      country              = $('#country').val();
-      var location         = "{{ url('admin/service-providers') }}?country="+country;
-      window.location.href = location;
-  });
-  $(document).on('click','.delete_record',function(e){
-
-    e.preventDefault();
-      var delete_type     = $(this).data('type');
-      var delete_message  = 'Do you want to delete '+delete_type+'?';
-      var success_message = delete_type+' deleted successfully';
-      var deny_message    = delete_type+' not deleted.';
-      var href            = $(this).attr('href');
-      Swal.fire({
-          title: delete_message,
-          showDenyButton: false,
-          showCancelButton: true,
-          confirmButtonText: `OK`,
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          allowOutsideClick: false
-          }).then((result) => {
-            if (result.isConfirmed) {
-              $.ajax({
-                url: href,
-                type: 'DELETE',
-                success:function(data){
-                //  console.log(data);
-                   Swal.fire(success_message, '', 'success');
-                   window.location.reload();
-                },
-              });
-
-            } else if (result.isDenied) {
-              Swal.fire(deny_message, '', 'info')
-            }
-      });
-  });
-    
-});
 </script>
 @stop

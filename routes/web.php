@@ -115,7 +115,8 @@ Route::prefix('admin')->group(function () {
         // ========================== discount =====================================//
         Route::prefix('discount')->group(function () {
             Route::resource('offer-type',                           OfferTypeController::class);
-            Route::get('offer-type-create',                         [OfferTypeController::class, 'create'])->name('offer-type-create');
+            Route::get('offer-type-create',                         [OfferTypeController::class, 'create']);
+            Route::get('change/offerType/status/{table_id}',        [OfferTypeController::class, 'changeOfferTypeStatus'])->name('change_offer_type_status');
         });
        //======================================================================//
     });
