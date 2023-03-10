@@ -330,19 +330,41 @@ return [
             'text'        => 'Company Management',
             'icon'        => 'fas fa-building',
             'submenu' => [
-                 [
+                [
                     'text'        => 'Companies',
                     'url'         => 'admin/companies',
                 ],
                 [
                     'text'        => 'Assign Admin',
                     'url'         => 'admin/company/owners',
-               ], 
-               [
+                ], 
+                [
                     'text'        => 'Close Company',
                     'url'         => 'admin/companies/status',
                     'role'        => 'superadmin'
-               ],
+                ],
+            ]
+        ],[
+            'text'        => 'Booking Management',
+            'icon'        => 'fas fa-id-card',
+            'submenu' => [
+                [
+                    'text'        => 'Bookings',
+                    'url'         => 'admin/bookings',
+                ],
+                [
+                    'text'        => 'Add Booking',
+                    'url'         => 'admin/add/booking',
+                ],
+                [
+                    'text'        => 'Cancelled Booking',
+                    'url'         => 'admin/cancelled/booking',
+                ], 
+                [
+                    'text'        => 'Trasheded Booking',
+                    'url'         => 'admin/trasheded/booking',
+                    //'role'        => 'superadmin'
+                ],
             ]
         ],[
             'text'        => 'Settings',

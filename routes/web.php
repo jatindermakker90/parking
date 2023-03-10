@@ -73,6 +73,9 @@ Route::prefix('admin')->group(function () {
         Route::get('fetch/product/details',                    [ProductsController::class, 'getProductDetails'])->name('get_product_details');
 
         Route::resource('bookings',                            BookingsController::class);
+        Route::get('add/booking',                              [BookingsController::class, 'create']); 
+        Route::get('cancelled/booking',                        [BookingsController::class, 'cancelledBookingList'])->name('cancelled_booking'); 
+        Route::get('trasheded/booking',                        [BookingsController::class, 'trashededBookingList'])->name('trasheded_booking'); 
         Route::get('change/booking/status/{table_id}',         [BookingsController::class, 'changeBookingsStatus'])->name('change_booking_status');
 
         Route::resource('invoices',                            InvoiceController::class);
