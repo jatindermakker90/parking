@@ -366,7 +366,46 @@ return [
                     //'role'        => 'superadmin'
                 ],
             ]
-        ],[
+        ],
+        [
+            'text'        => 'Discount',
+            'icon'        => 'fas fa-building',
+            'submenu' => [
+                [
+                    'text'        => 'Add Flat Discount',
+                    'url'         => 'admin/discount/flat-discount'
+                ],
+                [
+                    'text'        => 'Add Affiliated',
+                    'url'         => '#'
+                ], 
+                [
+                    'text'        => 'Add Offer Type',
+                    'url'         => 'admin/discount/offer-type'
+                ],
+                [
+                    'text'        => 'Add Discount',
+                    'url'         => 'admin/discount/add-discount'
+                ],
+                [
+                    'text'        => 'Assign Discount',
+                    'url'         => '#'
+                ],
+                [
+                    'text'        => 'Discount List',
+                    'url'         => '#'
+                ],
+                [
+                    'text'        => 'Discount Report',
+                    'url'         => '#'
+                ],
+                [
+                    'text'        => 'Discount Code Report',
+                    'url'         => '#'
+                ]
+            ]
+        ],
+        [
             'text'        => 'Settings',
             'icon'        => 'fa fa-cog',
             'submenu' => [
