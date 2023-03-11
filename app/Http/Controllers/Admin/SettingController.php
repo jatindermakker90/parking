@@ -14,7 +14,7 @@ class SettingController extends Controller
      */
     public function index()
     {
-        return view('admin.settings.index')->with(['title' =>'Site Settings', "header" => "Config Setting"]);
+        return view('admin.settings.index')->with(['title' =>'Site Settings', "header" => "Please enter site settings details"]);
     }
 
     /**
