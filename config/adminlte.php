@@ -368,11 +368,11 @@ return [
             ]
         ],[
             'text'        => 'Settings',
-            'icon'        => 'fas fa-setting',
+            'icon'        => 'fa fa-cog',
             'submenu' => [
                  [
                      'text'        => 'Site Settings',
-                     'url'         => 'site/settings',
+                     'url'         => 'admin/site/settings',
                  ],
                  [
                     'text'        => 'Add pages',

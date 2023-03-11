@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\DriverController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\SettingController;
 
 
 use App\Http\Controllers\HomeController;
@@ -58,7 +59,7 @@ Route::prefix('admin')->group(function () {
        Route::get('dashboard/stats', [AdminHomeController::class, 'adminDashboardStats'])->name('admin_dashbaord_stats');
        Route::get('dashboard/rides', [AdminHomeController::class, 'adminDashboardRides'])->name('admin_dashbaord_rides');
        Route::get('dashboard/commission', [AdminHomeController::class, 'adminDashboardCommissons'])->name('admin_dashbaord_commissions');
-   
+
        // ========================= Roles ====================================//
        Route::get('/user/roles',  [AdminHomeController::class, 'userRoles'])->name('user_roles');
        Route::get('change/user/roles/status/{table_id}',  [AdminHomeController::class, 'changeUserRolesStatus'])->name('change_user_roles_status');
@@ -73,9 +74,9 @@ Route::prefix('admin')->group(function () {
         Route::get('fetch/product/details',                    [ProductsController::class, 'getProductDetails'])->name('get_product_details');
 
         Route::resource('bookings',                            BookingsController::class);
-        Route::get('add/booking',                              [BookingsController::class, 'create']); 
-        Route::get('cancelled/booking',                        [BookingsController::class, 'cancelledBookingList'])->name('cancelled_booking'); 
-        Route::get('trasheded/booking',                        [BookingsController::class, 'trashededBookingList'])->name('trasheded_booking'); 
+        Route::get('add/booking',                              [BookingsController::class, 'create']);
+        Route::get('cancelled/booking',                        [BookingsController::class, 'cancelledBookingList'])->name('cancelled_booking');
+        Route::get('trasheded/booking',                        [BookingsController::class, 'trashededBookingList'])->name('trasheded_booking');
         Route::get('change/booking/status/{table_id}',         [BookingsController::class, 'changeBookingsStatus'])->name('change_booking_status');
 
         Route::resource('invoices',                            InvoiceController::class);
@@ -103,16 +104,16 @@ Route::prefix('admin')->group(function () {
         //============================ airport ===============================//
         Route::resource('airport',                              AirportController::class)/*->middleware(['allow_admin'])*/;
         Route::get('change/airport/status/{table_id}',         [AirportController::class, 'changeAirportStatus'])->name('change_airport_status');
-        //============================= End ===================================// 
+        //============================= End ===================================//
         //============================ terminals ===============================//
         Route::resource('terminals',                                    AirportTerminalController::class)/*->middleware(['allow_admin'])*/;
         Route::get('change/airport/terminal/status/{table_id}',         [AirportTerminalController::class, 'changeAirportTerminalStatus'])->name('change_airport_terminal_status');
         //============================= End ===================================//
 
         //============================ settings ===============================//
-        Route::resource('settings',                                     SettingController::class);     
-        Route::get('pages/list',                                         [SettingController::class, 'index']); 
+        Route::resource('site/settings',                                     SettingController::class);
+        Route::get('pages/list',                                         [SettingController::class, 'getpagelist'])->name('get_page_list');
         //============================= End ===================================//
     });
-    
+
 });
