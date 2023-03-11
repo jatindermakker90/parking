@@ -367,8 +367,8 @@ return [
                 ],
             ]
         ],[
-            'text'        => 'Settings',
-            'icon'        => 'fas fa-setting',
+            'text'        => 'Site Settings',
+            'icon'        => 'fas fa-cog',
             'submenu' => [
                  [
                     'text'        => 'Add pages',
