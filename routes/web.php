@@ -23,6 +23,8 @@ use App\Http\Controllers\Admin\DriverController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\OfferTypeController;
+use App\Http\Controllers\Admin\AddDiscountController;
+use App\Http\Controllers\Admin\FlatDiscountController;
 
 
 use App\Http\Controllers\HomeController;
@@ -117,6 +119,12 @@ Route::prefix('admin')->group(function () {
             Route::resource('offer-type',                           OfferTypeController::class);
             Route::get('offer-type-create',                         [OfferTypeController::class, 'create']);
             Route::get('change/offerType/status/{table_id}',        [OfferTypeController::class, 'changeOfferTypeStatus'])->name('change_offer_type_status');
+
+
+            Route::resource('add-discount',                           AddDiscountController::class);
+
+            Route::resource('flat-discount',                           FlatDiscountController::class);
+
         });
        //======================================================================//
     });

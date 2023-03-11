@@ -385,7 +385,7 @@ return [
                 ],
                 [
                     'text'        => 'Add Discount',
-                    'url'         => '#'
+                    'url'         => 'admin/discount/add-discount'
                 ],
                 [
                     'text'        => 'Assign Discount',
