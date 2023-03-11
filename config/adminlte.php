@@ -303,7 +303,7 @@ return [
                     'text'        => 'Admin',
                     'url'         => 'admin/service-providers',
                     'role'        => 'superadmin'
-               ], 
+               ],
                [
                     'text'        => 'Country',
                     'url'         => 'admin/countries',
@@ -337,7 +337,7 @@ return [
                 [
                     'text'        => 'Assign Admin',
                     'url'         => 'admin/company/owners',
-                ], 
+                ],
                 [
                     'text'        => 'Close Company',
                     'url'         => 'admin/companies/status',
@@ -359,24 +359,72 @@ return [
                 [
                     'text'        => 'Cancelled Booking',
                     'url'         => 'admin/cancelled/booking',
-                ], 
+                ],
                 [
                     'text'        => 'Trasheded Booking',
                     'url'         => 'admin/trasheded/booking',
                     //'role'        => 'superadmin'
                 ],
             ]
+
         ],[
             'text'        => 'Site Settings',
             'icon'        => 'fas fa-cog',
+
+        ],
+        [
+            'text'        => 'Discount',
+            'icon'        => 'fas fa-building',
             'submenu' => [
+                [
+                    'text'        => 'Add Flat Discount',
+                    'url'         => 'admin/discount/flat-discount'
+                ],
+                [
+                    'text'        => 'Add Affiliated',
+                    'url'         => '#'
+                ], 
+                [
+                    'text'        => 'Add Offer Type',
+                    'url'         => 'admin/discount/offer-type'
+                ],
+                [
+                    'text'        => 'Add Discount',
+                    'url'         => 'admin/discount/add-discount'
+                ],
+                [
+                    'text'        => 'Assign Discount',
+                    'url'         => '#'
+                ],
+                [
+                    'text'        => 'Discount List',
+                    'url'         => '#'
+                ],
+                [
+                    'text'        => 'Discount Report',
+                    'url'         => '#'
+                ],
+                [
+                    'text'        => 'Discount Code Report',
+                    'url'         => '#'
+                ]
+            ]
+        ],
+        [
+            'text'        => 'Settings',
+            'icon'        => 'fa fa-cog',
+            'submenu' => [
+                 [
+                     'text'        => 'Site Settings',
+                     'url'         => 'admin/site/settings',
+                 ],
                  [
                     'text'        => 'Add pages',
                     'url'         => 'admin/pages/list',
-                ],               
+                ],
             ]
         ],
-      
+
     ],
 
     /*

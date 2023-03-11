@@ -14,7 +14,7 @@ class SettingController extends Controller
      */
     public function index()
     {
-        dd('hereeeee');
+        return view('admin.settings.index')->with(['title' =>'Site Settings', "header" => "Please enter site settings details"]);
     }
 
     /**
@@ -81,5 +81,9 @@ class SettingController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getpagelist(){
+      return view('admin.settings.pagelist')->with(['title' =>'Page List', "header" => "Config Page"]);
     }
 }
