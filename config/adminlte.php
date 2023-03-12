@@ -393,15 +393,15 @@ return [
                 ],
                 [
                     'text'        => 'Discount List',
-                    'url'         => 'admin/discount/discoun-code-list'
+                    'url'         => 'admin/discount/discount-code-list'
                 ],
                 [
                     'text'        => 'Discount Report',
-                    'url'         => 'admin/discount/discoun-code-report'
+                    'url'         => 'admin/discount/discount-code-report'
                 ],
                 [
                     'text'        => 'Discount Code Report',
-                    'url'         => '#'
+                    'url'         => 'admin/discount/discount-code-code-report'
                 ]
             ]
         ],

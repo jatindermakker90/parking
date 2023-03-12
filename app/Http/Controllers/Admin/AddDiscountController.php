@@ -165,7 +165,10 @@ class AddDiscountController extends WebController
                         $todayDate = date('d-m-Y', strtotime(now()));
                         $startDate = date('d-m-Y', strtotime($row->start_date)); 
                         $lastDate = date('d-m-Y', strtotime($row->end_date));
-                        if($startDate < $todayDate && $todayDate < $lastDate){
+                        if($startDate > $todayDate){
+                            return 'comming';
+                        }
+                        else if($startDate <= $todayDate && $todayDate < $lastDate){
                             return 'Active';
                         }
                         else{
@@ -207,7 +210,10 @@ class AddDiscountController extends WebController
                         $todayDate = date('d-m-Y', strtotime(now()));
                         $startDate = date('d-m-Y', strtotime($row->start_date)); 
                         $lastDate = date('d-m-Y', strtotime($row->end_date));
-                        if($startDate < $todayDate && $todayDate < $lastDate){
+                        if($startDate > $todayDate){
+                            return 'comming';
+                        }
+                        else if($startDate <= $todayDate && $todayDate < $lastDate){
                             return 'Active';
                         }
                         else{
@@ -221,6 +227,45 @@ class AddDiscountController extends WebController
             'title' => 'Discount Report', 
             'header' => "Discount Code Report",
             'offer_type' => $offer_type
+        ]);
+    }
+
+    public function discountCodeCodeReport(Request $request){
+          
+        
+        if ($request->ajax()) {
+            $all_disount_codes = AddDiscount::get(); 
+            // $offer_type_id = $request->offer_type;
+            // $start_date = date('Y-m-d', strtotime($request->start_date));
+            // $end_date = date('Y-m-d', strtotime($request->end_date));
+
+            // $addDiscount = AddDiscount::where('offer_type_id', $offer_type_id)
+            //             ->where('start_date', '>=', $start_date)
+            //             ->where('end_date', '<=', $end_date)
+            //             ->get();
+
+            return Datatables::of($all_disount_codes)
+                    ->addIndexColumn()
+                    ->addColumn('status', function($row){
+                        $todayDate = date('d-m-Y', strtotime(now()));
+                        $startDate = date('d-m-Y', strtotime($row->start_date)); 
+                        $lastDate = date('d-m-Y', strtotime($row->end_date));
+                        if($startDate > $todayDate){
+                            return 'comming';
+                        }
+                        else if($startDate <= $todayDate && $todayDate < $lastDate){
+                            return 'Active';
+                        }
+                        else{
+                            return 'Expired';
+                        }
+                    })
+                    ->rawColumns(['status'])
+                    ->make(true);
+        }
+        return view('admin.discountAddDiscount.discount-code-report')->with([
+            'title' => 'Discount Report', 
+            'header' => "Discount Code Details Report"
         ]);
     }
 }

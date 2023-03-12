@@ -123,8 +123,9 @@ Route::prefix('admin')->group(function () {
 
 
             Route::resource('add-discount',                           AddDiscountController::class);
-            Route::get('discoun-code-list',                           [AddDiscountController::class, 'discountCodeList'])->name('discoun-code-list');
-            Route::get('discoun-code-report',                           [AddDiscountController::class, 'discountCodeReport'])->name('discoun-code-report');
+            Route::get('discount-code-list',                          [AddDiscountController::class, 'discountCodeList'])->name('discount-code-list');
+            Route::get('discount-code-report',                        [AddDiscountController::class, 'discountCodeReport'])->name('discount-code-report');
+            Route::get('discount-code-code-report',                   [AddDiscountController::class, 'discountCodeCodeReport'])->name('discount-code-code-report');
 
             Route::resource('flat-discount',                           FlatDiscountController::class);
 

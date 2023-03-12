@@ -20,30 +20,13 @@
   <div class="row">
     <div class="col-12">
       <div class="card">
-        <form method="POST" action="{{ route('discount-code-report') }}" enctype="multipart/form-data" id="discountReportFilter">
+        <form method="POST" action="{{ route('discount-code-code-report') }}" enctype="multipart/form-data" id="discountReportFilter">
           <div class="card-header">
               <h3 class="card-title">{{ $header }}</h3>
           </div>
           <div class="card-body">
             <div class="row col-12">
-              <div class="col-sm-4">
-                  <div class="form-group {{ $errors->has('offer_type') ? 'has-error' : '' }}">
-                    <label for="airport">Select Offer</label>
-                    <select class="form-control select2" style="width: 100%;" required name="offer_type" id="offer_type">
-                        <option value="">Select offer</option>
-                        @if($offer_type->count())
-                          @foreach ($offer_type as $offer_type_key => $offer_type_value)
-                              <option value="{{ $offer_type_value->id }}">{{ $offer_type_value->name }}</option>
-                          @endforeach
-                        @endif
-                    </select>
-                    <span class="ajax-error">Please select offer type</span>
-                    @if ($errors->first('offer_type'))
-                        <span class="form-error">{{ $errors->first('offer_type') }}</span>
-                    @endif
-                </div>
-              </div>
-              <div class="col-sm-4">
+              <div class="col-sm-6">
                 <div class="form-group {{ $errors->has('start_date') ? 'has-error' : '' }}">
                     <label for="start_date">Select Start Date</label>
                     {{old('start_date')}}
@@ -54,7 +37,7 @@
                     @endif
                 </div>
               </div>
-              <div class="col-sm-4">
+              <div class="col-sm-6">
                 <div class="form-group {{ $errors->has('end_date') ? 'has-error' : '' }}">
                     <label for="end_date">Select End Date</label>
                     <input type="date" class="form-control" required name="end_date" id="end_date" value="{{ old('end_date') ?? '' }}">
@@ -74,7 +57,7 @@
       </div>
     </div>
   </div>
-  <div class="row" id="discount-report-result">
+  <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
@@ -144,31 +127,71 @@
   $(document).ready(function(){
     $('.select2').select2();
 
+    $('#data_collection').DataTable({
+        "paging"      : true,
+        "pageLength"  : 10,
+        "lengthChange": false,
+        "searching"   : true,
+        "ordering"    : true,
+        "info"        : true,
+        "autoWidth"   : false,
+        "responsive"  : true,
+        "processing"  : true,
+        "serverSide"  : true,
+        "ajax"        : "{{ route('discount-code-code-report') }}",
+        "columns"     : [
+            {
+                data: 'DT_RowIndex',         
+                name: 'DT_RowIndex',   
+                searchable: false,
+                orderable: false
+            },
+            {
+                data: 'name',
+                name: 'name', 
+                orderable: true,
+                render: function ( data, type, row) {
+                    if(type === 'sort'){
+                        return data;
+                    }else{
+                        return  data??'NA';
+                    }
+                }
+            },
+            {
+                data: 'status',
+                name: 'status', 
+                orderable: true,
+                render: function ( data, type, row) {
+                    if(type === 'sort'){
+                        return data;
+                    }else{
+                        return data;
+                    }
+                }
+            }   
+        ]
+    });
+
     $(document).on('click','#submitButton',function(e){
         e.preventDefault();
         let targetEle = $("#discountReportFilter");
         let formData = targetEle.serialize();
         let formDataArray = targetEle.serializeArray();
-
+        
         if(formDataArray[0].value){
-            $("#offer_type").siblings('.ajax-error').hide();
-        }
-        else{
-            $("#offer_type").siblings('.ajax-error').show();
-        }
-        if(formDataArray[1].value){
             $("#start_date").siblings('.ajax-error').hide();
         }
         else{
             $("#start_date").siblings('.ajax-error').show();
         }
-        if(formDataArray[2].value){
+        if(formDataArray[1].value){
             $("#end_date").siblings('.ajax-error').hide();
         }
         else{
             $("#end_date").siblings('.ajax-error').show();
         }
-        if(formDataArray[0].value && formDataArray[1].value && formDataArray[2].value){
+        if(formDataArray[0].value && formDataArray[1].value){
             let apiUrl = targetEle.attr('action');
             let href = `${apiUrl}?${formData}`;
             

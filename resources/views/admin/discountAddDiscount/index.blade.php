@@ -93,7 +93,7 @@
       "processing"  : true,
       "serverSide"  : true,
       
-      "ajax"        :"{{ url('admin/discount/discoun-code-list') }}",
+      "ajax"        :"{{ url('admin/discount/discount-code-list') }}",
       "columns"     : [
             {
               data: 'DT_RowIndex',         
