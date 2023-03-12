@@ -4,8 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\EmailSetting;
+use App\Http\Controllers\WebController;
+use App\Http\Controllers\ApiController;
+use Illuminate\Support\Facades\Auth;
+use Validator;
 
-class SettingController extends Controller
+class SettingController extends WebController
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +19,8 @@ class SettingController extends Controller
      */
     public function index()
     {
-        return view('admin.settings.index')->with(['title' =>'Site Settings', "header" => "Please enter site settings details"]);
+        $email_settings = EmailSetting::first();
+        return view('admin.settings.index')->with(['title' =>'Site Settings', "header" => "Please enter site settings details",'email_setting' => $email_settings]);
     }
 
     /**
@@ -35,7 +41,41 @@ class SettingController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $tab_type = $request->form_type;
+        $row_id = $request->row_id;
+        try{
+          if($tab_type == 'email'){
+            $data_array = [
+              'user_id' => '1',
+              'smtp2go_api_key' => $request->smtp2go_api_key, 'smtp2go_base_url' => $request->smtp2go_base_url,
+              'smtp_host' => $request->smtp_host, 'smtp_username' => $request->smtp_username,
+              'smtp_password' => $request->smtp_password, 'smtp_port' => $request->smtp_port,
+              'smtp_debug_status' => $request->smtp_debug_status, 'smtp_ssl_status' => $request->smtp_ssl_status,
+              'review_smtp_host' => $request->review_smtp_host, 'review_smtp_username' => $request->review_smtp_username,
+              'review_smtp_passowrd' => $request->review_smtp_passowrd, 'review_smtp_port' => $request->review_smtp_port,
+              'review_smtp_debug_status' => $request->review_smtp_debug_status, 'review_smtp_ssl_status' => $request->review_smtp_ssl_status,
+              'from_email_confirmation' => $request->from_email_confirmation, 'from_email_amend' => $request->from_email_amend,
+              'from_email_cancel' => $request->from_email_cancel, 'email_cc' => $request->email_cc,
+              'email_bcc' => $request->email_bcc, 'contact_email' => $request->contact_email,
+              'noreply_confirmation' => $request->noreply_confirmation, 'noreply_amend' => $request->noreply_amend,
+              'noreply_cancel' => $request->noreply_cancel, 'default_smtp_gateway' => $request->default_smtp_gateway,
+            ];
+            if($row_id == 0){
+              // New entry
+              EmailSetting::create($data_array);
+              return redirect()->route('settings.index')->with(['success' => 'Email Settings added successfully']);
+              //return $this->sendSuccess(['form_type'=>'email'],'Email Settings Created',200);
+            } else {
+              // Update Data0
+              EmailSetting::where('id',$row_id)->update($data_array);
+              return redirect()->route('settings.index')->with(['success' => 'Email Settings updated successfully']);
+              //return $this->sendSuccess(['form_type'=>'email'],'Email Settings Updated',200);
+            }
+          }
+        } catch (Exception $e) {
+            $message = $e->getMessage()." at line ".$e->getLine()." in file ".$e->getFile();
+            return $this->sendError($message);
+          }
     }
 
     /**
