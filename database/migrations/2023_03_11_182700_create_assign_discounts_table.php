@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFlatDiscountsTable extends Migration
+class CreateAssignDiscountsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateFlatDiscountsTable extends Migration
      */
     public function up()
     {
-        Schema::create('flat_discounts', function (Blueprint $table) {
+        Schema::create('assign_discounts', function (Blueprint $table) {
             $table->id();
+            $table->integer('airport_id');
+            $table->integer('company_id');
             $table->integer('offer_type_id');
-            $table->integer('flat_code_id');
-            $table->string('type');
-            $table->integer('amount');
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ class CreateFlatDiscountsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('flat_discounts');
+        Schema::dropIfExists('assign_discounts');
     }
 }

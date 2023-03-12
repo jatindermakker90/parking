@@ -20,8 +20,9 @@
   <div class="row">
     <div class="col-12">
       <div class="card">
-        <form method="POST" action="{{ route('add-discount.store') }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('add-discount.update', [$get_discount->id]) }}" enctype="multipart/form-data">
           @csrf
+          @method('PUT')
           <div class="card-header">
               <h3 class="card-title">{{ $header }}</h3>
           </div>
@@ -31,7 +32,7 @@
                 <div class="form-group {{ $errors->has('start_date') ? 'has-error' : '' }}">
                     <label for="start_date">Select Start Date</label>
                     {{old('start_date')}}
-                    <input type="date" class="form-control" name="start_date" id="start_date" value="{{ old('start_date') ?? '' }}">
+                    <input type="date" class="form-control" name="start_date" id="start_date" value="{{ date("Y-m-d", strtotime($get_discount->start_date)); }}">
                     @if ($errors->first('start_date'))
                         <span class="form-error">{{ $errors->first('start_date') }}</span>
                     @endif
@@ -40,7 +41,7 @@
               <div class="col-sm-6">
                 <div class="form-group {{ $errors->has('end_date') ? 'has-error' : '' }}">
                     <label for="end_date">Select End Date</label>
-                    <input type="date" class="form-control" name="end_date" id="end_date" value="{{ old('end_date') ?? '' }}">
+                    <input type="date" class="form-control" name="end_date" id="end_date" value="{{ date("Y-m-d", strtotime($get_discount->end_date)); }}">
                     @if ($errors->first('end_date'))
                         <span class="form-error">{{ $errors->first('end_date') }}</span>
                     @endif
@@ -52,7 +53,7 @@
                 <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
                     <label for="name">Name</label>
                     <input type="text" class="form-control" placeholder="Enter name"
-                        name="name" id="name" value="{{ old('name') ?? '' }}">
+                        name="name" id="name" value="{{ $get_discount->name }}">
                     @if ($errors->first('name'))
                         <span class="form-error">{{ $errors->first('name') }}</span>
                     @endif
@@ -65,7 +66,7 @@
                         <option value="">Select offer</option>
                         @if($get_offer_type->count())
                           @foreach ($get_offer_type as $offer_type_key => $offer_type_value)
-                              <option value="{{ $offer_type_value->id }}">{{ $offer_type_value->name }}</option>
+                              <option value="{{ $offer_type_value->id }}" <?php echo $get_discount->offer_type_id ==  $offer_type_value->id ? 'selected' : ''?>>{{ $offer_type_value->name }}</option>
                           @endforeach
                         @endif
                     </select>

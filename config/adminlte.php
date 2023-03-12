@@ -389,15 +389,15 @@ return [
                 ],
                 [
                     'text'        => 'Assign Discount',
-                    'url'         => '#'
+                    'url'         => 'admin/discount/assign-discount'
                 ],
                 [
                     'text'        => 'Discount List',
-                    'url'         => '#'
+                    'url'         => 'admin/discount/discoun-code-list'
                 ],
                 [
                     'text'        => 'Discount Report',
-                    'url'         => '#'
+                    'url'         => 'admin/discount/discoun-code-report'
                 ],
                 [
                     'text'        => 'Discount Code Report',

@@ -20,44 +20,13 @@
   <div class="row">
     <div class="col-12">
       <div class="card">
-        <form method="POST" action="{{ route('add-discount.store') }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('flat-discount.store') }}" enctype="multipart/form-data">
           @csrf
           <div class="card-header">
               <h3 class="card-title">{{ $header }}</h3>
           </div>
           <div class="card-body">
             <div class="row col-12">
-              <div class="col-sm-6">
-                <div class="form-group {{ $errors->has('start_date') ? 'has-error' : '' }}">
-                    <label for="start_date">Select Start Date</label>
-                    {{old('start_date')}}
-                    <input type="date" class="form-control" name="start_date" id="start_date" value="{{ old('start_date') ?? '' }}">
-                    @if ($errors->first('start_date'))
-                        <span class="form-error">{{ $errors->first('start_date') }}</span>
-                    @endif
-                </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="form-group {{ $errors->has('end_date') ? 'has-error' : '' }}">
-                    <label for="end_date">Select End Date</label>
-                    <input type="date" class="form-control" name="end_date" id="end_date" value="{{ old('end_date') ?? '' }}">
-                    @if ($errors->first('end_date'))
-                        <span class="form-error">{{ $errors->first('end_date') }}</span>
-                    @endif
-                </div>
-              </div>
-            </div>
-            <div class="row col-12">
-              <div class="col-sm-6">
-                <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
-                    <label for="name">Name</label>
-                    <input type="text" class="form-control" placeholder="Enter name"
-                        name="name" id="name" value="{{ old('name') ?? '' }}">
-                    @if ($errors->first('name'))
-                        <span class="form-error">{{ $errors->first('name') }}</span>
-                    @endif
-                </div>
-              </div>
               <div class="col-sm-6">
                 <div class="form-group {{ $errors->has('offer_type') ? 'has-error' : '' }}">
                     <label for="offer_type">Select Offer</label>
@@ -71,6 +40,46 @@
                     </select>
                     @if ($errors->first('offer_type'))
                         <span class="form-error">{{ $errors->first('offer_type') }}</span>
+                    @endif
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group {{ $errors->has('flat_code') ? 'has-error' : '' }}">
+                    <label for="flat_code">Select Flat Code</label>
+                    <select class="form-control select2" style="width: 100%;" name="flat_code" id="flat_code">
+                        <option value="">Select flat code</option>
+                        @if($get_flat_codes->count())
+                          @foreach ($get_flat_codes as $flat_codes_key => $flat_codes_value)
+                              <option value="{{ $flat_codes_value->id }}">{{ $flat_codes_value->name }}</option>
+                          @endforeach
+                        @endif
+                    </select>
+                    @if ($errors->first('flat_code'))
+                        <span class="form-error">{{ $errors->first('flat_code') }}</span>
+                    @endif
+                </div>
+              </div>
+            </div>
+            <div class="row col-12">
+              <div class="col-sm-6">
+                <div class="form-group {{ $errors->has('type') ? 'has-error' : '' }}">
+                    <label for="flat_code">Select Type</label>
+                    <select class="form-control select2" style="width: 100%;" name="type" id="type">
+                        <option value="percentage">Percentage</option>
+                        <option value="amount">Amount</option>
+                    </select>
+                    @if ($errors->first('type'))
+                        <span class="form-error">{{ $errors->first('type') }}</span>
+                    @endif
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group {{ $errors->has('amount') ? 'has-error' : '' }}">
+                    <label for="amount">Amount</label>
+                    <input type="text" class="form-control" placeholder="Enter Amount"
+                        name="amount" id="amount" value="{{ old('amount') ?? '' }}">
+                    @if ($errors->first('amount'))
+                        <span class="form-error">{{ $errors->first('amount') }}</span>
                     @endif
                 </div>
               </div>
@@ -100,6 +109,32 @@
 <script type="text/javascript">
   $(document).ready(function(){
     $('.select2').select2();
+
+    $(document).on('change','#offer_type',function(e){
+      let targetEle = $(e.target);
+      let selectedOfferType = targetEle.val();
+      let apiUrl = "{{ route('flat-discount.index') }}";
+      let href = `${apiUrl}?offer_type_id=${selectedOfferType}`;
+
+      console.log(`selected offer type`, selectedOfferType, `apiUrl:: `, apiUrl);
+
+      $.get(href, function(data) {
+        console.log(`get offer type:: `, data)
+        var message = null;
+        var response_status  = data.success;
+        let respData = data.result.offer_types;
+        if(data.success){
+          let html = `<option value="">Select flat code</option>`;
+          respData.forEach(element => {
+            html += `<option value="${element.id}">${element.name}</option>`
+          });
+          $('#flat_code').html(html);
+        }else{
+          
+        }
+      });
+
+    });
   });
 </script>
 @stop

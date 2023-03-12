@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\OfferTypeController;
 use App\Http\Controllers\Admin\AddDiscountController;
 use App\Http\Controllers\Admin\FlatDiscountController;
+use App\Http\Controllers\Admin\AssignDiscountController;
 
 
 use App\Http\Controllers\HomeController;
@@ -122,8 +123,12 @@ Route::prefix('admin')->group(function () {
 
 
             Route::resource('add-discount',                           AddDiscountController::class);
+            Route::get('discoun-code-list',                           [AddDiscountController::class, 'discountCodeList'])->name('discoun-code-list');
+            Route::get('discoun-code-report',                           [AddDiscountController::class, 'discountCodeReport'])->name('discoun-code-report');
 
             Route::resource('flat-discount',                           FlatDiscountController::class);
+
+            Route::resource('assign-discount',                           AssignDiscountController::class);
 
         });
        //======================================================================//
