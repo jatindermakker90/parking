@@ -303,7 +303,7 @@ return [
                     'text'        => 'Admin',
                     'url'         => 'admin/service-providers',
                     'role'        => 'superadmin'
-               ], 
+               ],
                [
                     'text'        => 'Country',
                     'url'         => 'admin/countries',
@@ -337,7 +337,7 @@ return [
                 [
                     'text'        => 'Assign Admin',
                     'url'         => 'admin/company/owners',
-                ], 
+                ],
                 [
                     'text'        => 'Close Company',
                     'url'         => 'admin/companies/status',
@@ -359,13 +359,18 @@ return [
                 [
                     'text'        => 'Cancelled Booking',
                     'url'         => 'admin/cancelled/booking',
-                ], 
+                ],
                 [
                     'text'        => 'Trasheded Booking',
                     'url'         => 'admin/trasheded/booking',
                     //'role'        => 'superadmin'
                 ],
             ]
+
+        ],[
+            'text'        => 'Site Settings',
+            'icon'        => 'fas fa-cog',
+
         ],
         [
             'text'        => 'Discount',
@@ -407,15 +412,19 @@ return [
         ],
         [
             'text'        => 'Settings',
-            'icon'        => 'fas fa-setting',
+            'icon'        => 'fa fa-cog',
             'submenu' => [
+                 [
+                     'text'        => 'Site Settings',
+                     'url'         => 'admin/site/settings',
+                 ],
                  [
                     'text'        => 'Add pages',
                     'url'         => 'admin/pages/list',
-                ],               
+                ],
             ]
         ],
-      
+
     ],
 
     /*
