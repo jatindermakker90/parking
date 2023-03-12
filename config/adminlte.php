@@ -382,7 +382,7 @@ return [
                 ],
                 [
                     'text'        => 'Add Affiliated',
-                    'url'         => '#'
+                    'url'         => 'admin/discount/affiliate-discount'
                 ], 
                 [
                     'text'        => 'Add Offer Type',
