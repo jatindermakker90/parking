@@ -190,13 +190,32 @@ class AddDiscountController extends WebController
 
     public function discountCodeReport(Request $request){
         $offer_type = DiscountOfferType::select('id', 'name')->where('status','=',config('constant.STATUS.ACTIVE'))->get();   
-        // dd($airport);
+        
         if ($request->ajax()) {
-            $companies = Company::select('id', 'company_title')->where('airport_id', $request->airport_id)->get();
-            
-            $response['companies']         = $companies;
-            $message                       = "Companies fetched successfully";
-            return $this->sendSuccess($response,$message,200);
+            $offer_type_id = $request->offer_type;
+            $start_date = date('Y-m-d', strtotime($request->start_date));
+            $end_date = date('Y-m-d', strtotime($request->end_date));
+
+            $addDiscount = AddDiscount::where('offer_type_id', $offer_type_id)
+                        ->where('start_date', '>=', $start_date)
+                        ->where('end_date', '<=', $end_date)
+                        ->get();
+
+            return Datatables::of($addDiscount)
+                    ->addIndexColumn()
+                    ->addColumn('status', function($row){
+                        $todayDate = date('d-m-Y', strtotime(now()));
+                        $startDate = date('d-m-Y', strtotime($row->start_date)); 
+                        $lastDate = date('d-m-Y', strtotime($row->end_date));
+                        if($startDate < $todayDate && $todayDate < $lastDate){
+                            return 'Active';
+                        }
+                        else{
+                            return 'Expired';
+                        }
+                    })
+                    ->rawColumns(['status'])
+                    ->make(true);
         }
         return view('admin.discountAddDiscount.discount-report')->with([
             'title' => 'Discount Report', 
