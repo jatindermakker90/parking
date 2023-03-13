@@ -9,6 +9,8 @@ use App\Http\Controllers\WebController;
 use App\Http\Controllers\ApiController;
 use Illuminate\Support\Facades\Auth;
 use Validator;
+use App\Models\TwilioSetting;
+use App\Models\SiteScriptSetting;
 
 class SettingController extends WebController
 {
@@ -20,7 +22,15 @@ class SettingController extends WebController
     public function index()
     {
         $email_settings = EmailSetting::first();
-        return view('admin.settings.index')->with(['title' =>'Site Settings', "header" => "Please enter site settings details",'email_setting' => $email_settings]);
+        $twilio_settings = TwilioSetting::first();
+        $script_settings = SiteScriptSetting::first();
+        return view('admin.settings.index')->with([
+          'title' =>'Site Settings',
+          "header" => "Please enter site settings details",
+          'email_setting' => $email_settings,
+          'twilio_setting'=> $twilio_settings,
+          'script_setting' => $script_settings
+        ]);
     }
 
     /**
@@ -41,12 +51,13 @@ class SettingController extends WebController
      */
     public function store(Request $request)
     {
+        $user = Auth::user();
         $tab_type = $request->form_type;
         $row_id = $request->row_id;
         try{
           if($tab_type == 'email'){
             $data_array = [
-              'user_id' => '1',
+              'user_id' => $user->id,
               'smtp2go_api_key' => $request->smtp2go_api_key, 'smtp2go_base_url' => $request->smtp2go_base_url,
               'smtp_host' => $request->smtp_host, 'smtp_username' => $request->smtp_username,
               'smtp_password' => $request->smtp_password, 'smtp_port' => $request->smtp_port,
@@ -69,6 +80,42 @@ class SettingController extends WebController
               // Update Data0
               EmailSetting::where('id',$row_id)->update($data_array);
               return redirect()->route('settings.index')->with(['success' => 'Email Settings updated successfully']);
+              //return $this->sendSuccess(['form_type'=>'email'],'Email Settings Updated',200);
+            }
+          }
+          if($tab_type == "twilio"){
+            $data_array = [
+              'user_id' => $user->id,
+              'twilio_acc_id' => $request->twilio_acc_id, 'twilio_auth_token' => $request->twilio_auth_token,
+              'twilio_form_number' => $request->twilio_form_number, 'twilio_box' => $request->twilio_box,
+            ];
+            if($row_id == 0){
+              // New entry
+              TwilioSetting::create($data_array);
+              return redirect()->route('settings.index')->with(['success' => 'Twilio Settings added successfully']);
+              //return $this->sendSuccess(['form_type'=>'email'],'Email Settings Created',200);
+            } else {
+              // Update Data
+              TwilioSetting::where('id',$row_id)->update($data_array);
+              return redirect()->route('settings.index')->with(['success' => 'Twilio Settings updated successfully']);
+              //return $this->sendSuccess(['form_type'=>'email'],'Email Settings Updated',200);
+            }
+          }
+          if($tab_type == "script"){
+            $data_array = [
+              'user_id' => $user->id,
+              'header_script' => $request->header_script, 'footer_script' => $request->footer_script,
+              'body_script' => $request->body_script, 'booking_script' => $request->booking_script,
+            ];
+            if($row_id == 0){
+              // New entry
+              SiteScriptSetting::create($data_array);
+              return redirect()->route('settings.index')->with(['success' => 'Site Script Settings added successfully']);
+              //return $this->sendSuccess(['form_type'=>'email'],'Email Settings Created',200);
+            } else {
+              // Update Data
+              SiteScriptSetting::where('id',$row_id)->update($data_array);
+              return redirect()->route('settings.index')->with(['success' => 'Site Script Settings updated successfully']);
               //return $this->sendSuccess(['form_type'=>'email'],'Email Settings Updated',200);
             }
           }

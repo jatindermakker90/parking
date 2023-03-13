@@ -81,24 +81,24 @@
                             <div class="col-sm-3">
                               <div class="form-group">
                                 {{ Form::label('Smtp Port'); }}
-                                {{ Form::text('smtp_port',isset($email_setting->smtp_port) ? $email_setting->smtp_port : '',['class'=>'form-control m-t-xxs']); }}
+                                {{ Form::number('smtp_port',isset($email_setting->smtp_port) ? $email_setting->smtp_port : '',['class'=>'form-control m-t-xxs']); }}
                               </div>
                             </div>
                             <div class="col-sm-12">
                               <div class="form-group">
                                 <label for="debug">
                                   @if(isset($email_setting->smtp_debug_status) && $email_setting->smtp_debug_status == 1)
-                                  <div class="checker"><span><input type="checkbox" name="smtp_debug_status" value = "{{$email_setting->smtp_debug_status}}" checked></span></div>
+                                  <div class="checker up"><span>{{ Form::checkbox('smtp_debug_status', '1', true) }}</span></div>
                                   @else
-                                  <div class="checker"><span><input type="checkbox" name="smtp_debug_status" value = ""></span></div>
+                                  <div class="checker down"><span> {{ Form::checkbox('smtp_debug_status', '1', false) }} </span></div>
                                   @endif
                                   Check to turn on Smtp Debug
                                 </label>
                                 <label for="ssl">
                                   @if(isset($email_setting->smtp_ssl_status) && $email_setting->smtp_ssl_status == 1)
-                                  <div class="checker"><span><input type="checkbox" name="smtp_ssl_status" value = "{{$email_setting->smtp_ssl_status}}" checked></span></div>
+                                  <div class="checker"><span>{{ Form::checkbox('smtp_ssl_status', '1', true) }}</span></div>
                                   @else
-                                  <div class="checker"><span><input type="checkbox" name="smtp_ssl_status" value = "0"></span></div>
+                                  <div class="checker"><span>{{ Form::checkbox('smtp_ssl_status', '1', false) }}</span></div>
                                   @endif
                                   Check to Active Smtp SSL
                                 </label>
@@ -129,24 +129,24 @@
                             <div class="col-sm-3">
                               <div class="form-group">
                                 {{ Form::label('Review Smtp Port'); }}
-                                {{ Form::text('review_smtp_port',isset($email_setting->review_smtp_port) ? $email_setting->review_smtp_port : '',['class'=>'form-control m-t-xxs']); }}
+                                {{ Form::number('review_smtp_port',isset($email_setting->review_smtp_port) ? $email_setting->review_smtp_port : '',['class'=>'form-control m-t-xxs']); }}
                               </div>
                             </div>
                             <div class="col-sm-12">
                               <div class="form-group">
                                 <label for="debug">
                                   @if(isset($email_setting->review_smtp_debug_status) && $email_setting->review_smtp_debug_status == 1)
-                                  <div class="checker"><span><input type="checkbox" name="review_smtp_debug_status" value = "{{$email_setting->review_smtp_debug_status}}" checked></span></div>
+                                  <div class="checker"><span>{{ Form::checkbox('review_smtp_debug_status', '1', true) }}</span></div>
                                   @else
-                                  <div class="checker"><span><input type="checkbox" name="review_smtp_debug_status" value = "0"></span></div>
+                                  <div class="checker"><span>{{ Form::checkbox('review_smtp_debug_status', '1', false) }}</span></div>
                                   @endif
                                   Check to turn on Review Smtp Debug
                                 </label>
                                 <label for="ssl">
                                   @if(isset($email_setting->review_smtp_ssl_status) && $email_setting->review_smtp_ssl_status == 1)
-                                  <div class="checker"><span><input type="checkbox" name="review_smtp_ssl_status" value = "{{$email_setting->review_smtp_ssl_status}}" checked></span></div>
+                                  <div class="checker"><span>{{ Form::checkbox('review_smtp_ssl_status', '1', true) }}</span></div>
                                   @else
-                                  <div class="checker"><span><input type="checkbox" name="review_smtp_ssl_status" value = "0"></span></div>
+                                  <div class="checker"><span>{{ Form::checkbox('review_smtp_ssl_status', '1', false) }}</span></div>
                                   @endif
                                   Check to Active Review Smtp SSL
                                 </label>
@@ -240,25 +240,29 @@
                           <div class="col-sm-4">
                             <div class="form-group">
                               {{ Form::label('Twilio Account ID'); }}
-                              {{ Form::text('twilio_acc_id','',['class'=>'form-control m-t-xxs']); }}
+                              {{ Form::text('twilio_acc_id',isset($twilio_setting->twilio_acc_id) ? $twilio_setting->twilio_acc_id : '',['class'=>'form-control m-t-xxs']); }}
                             </div>
                           </div>
                           <div class="col-sm-4">
                             <div class="form-group">
                               {{ Form::label('Twilio Auth Token'); }}
-                              {{ Form::text('twilio_auth_token','',['class'=>'form-control m-t-xxs']); }}
+                              {{ Form::text('twilio_auth_token',isset($twilio_setting->twilio_auth_token) ? $twilio_setting->twilio_auth_token : '',['class'=>'form-control m-t-xxs']); }}
                             </div>
                           </div>
                           <div class="col-sm-4">
                             <div class="form-group">
                               {{ Form::label('Twilio From Number'); }}
-                              {{ Form::text('twilio_form_number','',['class'=>'form-control m-t-xxs']); }}
+                              {{ Form::text('twilio_form_number',isset($twilio_setting->twilio_form_number) ? $twilio_setting->twilio_form_number : '',['class'=>'form-control m-t-xxs']); }}
                             </div>
                           </div>
                           <div class="col-sm-12">
                             <div class="form-group">
                               <label for="debug">
-                                <span><input type="checkbox" name="twilio_box" value="1"></span>
+                                @if(isset($twilio_setting->twilio_box) && $twilio_setting->twilio_box == 1)
+                                <div class="checker"><span>{{ Form::checkbox('twilio_box', '1', true) }}</span></div>
+                                @else
+                                <div class="checker"><span>{{ Form::checkbox('twilio_box', '1', false) }}</span></div>
+                                @endif
                                 Check to turn on Twilio
                               </label>
                             </div>
@@ -267,6 +271,7 @@
                         <br><hr><br>
                         <div class="form-group" style="text-align: right;">
                           {{ Form::hidden('form_type','twilio'); }}
+                          {{ Form::hidden('row_id',isset($twilio_setting->id) ? $twilio_setting->id : 0); }}
                           <button type="submit" name="submit" id="submitButton" class="btn btn-info">Submit</button>
                         </div>
                       {!! Form::close() !!}
@@ -278,31 +283,32 @@
                         <div class="col-sm-12">
                           <div class="form-group">
                             {{ Form::label('Header Script'); }}
-                            {{ Form::textarea('header_script','',['class'=>'form-control m-t-xxs','rows' => 5]); }}
+                            {{ Form::textarea('header_script',isset($script_setting->header_script) ? $script_setting->header_script : '',['class'=>'form-control m-t-xxs','rows' => 5]); }}
                           </div>
                         </div>
                         <div class="col-sm-12">
                           <div class="form-group">
                             {{ Form::label('Footer Script'); }}
-                            {{ Form::textarea('footer_script','',['class'=>'form-control m-t-xxs','rows' => 5]); }}
+                            {{ Form::textarea('footer_script',isset($script_setting->footer_script) ? $script_setting->footer_script : '',['class'=>'form-control m-t-xxs','rows' => 5]); }}
                           </div>
                         </div>
                         <div class="col-sm-12">
                           <div class="form-group">
                             {{ Form::label('Body Script'); }}
-                            {{ Form::textarea('body_script','',['class'=>'form-control m-t-xxs','rows' => 5]); }}
+                            {{ Form::textarea('body_script',isset($script_setting->body_script) ? $script_setting->body_script : '',['class'=>'form-control m-t-xxs','rows' => 5]); }}
                           </div>
                         </div>
                         <div class="col-sm-12">
                           <div class="form-group">
                             {{ Form::label('Booking Confirmation Script'); }}
-                            {{ Form::textarea('booking_script','',['class'=>'form-control m-t-xxs','rows' => 5]); }}
+                            {{ Form::textarea('booking_script',isset($script_setting->booking_script) ? $script_setting->booking_script : '',['class'=>'form-control m-t-xxs','rows' => 5]); }}
                           </div>
                         </div>
                       </div>
                       <br><hr><br>
                       <div class="form-group" style="text-align: right;">
                         {{ Form::hidden('form_type','script'); }}
+                        {{ Form::hidden('row_id',isset($script_setting->id) ? $script_setting->id : 0); }}
                         <button type="submit" name="submit" id="submitButton" class="btn btn-info">Submit</button>
                       </div>
                      {!! Form::close() !!}
