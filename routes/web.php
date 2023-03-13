@@ -102,6 +102,8 @@ Route::prefix('admin')->group(function () {
         Route::get('change/company/status/{table_id}',          [CompanyController::class, 'changeCompanyStatus'])->name('change_company_status');
         Route::post('company/assign-user-to-companies',         [CompanyController::class, 'assignUserToCompanies'])->name('assign-user-to-companies');
         Route::post('company/remove-user-to-companies',         [CompanyController::class, 'removeUserToCompanies'])->name('remove-user-to-companies');
+        Route::get('company/close-company',                    [CompanyController::class, 'closeCompany'])->name('close-company');
+        Route::post('company/close-company-store',                    [CompanyController::class, 'closeCompanyStore'])->name('close-company-store');
        //======================================================================//
        //============================ Country ===============================//
         Route::resource('countries',                            CountriesController::class)/*->middleware(['allow_admin'])*/;
