@@ -39,21 +39,21 @@
                       <button class="nav-link" id="term-tab" data-bs-toggle="tab" data-bs-target="#term" type="button" role="tab" aria-controls="term" aria-selected="false">Terms and Conditions</button>
                     </li>
                   </ul>
-                <form class="form-signin" action="site_settings.php" method="post">
                   <div class="tab-content" id="myTabContent" style="padding: 20px;background: white;">
                     <div class="tab-pane fade show active" id="email" role="tabpanel" aria-labelledby="email-tab">
+                      {{ Form::open(['route' => 'settings.store', 'method' => 'post']) }}
                           <h3>Smtp2go Details</h3>
                           <div class="row">
                             <div class="col-sm-6">
                               <div class="form-group">
-                                <label for="">Smtp2go API Key</label>
-                                <input type="text" class="form-control m-t-xxs" name="smtp2go_api_key" value="" id="smptp2go_api_key" placeholder="">
+                                {{ Form::label('Smtp2go API Key'); }}
+                                {{ Form::text('smtp2go_api_key',isset($email_setting->smtp2go_api_key) ? $email_setting->smtp2go_api_key : '',['class'=>'form-control m-t-xxs']); }}
                               </div>
                             </div>
                             <div class="col-sm-6">
                               <div class="form-group">
-                                <label for="">Smtp2go Base Url</label>
-                                <input type="text" class="form-control m-t-xxs" name="smtp2go_base_url" value="" id="smtp2go_base_url">
+                                {{ Form::label('Smtp2go Base Url'); }}
+                                {{ Form::text('smtp2go_base_url',isset($email_setting->smtp2go_base_url) ? $email_setting->smtp2go_base_url : '',['class'=>'form-control m-t-xxs']); }}
                               </div>
                             </div>
                           </div>
@@ -62,36 +62,44 @@
                           <div class="row">
                             <div class="col-sm-3">
                               <div class="form-group">
-                                <label for="">Smtp Host</label>
-                                <input type="text" class="form-control m-t-xxs" name="s_host" value="" id="s_host" placeholder="">
+                                {{ Form::label('Smtp Host'); }}
+                                {{ Form::text('smtp_host',isset($email_setting->smtp_host) ? $email_setting->smtp_host : '',['class'=>'form-control m-t-xxs']); }}
                               </div>
                             </div>
                             <div class="col-sm-3">
                               <div class="form-group">
-                                <label for="">Smtp Username</label>
-                                <input type="text" class="form-control m-t-xxs" name="s_username" value="" id="s_username">
+                                {{ Form::label('Smtp Username'); }}
+                                {{ Form::text('smtp_username',isset($email_setting->smtp_username) ? $email_setting->smtp_username : '',['class'=>'form-control m-t-xxs']); }}
                               </div>
                             </div>
                             <div class="col-sm-3">
                               <div class="form-group">
-                                <label for="">Smtp Password</label>
-                                <input type="text" class="form-control m-t-xxs" name="s_password" value="" id="s_password" placeholder="">
+                                {{ Form::label('Smtp Password'); }}
+                                {{ Form::text('smtp_password',isset($email_setting->smtp_password) ? $email_setting->smtp_password : '',['class'=>'form-control m-t-xxs']); }}
                               </div>
                             </div>
                             <div class="col-sm-3">
                               <div class="form-group">
-                                <label for="">Smtp Port</label>
-                                <input type="text" class="form-control m-t-xxs" name="s_port" value="" id="s_port">
+                                {{ Form::label('Smtp Port'); }}
+                                {{ Form::text('smtp_port',isset($email_setting->smtp_port) ? $email_setting->smtp_port : '',['class'=>'form-control m-t-xxs']); }}
                               </div>
                             </div>
                             <div class="col-sm-12">
                               <div class="form-group">
                                 <label for="debug">
-                                  <div class="checker"><span><input type="checkbox" name="s_debug" value=""></span></div>
+                                  @if(isset($email_setting->smtp_debug_status) && $email_setting->smtp_debug_status == 1)
+                                  <div class="checker"><span><input type="checkbox" name="smtp_debug_status" value = "{{$email_setting->smtp_debug_status}}" checked></span></div>
+                                  @else
+                                  <div class="checker"><span><input type="checkbox" name="smtp_debug_status" value = ""></span></div>
+                                  @endif
                                   Check to turn on Smtp Debug
                                 </label>
                                 <label for="ssl">
-                                  <div class="checker"><span class="checked"><input type="checkbox" name="s_ssl" value="1" checked=""></span></div>
+                                  @if(isset($email_setting->smtp_ssl_status) && $email_setting->smtp_ssl_status == 1)
+                                  <div class="checker"><span><input type="checkbox" name="smtp_ssl_status" value = "{{$email_setting->smtp_ssl_status}}" checked></span></div>
+                                  @else
+                                  <div class="checker"><span><input type="checkbox" name="smtp_ssl_status" value = "0"></span></div>
+                                  @endif
                                   Check to Active Smtp SSL
                                 </label>
                               </div>
@@ -102,36 +110,44 @@
                           <div class="row">
                             <div class="col-sm-3">
                               <div class="form-group">
-                                <label for="">Review Smtp Host</label>
-                                <input type="text" class="form-control m-t-xxs" name="rs_host" value="" id="rs_host" placeholder="">
+                                {{ Form::label('Review Smtp Host'); }}
+                                {{ Form::text('review_smtp_host',isset($email_setting->review_smtp_host) ? $email_setting->review_smtp_host : '',['class'=>'form-control m-t-xxs']); }}
                               </div>
                             </div>
                             <div class="col-sm-3">
                               <div class="form-group">
-                                <label for="">Review Smtp Username</label>
-                                <input type="text" class="form-control m-t-xxs" name="rs_username" value="" id="rs_username">
+                                {{ Form::label('Review Smtp Username'); }}
+                                {{ Form::text('review_smtp_username',isset($email_setting->review_smtp_username) ? $email_setting->review_smtp_username : '',['class'=>'form-control m-t-xxs']); }}
                               </div>
                             </div>
                             <div class="col-sm-3">
                               <div class="form-group">
-                                <label for="">Review Smtp Password</label>
-                                <input type="text" class="form-control m-t-xxs" name="rs_password" value="" id="rs_password" placeholder="">
+                                {{ Form::label('Review Smtp Password'); }}
+                                {{ Form::text('review_smtp_passowrd',isset($email_setting->review_smtp_passowrd) ? $email_setting->review_smtp_passowrd : '',['class'=>'form-control m-t-xxs']); }}
                               </div>
                             </div>
                             <div class="col-sm-3">
                               <div class="form-group">
-                                <label for="">Review Smtp Port</label>
-                                <input type="text" class="form-control m-t-xxs" name="rs_port" value="" id="rs_port">
+                                {{ Form::label('Review Smtp Port'); }}
+                                {{ Form::text('review_smtp_port',isset($email_setting->review_smtp_port) ? $email_setting->review_smtp_port : '',['class'=>'form-control m-t-xxs']); }}
                               </div>
                             </div>
                             <div class="col-sm-12">
                               <div class="form-group">
                                 <label for="debug">
-                                  <div class="checker"><span class=""><input type="checkbox" name="rs_debug" value=""></span></div>
+                                  @if(isset($email_setting->review_smtp_debug_status) && $email_setting->review_smtp_debug_status == 1)
+                                  <div class="checker"><span><input type="checkbox" name="review_smtp_debug_status" value = "{{$email_setting->review_smtp_debug_status}}" checked></span></div>
+                                  @else
+                                  <div class="checker"><span><input type="checkbox" name="review_smtp_debug_status" value = "0"></span></div>
+                                  @endif
                                   Check to turn on Review Smtp Debug
                                 </label>
                                 <label for="ssl">
-                                  <div class="checker"><span class=""><input type="checkbox" name="rs_ssl" value="1"></span></div>
+                                  @if(isset($email_setting->review_smtp_ssl_status) && $email_setting->review_smtp_ssl_status == 1)
+                                  <div class="checker"><span><input type="checkbox" name="review_smtp_ssl_status" value = "{{$email_setting->review_smtp_ssl_status}}" checked></span></div>
+                                  @else
+                                  <div class="checker"><span><input type="checkbox" name="review_smtp_ssl_status" value = "0"></span></div>
+                                  @endif
                                   Check to Active Review Smtp SSL
                                 </label>
                               </div>
@@ -142,56 +158,56 @@
                           <div class="row">
                             <div class="col-sm-4">
                               <div class="form-group">
-                                <label for="">From Email Confirmation</label>
-                                <input type="text" class="form-control m-t-xxs" name="from_email_confirmation" value="" id="from_email_confirmation" placeholder="">
+                                {{ Form::label('From Email Confirmation'); }}
+                                {{ Form::text('from_email_confirmation',isset($email_setting->from_email_confirmation) ? $email_setting->from_email_confirmation : '',['class'=>'form-control m-t-xxs']); }}
                               </div>
                             </div>
                             <div class="col-sm-4">
                               <div class="form-group">
-                                <label for="">From Email Amend</label>
-                                 <input type="text" class="form-control m-t-xxs" name="from_email_amend" value="" id="from_email_amend">
+                                {{ Form::label('From Email Amend'); }}
+                                {{ Form::text('from_email_amend',isset($email_setting->from_email_amend) ? $email_setting->from_email_amend : '',['class'=>'form-control m-t-xxs']); }}
                               </div>
                             </div>
                             <div class="col-sm-4">
                               <div class="form-group">
-                                <label for="">From Email Cancel</label>
-                                <input type="text" class="form-control m-t-xxs" name="from_email_cancel" value="" id="from_email_cancel" placeholder="">
+                                {{ Form::label('From Email Cancel'); }}
+                                {{ Form::text('from_email_cancel',isset($email_setting->from_email_cancel) ? $email_setting->from_email_cancel : '',['class'=>'form-control m-t-xxs']); }}
                               </div>
                             </div>
                             <div class="col-sm-4">
                               <div class="form-group">
-                                <label for="">Email CC</label>
-                                <input type="text" class="form-control m-t-xxs" name="email_cc" value="" id="email_cc" placeholder="">
+                                {{ Form::label('Email CC'); }}
+                                {{ Form::text('email_cc',isset($email_setting->email_cc) ? $email_setting->email_cc : '',['class'=>'form-control m-t-xxs']); }}
                               </div>
                             </div>
                             <div class="col-sm-4">
                               <div class="form-group">
-                                <label for="">Email BCC</label>
-                                <input type="text" class="form-control m-t-xxs" name="email_bcc" value="" id="email_bcc">
+                                {{ Form::label('Email BCC'); }}
+                                {{ Form::text('email_bcc',isset($email_setting->email_bcc) ? $email_setting->email_bcc : '',['class'=>'form-control m-t-xxs']); }}
                               </div>
                             </div>
                             <div class="col-sm-4">
                               <div class="form-group">
-                                <label for="">Email Contact us</label>
-                                <input type="text" class="form-control m-t-xxs" name="contact_email" value="" id="contact_email" placeholder="">
+                                {{ Form::label('Email Contact us'); }}
+                                {{ Form::text('contact_email',isset($email_setting->contact_email) ? $email_setting->contact_email : '',['class'=>'form-control m-t-xxs']); }}
                               </div>
                             </div>
                             <div class="col-sm-4">
                               <div class="form-group">
-                                <label for="">No Reply Confirmation Email</label>
-                                <input type="text" class="form-control m-t-xxs" name="noreply_confirmation" value="" id="noreply_confirmation" placeholder="">
+                                {{ Form::label('No Reply Confirmation Email'); }}
+                                {{ Form::text('noreply_confirmation',isset($email_setting->noreply_confirmation) ? $email_setting->noreply_confirmation : '',['class'=>'form-control m-t-xxs']); }}
                               </div>
                             </div>
                             <div class="col-sm-4">
                               <div class="form-group">
-                                <label for="">No Reply Amendment Email</label>
-                                <input type="text" class="form-control m-t-xxs" name="noreply_amend" value="" id="noreply_amend">
+                                {{ Form::label('No Reply Amendment Email'); }}
+                                {{ Form::text('noreply_amend',isset($email_setting->noreply_amend) ? $email_setting->noreply_amend : '',['class'=>'form-control m-t-xxs']); }}
                               </div>
                             </div>
                             <div class="col-sm-4">
                               <div class="form-group">
-                                <label for="">No Reply Cancelation Email</label>
-                                <input type="text" class="form-control m-t-xxs" name="noreply_cancel" value="" id="noreply_cancel" placeholder="">
+                                {{ Form::label('No Reply Cancelation Email'); }}
+                                {{ Form::text('noreply_cancel',isset($email_setting->noreply_cancel) ? $email_setting->noreply_cancel : '',['class'=>'form-control m-t-xxs']); }}
                               </div>
                             </div>
                           </div>
@@ -209,103 +225,90 @@
                               </div>
                             </div>
                           </div>
+                          <br><hr><br>
+                          <div class="form-group" style="text-align: right;">
+                            {{ Form::hidden('form_type','email'); }}
+                            {{ Form::hidden('row_id',isset($email_setting->id) ? $email_setting->id : 0); }}
+                            <button type="submit" name="submit" id="submitButton" class="btn btn-info">Submit</button>
+                          </div>
+                          {!! Form::close() !!}
                       </div>
                     <div class="tab-pane fade" id="twilio" role="tabpanel" aria-labelledby="twilio-tab">
-                      <h3>Twilio gateway details</h3>
-                      <div class="row">
-                        <div class="col-sm-4">
-                          <div class="form-group">
-                            <label for="">Twilio Account ID</label>
-                            <input type="text" class="form-control m-t-xxs" name="smtp2go_api_key" value="" id="smptp2go_api_key" placeholder="">
+                      {{ Form::open(['route' => 'settings.store', 'method' => 'post']) }}
+                        <h3>Twilio gateway details</h3>
+                        <div class="row">
+                          <div class="col-sm-4">
+                            <div class="form-group">
+                              {{ Form::label('Twilio Account ID'); }}
+                              {{ Form::text('twilio_acc_id','',['class'=>'form-control m-t-xxs']); }}
+                            </div>
+                          </div>
+                          <div class="col-sm-4">
+                            <div class="form-group">
+                              {{ Form::label('Twilio Auth Token'); }}
+                              {{ Form::text('twilio_auth_token','',['class'=>'form-control m-t-xxs']); }}
+                            </div>
+                          </div>
+                          <div class="col-sm-4">
+                            <div class="form-group">
+                              {{ Form::label('Twilio From Number'); }}
+                              {{ Form::text('twilio_form_number','',['class'=>'form-control m-t-xxs']); }}
+                            </div>
+                          </div>
+                          <div class="col-sm-12">
+                            <div class="form-group">
+                              <label for="debug">
+                                <span><input type="checkbox" name="twilio_box" value="1"></span>
+                                Check to turn on Twilio
+                              </label>
+                            </div>
                           </div>
                         </div>
-                        <div class="col-sm-4">
-                          <div class="form-group">
-                            <label for="">Twilio Auth Token</label>
-                            <input type="text" class="form-control m-t-xxs" name="smtp2go_base_url" value="" id="smtp2go_base_url">
-                          </div>
+                        <br><hr><br>
+                        <div class="form-group" style="text-align: right;">
+                          {{ Form::hidden('form_type','twilio'); }}
+                          <button type="submit" name="submit" id="submitButton" class="btn btn-info">Submit</button>
                         </div>
-                        <div class="col-sm-4">
-                          <div class="form-group">
-                            <label for="">Twilio From Number</label>
-                            <input type="text" class="form-control m-t-xxs" name="smtp2go_base_url" value="" id="smtp2go_base_url">
-                          </div>
-                        </div>
-                        <div class="col-sm-12">
-                          <div class="form-group">
-                            <label for="debug">
-                              <div class="checker"><span><input type="checkbox" name="s_debug" value="1"></span></div>
-                              Check to turn on Twilio
-                            </label>
-                          </div>
-                        </div>
-                      </div>
+                      {!! Form::close() !!}
                     </div>
                     <div class="tab-pane fade" id="site" role="tabpanel" aria-labelledby="site-tab">
+                    {{ Form::open(['route' => 'settings.store', 'method' => 'post']) }}
                       <h3>Website Scripts</h3>
                       <div class="row">
                         <div class="col-sm-12">
                           <div class="form-group">
-                            <label for="">Header Script</label>
-                            <textarea class="form-control m-t-xxs" rows="5" name="header_script" id="header_script">
-
-                            </textarea>
+                            {{ Form::label('Header Script'); }}
+                            {{ Form::textarea('header_script','',['class'=>'form-control m-t-xxs','rows' => 5]); }}
                           </div>
                         </div>
                         <div class="col-sm-12">
                           <div class="form-group">
-                            <label for="">Footer Script</label>
-                            <textarea class="form-control m-t-xxs" rows="5" name="footer_script" id="footer_script">
-
-                            </textarea>
+                            {{ Form::label('Footer Script'); }}
+                            {{ Form::textarea('footer_script','',['class'=>'form-control m-t-xxs','rows' => 5]); }}
                           </div>
                         </div>
                         <div class="col-sm-12">
                           <div class="form-group">
-                            <label for="">Body Script</label>
-                            <textarea class="form-control m-t-xxs" rows="5" name="body_script" id="body_script">
-
-                            </textarea>
+                            {{ Form::label('Body Script'); }}
+                            {{ Form::textarea('body_script','',['class'=>'form-control m-t-xxs','rows' => 5]); }}
                           </div>
                         </div>
                         <div class="col-sm-12">
                           <div class="form-group">
-                            <label for="">Booking Confirmation Script</label>
-                            <textarea class="form-control m-t-xxs" rows="5" name="booking_script" id="booking_script">                                &lt;!-- Event snippet for Buy Parking conversion page --&gt;
-                            </textarea>
+                            {{ Form::label('Booking Confirmation Script'); }}
+                            {{ Form::textarea('booking_script','',['class'=>'form-control m-t-xxs','rows' => 5]); }}
                           </div>
                         </div>
                       </div>
+                      <br><hr><br>
+                      <div class="form-group" style="text-align: right;">
+                        {{ Form::hidden('form_type','script'); }}
+                        <button type="submit" name="submit" id="submitButton" class="btn btn-info">Submit</button>
+                      </div>
+                     {!! Form::close() !!}
                     </div>
                     <div class="tab-pane fade" id="term" role="tabpanel" aria-labelledby="term-tab">Term and Conditions</div>
-                    <br><hr><br>
-                    <div class="form-group" style="text-align: right;">
-                      <input type="hidden" name="data" value="mm">
-                      <button type="submit" name="submit" id="submitButton" class="btn btn-info">Submit</button>
-                    </div>
                   </div>
-                </form>
-                <!-- <form method="POST" action="{{ route('airport.store') }}" enctype="multipart/form-data">
-                  <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                  <div class="form-group {{ $errors->has('airport_name') ? 'has-error' : '' }}">
-                    <label for="airport_name">Email Setting</label>
-                    <input type="text" class="form-control"  placeholder="Enter Email Setting" required="" name ="airport_name" id ="airport_name"  value ="{{ old('airport_name') }}">
-                    @if($errors->first('airport_name'))
-                    <span class="form-error">{{$errors->first('airport_name')}}</span>
-                    @endif
-                  </div>
-                  <div class="form-group {{ $errors->has('operating_location') ? 'has-error' : '' }}">
-                    <label for="airport_name">Site Script</label>
-                    <input type="text" class="form-control"  placeholder="Enter Site Script" required="" name ="operating_location" id ="operating_location"  value ="{{ old('operating_location') }}">
-                    @if($errors->first('operating_location'))
-                    <span class="form-error">{{$errors->first('operating_location')}}</span>
-                    @endif
-                  </div>
-                </div>
-                <div class="card-footer">
-                  <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
-              </form> -->
               </div>
               <!-- /.card-body -->
             </div>
