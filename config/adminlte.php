@@ -340,7 +340,7 @@ return [
                 ],
                 [
                     'text'        => 'Close Company',
-                    'url'         => 'admin/companies/status',
+                    'url'         => 'admin/company/close-company ',
                     'role'        => 'superadmin'
                 ],
             ]

@@ -53,5 +53,9 @@ return [
       'standard' => 'Standard Price Plan',
       'advance' => 'Advance Price Plan'
     ],
+    'CLOSE_COMPANY_STATUS' => [
+      'unactive' => 0,
+      'active' => 1      
+    ]
 
 ];

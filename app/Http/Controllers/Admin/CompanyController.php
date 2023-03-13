@@ -16,6 +16,7 @@ use App\Models\OfferType;
 use App\Models\CompanyType;
 use App\Models\ServiceType;
 use App\Models\AssignAdminToCompany;
+use App\Models\CloseCompany;
 use DataTables;
 use Validator;
 
@@ -233,8 +234,6 @@ class CompanyController extends WebController
      */
     public function destroy($company_id,Request $request)
     {
-
-    //    $save_countries = User::deleteUser($company_id);
        Company::where('id',$company_id)->delete();
        $message         = "Company deleted successfully";
         return $this->sendSuccess([],$message,200);    
@@ -430,5 +429,33 @@ class CompanyController extends WebController
                 'success' => 'Assigned admin couldn\'t removed.'
             ]);
         }
+    }
+
+    public function closeCompany()
+    {
+        $companies = Company::where('company_status', '!=', config('constant.STATUS.DELETED'))->get();
+        return view('admin/company/close-company')->with([
+            'title' => 'Close Company',
+            'header' => 'Close Company',
+            'companies' => $companies
+        ]);
+    }
+
+    public function closeCompanyStore(Request $request, CloseCompany $closeCompany)
+    {
+        // dd($request);
+        $validator = Validator::make($request->all(), [
+            'company_id'    => 'required|exists:companies,id',
+            'date'          => 'required',
+            'journey_type'  => 'required',
+            'status'        => 'required'
+        ]);
+   
+        if($validator->fails()){
+            return $this->sendError($validator->getMessageBag()->first());       
+        }
+
+        $closeCompany->closeCompanySave($request);
+        return redirect()->route('close-company')->with(['success' => 'Close company updated successfully']);
     }
 }
