@@ -313,7 +313,16 @@
                       </div>
                      {!! Form::close() !!}
                     </div>
-                    <div class="tab-pane fade" id="term" role="tabpanel" aria-labelledby="term-tab">Term and Conditions</div>
+                    <div class="tab-pane fade" id="term" role="tabpanel" aria-labelledby="term-tab">
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <div class="form-group">
+                            {{ Form::label('Header Script'); }}
+                            {{ Form::textarea('term','',['class'=>'form-control m-t-xxs','rows' => 5,'id'=>'myNicEditor']); }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
               </div>
               <!-- /.card-body -->
@@ -329,8 +338,18 @@
 @section('js')
 <!-- DataTables  & Plugins -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="http://js.nicedit.com/nicEdit-latest.js" type="text/javascript"></script>
 <script type="text/javascript">
-$(document).ready(function(){
+//<![CDATA[
+bkLib.onDomLoaded(function() {
+    nicEditors.editors.push(
+        new nicEditor().panelInstance(
+            document.getElementById('myNicEditor')
+        )
+    );
+});
+</script>
+<script type="text/javascript">
   $('.select2').select2();
   setTimeout(function(){
     //console.log('heeloo');
