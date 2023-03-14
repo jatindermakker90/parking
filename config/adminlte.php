@@ -383,7 +383,7 @@ return [
                 [
                     'text'        => 'Add Affiliated',
                     'url'         => 'admin/discount/affiliate-discount'
-                ], 
+                ],
                 [
                     'text'        => 'Add Offer Type',
                     'url'         => 'admin/discount/offer-type'
@@ -422,6 +422,18 @@ return [
                     'text'        => 'Add pages',
                     'url'         => 'admin/pages/list',
                 ],
+                [
+                   'text'        => 'Email Settings',
+                   'url'         => 'admin/pages/list',
+               ],
+               [
+                  'text'        => 'Payment Settings',
+                  'url'         => 'admin/pages/list',
+              ],
+              [
+                 'text'        => 'Import/Export User',
+                 'url'         => 'admin/pages/list',
+             ],
             ]
         ],
 

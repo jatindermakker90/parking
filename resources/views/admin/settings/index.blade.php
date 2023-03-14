@@ -313,7 +313,47 @@
                       </div>
                      {!! Form::close() !!}
                     </div>
-                    <div class="tab-pane fade" id="term" role="tabpanel" aria-labelledby="term-tab">Term and Conditions</div>
+                    <div class="tab-pane fade" id="term" role="tabpanel" aria-labelledby="term-tab">
+                      {{ Form::open(['route' => 'settings.store', 'method' => 'post']) }}
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <div class="form-group">
+                            <section class="">
+                                <div class="flex-box">
+                                    <div class="row">
+                                        <div class="col">
+                                            <button type="button" onclick="f1()" class="shadow-sm btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Bold Text">Bold</button>
+                                            <button type="button" onclick="f2()" class="shadow-sm btn btn-outline-success" data-toggle="tooltip" data-placement="top" title="Italic Text">Italic</button>
+                                            <button type="button" onclick="f3()" class="shadow-sm btn btn-outline-primary" data-toggle="tooltip" data-placement="top" title="Left Align"><i class="fas fa-align-left"></i></button>
+                                            <button type="button" onclick="f4()" class="btn shadow-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Center Align"><i class="fas fa-align-center"></i></button>
+                                            <button type="button" onclick="f5()" class="btn shadow-sm btn-outline-primary" data-toggle="tooltip" data-placement="top" title="Right Align"><i class="fas fa-align-right"></i></button>
+                                            <button type="button" onclick="f6()" class="btn shadow-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Uppercase Text">Upper Case</button>
+                                            <button type="button" onclick="f7()" class="btn shadow-sm btn-outline-primary" data-toggle="tooltip" data-placement="top" title="Lowercase Text"> Lower Case</button>
+                                            <button type="button" onclick="f8()" class="btn shadow-sm btn-outline-primary" data-toggle="tooltip" data-placement="top" title="Capitalize Text"> Capitalize</button>
+                                            <button type="button" onclick="f9()" class="btn shadow-sm btn-outline-primary side" data-toggle="tooltip" data-placement="top" title="Tooltip on top"> Clear Text</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12">
+                                        <div class="flex-box">
+                                            {{ Form::textarea('term_condition_box',isset($term_condition_setting->term_condition_box) ? $term_condition_setting->term_condition_box : '',['class'=>'form-control input shadow','rows' => 10, 'cols' => 120,'id'=> 'textarea1']); }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                          </div>
+                        </div>
+                      </div>
+                      <br><hr><br>
+                      <div class="form-group" style="text-align: right;">
+                        {{ Form::hidden('form_type','term'); }}
+                        {{ Form::hidden('row_id',isset($term_condition_setting->id) ? $term_condition_setting->id : 0); }}
+                        <button type="submit" name="submit" id="submitButton" class="btn btn-info">Submit</button>
+                      </div>
+                      {!! Form::close() !!}
+                    </div>
                   </div>
               </div>
               <!-- /.card-body -->
@@ -327,30 +367,4 @@
 
 @stop
 @section('js')
-<!-- DataTables  & Plugins -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-<script type="text/javascript">
-$(document).ready(function(){
-  $('.select2').select2();
-  setTimeout(function(){
-    //console.log('heeloo');
-    $('#country').trigger('change');
-  },1000);
-  $(document).on('change','#country',function(){
-      var name    = $(this).val();
-      var href    = "{{ url('admin/fetch/countries/details') }}"+"?name="+name;
-      $.get(href, function(response) {
-         var response_data = response.result;
-         console.log(response_data);
-         $('#language_iso_code').val(response_data.language_iso_code);
-         $('#country_iso_code').val(response_data.country_iso_code);
-         $('#country_code').val(response_data.country_code);
-         $('#currency').val(response_data.currency);
-         $('#language').val(response_data.languages);
-         $('#language_iso_code').val(response_data.language_iso_code);
-      });
-  });
-
-});
-</script>
 @stop
