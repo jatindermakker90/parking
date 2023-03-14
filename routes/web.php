@@ -27,6 +27,8 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\OfferTypeController;
 use App\Http\Controllers\Admin\AddDiscountController;
 use App\Http\Controllers\Admin\FlatDiscountController;
+use App\Http\Controllers\Admin\AssignDiscountController;
+use App\Http\Controllers\Admin\AffiliateDiscountController;
 
 use App\Http\Controllers\HomeController;
 
@@ -100,6 +102,8 @@ Route::prefix('admin')->group(function () {
         Route::get('change/company/status/{table_id}',          [CompanyController::class, 'changeCompanyStatus'])->name('change_company_status');
         Route::post('company/assign-user-to-companies',         [CompanyController::class, 'assignUserToCompanies'])->name('assign-user-to-companies');
         Route::post('company/remove-user-to-companies',         [CompanyController::class, 'removeUserToCompanies'])->name('remove-user-to-companies');
+        Route::get('company/close-company',                    [CompanyController::class, 'closeCompany'])->name('close-company');
+        Route::post('company/close-company-store',                    [CompanyController::class, 'closeCompanyStore'])->name('close-company-store');
        //======================================================================//
        //============================ Country ===============================//
         Route::resource('countries',                            CountriesController::class)/*->middleware(['allow_admin'])*/;
@@ -126,10 +130,16 @@ Route::prefix('admin')->group(function () {
             Route::get('offer-type-create',                         [OfferTypeController::class, 'create']);
             Route::get('change/offerType/status/{table_id}',        [OfferTypeController::class, 'changeOfferTypeStatus'])->name('change_offer_type_status');
 
+            Route::resource('affiliate-discount',                    AffiliateDiscountController::class);
 
             Route::resource('add-discount',                           AddDiscountController::class);
+            Route::get('discount-code-list',                          [AddDiscountController::class, 'discountCodeList'])->name('discount-code-list');
+            Route::get('discount-code-report',                        [AddDiscountController::class, 'discountCodeReport'])->name('discount-code-report');
+            Route::get('discount-code-code-report',                   [AddDiscountController::class, 'discountCodeCodeReport'])->name('discount-code-code-report');
 
             Route::resource('flat-discount',                           FlatDiscountController::class);
+
+            Route::resource('assign-discount',                           AssignDiscountController::class);
 
         });
        //======================================================================//

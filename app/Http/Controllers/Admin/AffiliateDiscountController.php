@@ -18,34 +18,20 @@ use App\Models\ServiceType;
 use App\Models\AssignAdminToCompany;
 use App\Models\DiscountOfferType;
 use App\Models\AddDiscount;
-use App\Models\FlatDiscount;
+use App\Models\AffiliateDiscount;
 use DataTables;
 use Validator;
 
-class FlatDiscountController extends WebController
+class AffiliateDiscountController extends WebController
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {
-        $get_offer_type = DiscountOfferType::get();
-        $get_flat_codes = AddDiscount::select('id', 'name')->get();
-        if ($request->ajax()) {
-            $get_flat_codes = AddDiscount::select('id', 'name')->where('offer_type_id', $request->offer_type_id)->get();
-            
-            $response['offer_types']       = $get_flat_codes;
-            $message                       = "Offer Types fetched successfully";
-            return $this->sendSuccess($response,$message,200);
-        }
-        return view('admin.discountFlatDiscount.create')->with([
-            'title' => 'Flat Discount', 
-            "header" => "Flat Discount Add",
-            'get_offer_type' => $get_offer_type,
-            'get_flat_codes' => $get_flat_codes
-        ]);
+    public function index(Request $request){
+        return redirect()->route('affiliate-discount.create');
+       
     }
 
     /**
@@ -53,9 +39,11 @@ class FlatDiscountController extends WebController
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
+    public function create(Request $request){
+        return view('admin.discountAffiliate.create')->with([
+            'title' =>'Affiliate Discount', 
+            'header' => 'Add Affiliate discount', 
+        ]);
     }
 
     /**
@@ -64,34 +52,30 @@ class FlatDiscountController extends WebController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request){
+        // dd($request->all());
         $validator = Validator::make($request->all(), [
-            'offer_type'    => 'required',
-            'flat_code'     => 'required',
-            'type'          => 'required',
-            'amount'        => 'required'
+            'name' => 'required'
         ]);
-        
+  
         if($validator->fails()){
            return redirect()->back()->withErrors($validator);      
         }
-        
         $user = Auth::user();
         if($user){
             $request->merge(['added_by' => $user->id]);
         }
-        $save_flat_discount = FlatDiscount::addDiscount($request);
-        return redirect()->route('flat-discount.index')->with(['success' => 'Flat discount created successfully']);
+        $save_affiliate = AffiliateDiscount::addAffiliate($request);
+        return redirect()->route('affiliate-discount.create')->with(['success' => 'Affiliate discount created successfully']);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\FlatDiscount  $flatDiscount
+     * @param  \App\Models\AffiliateDiscount  $affiliateDiscount
      * @return \Illuminate\Http\Response
      */
-    public function show(FlatDiscount $flatDiscount)
+    public function show(AffiliateDiscount $affiliateDiscount)
     {
         //
     }
@@ -99,10 +83,10 @@ class FlatDiscountController extends WebController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\FlatDiscount  $flatDiscount
+     * @param  \App\Models\AffiliateDiscount  $affiliateDiscount
      * @return \Illuminate\Http\Response
      */
-    public function edit(FlatDiscount $flatDiscount)
+    public function edit(AffiliateDiscount $affiliateDiscount)
     {
         //
     }
@@ -111,10 +95,10 @@ class FlatDiscountController extends WebController
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\FlatDiscount  $flatDiscount
+     * @param  \App\Models\AffiliateDiscount  $affiliateDiscount
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, FlatDiscount $flatDiscount)
+    public function update(Request $request, AffiliateDiscount $affiliateDiscount)
     {
         //
     }
@@ -122,10 +106,10 @@ class FlatDiscountController extends WebController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\FlatDiscount  $flatDiscount
+     * @param  \App\Models\AffiliateDiscount  $affiliateDiscount
      * @return \Illuminate\Http\Response
      */
-    public function destroy(FlatDiscount $flatDiscount)
+    public function destroy(AffiliateDiscount $affiliateDiscount)
     {
         //
     }

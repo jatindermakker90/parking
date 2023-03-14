@@ -340,7 +340,7 @@ return [
                 ],
                 [
                     'text'        => 'Close Company',
-                    'url'         => 'admin/companies/status',
+                    'url'         => 'admin/company/close-company ',
                     'role'        => 'superadmin'
                 ],
             ]
@@ -382,7 +382,7 @@ return [
                 ],
                 [
                     'text'        => 'Add Affiliated',
-                    'url'         => '#'
+                    'url'         => 'admin/discount/affiliate-discount'
                 ], 
                 [
                     'text'        => 'Add Offer Type',
@@ -394,19 +394,19 @@ return [
                 ],
                 [
                     'text'        => 'Assign Discount',
-                    'url'         => '#'
+                    'url'         => 'admin/discount/assign-discount'
                 ],
                 [
                     'text'        => 'Discount List',
-                    'url'         => '#'
+                    'url'         => 'admin/discount/discount-code-list'
                 ],
                 [
                     'text'        => 'Discount Report',
-                    'url'         => '#'
+                    'url'         => 'admin/discount/discount-code-report'
                 ],
                 [
                     'text'        => 'Discount Code Report',
-                    'url'         => '#'
+                    'url'         => 'admin/discount/discount-code-code-report'
                 ]
             ]
         ],

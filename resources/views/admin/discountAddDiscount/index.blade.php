@@ -9,7 +9,7 @@
           <div class="col-sm-6">
            <ol class="breadcrumb float-sm-right">
               <a href ="{{ route('offer-type.create') }}"> 
-               <button type="button" class="btn btn-block btn-primary"> + Add {{ $title }}</button> 
+               <!-- <button type="button" class="btn btn-block btn-primary"> + Add {{ $title }}</button>  -->
               </a>
             </ol>
           </div>
@@ -29,8 +29,16 @@
                         <thead>
                             <tr>
                                 <th>Sr No.</th>
-                                <th>Name</th>
+                                <th>code</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
                                 <th>Status</th>
+                                <th>Offer type</th>
+                                <!-- <th>Affiliat Type</th>
+                                <th>Used (Active Bookings)</th>
+                                <th>Used (InActive Bookings)</th>
+                                <th>Used (InActive Bookings)</th>
+                                <th>Edit</th> -->
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -72,7 +80,8 @@
 <script src="{{ asset('vendor/moment/moment.min.js') }}"></script> 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script>
-     $('#data_collection').DataTable({
+  $(document).ready(function(){
+    $('#data_collection').DataTable({
       "paging"      : true,
       "pageLength"  : 10,
       "lengthChange": false,
@@ -84,7 +93,7 @@
       "processing"  : true,
       "serverSide"  : true,
       
-      "ajax"        :"{{ url('admin/discount/offer-type') }}",
+      "ajax"        :"{{ url('admin/discount/discount-code-list') }}",
       "columns"     : [
             {
               data: 'DT_RowIndex',         
@@ -105,13 +114,47 @@
               }
             },
             {
+              data: 'start_date',
+              name: 'start_date', 
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type === 'sort'){
+                    return data;
+                }else{
+                    return data;
+                }
+              }
+            },
+            {
+              data: 'end_date',
+              name: 'end_date', 
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type === 'sort'){
+                    return data;
+                }else{
+                    return data;
+                }
+              }
+            },
+            {
               data: 'status',
               name: 'status', 
               orderable: true,
               render: function ( data, type, row) {
-                if(type == 'display'){
+                if(type === 'sort'){
                     return data;
-                }else if(type === 'sort'){
+                }else{
+                    return data;
+                }
+              }
+            },
+            {
+              data: 'offer_type.name',
+              name: 'offer_type.name', 
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type === 'sort'){
                     return data;
                 }else{
                     return data;
@@ -157,6 +200,40 @@
           });
           
       } 
+    });
+    $(document).on('click','.delete_record',function(e){
+
+      e.preventDefault();
+        var delete_type     = $(this).data('type');
+        var delete_message  = 'Do you want to delete '+delete_type+'?';
+        var success_message = delete_type+' deleted successfully';
+        var deny_message    = delete_type+' not deleted.';
+        var href            = $(this).attr('href');
+        Swal.fire({
+            title: delete_message,
+            showDenyButton: false,
+            showCancelButton: true,
+            confirmButtonText: `OK`,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            allowOutsideClick: false
+            }).then((result) => {
+              if (result.isConfirmed) {
+                $.ajax({
+                  url: href,
+                  type: 'DELETE',
+                  success:function(data){     
+                  //  console.log(data);
+                    Swal.fire(success_message, '', 'success');
+                    window.location.reload();
+                  },
+                });
+
+              } else if (result.isDenied) {
+                Swal.fire(deny_message, '', 'info')
+              }
+        });
+    });
   });
 </script>
 @stop
