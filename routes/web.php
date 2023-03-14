@@ -85,6 +85,7 @@ Route::prefix('admin')->group(function () {
         Route::get('trasheded/booking',                        [BookingsController::class, 'trashededBookingList'])->name('trasheded_booking');
 
         Route::get('change/booking/status/{table_id}',         [BookingsController::class, 'changeBookingsStatus'])->name('change_booking_status');
+        Route::post('booking/search-booking-companies',  [BookingsController::class, 'searchCompanyList'])->name('search-booking-companies');
 
         Route::resource('invoices',                            InvoiceController::class);
         Route::get('change/invoice/status/{table_id}',           [InvoiceController::class, 'changeInvoiceStatus'])->name('change_invoice_status');

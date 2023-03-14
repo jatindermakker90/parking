@@ -42,7 +42,7 @@
                     <label>Company:</label>
                     <select class="form-control select2" name ="select_airport" id ="select_airport">
                     <option value="">All</option>
-                    @foreach ($companies as $company_key => $company_value)
+                    @foreach ($companies ?? '' as $company_key => $company_value)
                       <option value="{{ $company_value->id }}">{{ $company_value->company_title }}</option>
                     @endforeach               
                 </select>
