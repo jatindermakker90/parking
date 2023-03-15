@@ -193,4 +193,12 @@ class SettingController extends WebController
     public function getpagelist(){
       return view('admin.settings.pagelist')->with(['title' =>'Page List', "header" => "Config Page"]);
     }
+
+    public function getemailtemplatepage(){
+      return view('admin.settings.emailtemplate')->with(['title' =>'Email Template Details', "header" => "Config Email Template"]);
+    }
+
+    public function getpaymentsettingpage(){
+      return view('admin.settings.payment')->with(['title' =>'Payment Gateways', "header" => "Please Enter Payment Gateways Details"]);
+    }
 }

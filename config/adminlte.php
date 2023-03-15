@@ -424,11 +424,11 @@ return [
                 ],
                 [
                    'text'        => 'Email Settings',
-                   'url'         => 'admin/pages/list',
+                   'url'         => 'admin/email/template',
                ],
                [
                   'text'        => 'Payment Settings',
-                  'url'         => 'admin/pages/list',
+                  'url'         => 'admin/payment/settings',
               ],
               [
                  'text'        => 'Import/Export User',
