@@ -122,6 +122,8 @@ Route::prefix('admin')->group(function () {
         //============================ settings ===============================//
         Route::resource('site/settings',                                     SettingController::class);
         Route::get('pages/list',                                         [SettingController::class, 'getpagelist'])->name('get_page_list');
+        Route::get('email/template',                                         [SettingController::class, 'getemailtemplatepage'])->name('get_email_template');
+        Route::get('payment/settings',                                         [SettingController::class, 'getpaymentsettingpage'])->name('get_payment_setting_page');  
         //============================= End ===================================//
 
         // ========================== discount =====================================//
