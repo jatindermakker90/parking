@@ -12,6 +12,7 @@ use Validator;
 use App\Models\TwilioSetting;
 use App\Models\SiteScriptSetting;
 use App\Models\TermCondition;
+use App\Models\EmailTemplates;
 
 class SettingController extends WebController
 {
@@ -139,6 +140,27 @@ class SettingController extends WebController
               //return $this->sendSuccess(['form_type'=>'email'],'Email Settings Updated',200);
             }
           }
+          if($tab_type == "client_email_template"){
+            $data_array = [
+              'user_id' => $user->id,
+              'client_email_template' => $request->client_email,
+              'client_cancel_email_template' => $request->client_cancel_email,
+              'company_confirm_email_template' => $request->company_confirm_email,
+              'company_cancel_email_template' => $request->company_cancel_email,
+              'review_email_template' => $request->review_email
+            ];
+            if($row_id == 0){
+              // New entry
+              EmailTemplates::create($data_array);
+              return redirect()->route('get_email_template')->with(['success' => 'Email Template Settings added successfully']);
+              //return $this->sendSuccess(['form_type'=>'email'],'Email Settings Created',200);
+            } else {
+              // Update Data
+              EmailTemplates::where('id',$row_id)->update($data_array);
+              return redirect()->route('get_email_template')->with(['success' => 'Email Template Settings updated successfully']);
+              //return $this->sendSuccess(['form_type'=>'email'],'Email Settings Updated',200);
+            }
+          }
         } catch (Exception $e) {
             $message = $e->getMessage()." at line ".$e->getLine()." in file ".$e->getFile();
             return $this->sendError($message);
@@ -195,7 +217,12 @@ class SettingController extends WebController
     }
 
     public function getemailtemplatepage(){
-      return view('admin.settings.emailtemplate')->with(['title' =>'Email Template Details', "header" => "Config Email Template"]);
+      $template_data = EmailTemplates::first();
+      return view('admin.settings.emailtemplate')->with([
+        'title' =>'Email Template Details',
+        "header" => "Config Email Template",
+        'template_data' => $template_data
+      ]);
     }
 
     public function getpaymentsettingpage(){
