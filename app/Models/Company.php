@@ -9,6 +9,23 @@ class Company extends Model
 {
     use HasFactory;
 
+    // public function get($service_types, $key, $value, $attributes)
+    // {
+    //     return explode(',', $value);
+    // }
+
+    // public function getServiceTypesAttribute($value)
+    // {
+    //     return explode(",", $value);
+    // }
+    // public function getCompanyTypesAttribute($value)
+    // {
+    //     return explode(",", $value);
+    // }
+    // public function getOfferTypesAttribute($value)
+    // {
+    //     return explode(",", $value);
+    // }
 
     public static function addCompany($data){
 
