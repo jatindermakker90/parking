@@ -104,39 +104,187 @@
 </div>
 
 @if(!empty($searchedCompanies) && $searchedCompanies->count() > 0)
-  <div class="row">
-  <!-- <div class="col-12"> -->
+  <div class="row" id="company-list">
     @foreach($searchedCompanies as $searchedCompanies_key => $searchedCompanies_value)
       <div class="col-3">
         <div class="card">     
-          <div class="card-header">
-            <h3 class="card-title">{{ $searchedCompanies_value->company_title }}</h3>
+          <div class="card-header text-center">
+            <div>
+                <p class="m-0 text-success"><i class="fas fa-window-close mr-1"></i>Cancellation Cover Available</p>
+                <h6 class="font-weight-bold">{{ $searchedCompanies_value->company_title }}</h6>
+                <p>{{$searchedCompanies_value->company_types[0]->name}}</p>
+              </div>
+            <!-- <h3 class="card-title">{{ $searchedCompanies_value->company_title }}</h3> -->
           </div>
           <div class="card-body">
-            
+            <div>
+              <img class="booking-company-logo" src="{{ asset('assets/images/abstract-logo-company-made-with-color_341269-925.jpg') }}" alt="" srcset="">
+              @if(!empty($searchedCompanies_value->service_types) && $searchedCompanies_value->service_types->count() > 0 )
+                <ul>
+                  @foreach($searchedCompanies_value->service_types as $serviceTypeKey => $serviceTypeValue)
+                    <li>{{$serviceTypeValue->name}}</li>
+                  @endforeach
+                </ul>
+              @endif
+            </div>
             
           </div>
           <div class="card-footer">
-            <button type="submit" class="btn btn-primary w-100">Book Now</button>        
+            <button type="button" class="btn btn-primary w-100 book-now" data-id="{{ $searchedCompanies_value->id }}">Book Now</button>        
           </div>
           <!-- /.card-body -->
         </div>
       </div>
     @endforeach
     <!-- /.card -->
-  <!-- </div> -->
-  <!-- /.col -->
-</div>
+  </div>
 @endif
+  <div class="row" id="booking-form">
+      <div class="col-8">
+        <div class="card">
+          <form action="" method="post">
+            <div class="card-header text-center">
+              <h3 class="card-title">Fill Your Deatils</h3>
+            </div>
+            <div class="card-body">
+             <div>
+              <div>
+                <h3 class="mb-4">Contact Details</h3>
+              </div>
+              <div class="row">
+                <div class="col-2">
+                  <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" class="form-control" placeholder="Enter title" name="title" id="title">
+                  </div>
+                </div>
+                <div class="col-5">
+                  <div class="form-group">
+                    <label for="first_name">First Name</label>
+                    <input type="text" class="form-control" placeholder="Enter first name" name="first_name" id="first_name">
+                  </div>
+                </div>
+                <div class="col-5">
+                  <div class="form-group">
+                    <label for="last_name">Last Name</label>
+                    <input type="text" class="form-control" placeholder="Enter last name" name="last_name" id="last_name">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" class="form-control" placeholder="Enter email" name="email" id="email">
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="mobile">Mobile Number</label>
+                    <input type="number" class="form-control" placeholder="Enter mobile" name="mobile" id="mobile">
+                  </div>
+                </div>
+              </div>
+              <div>
+                <h3 class="mt-5 mb-4">Optional Servivce</h3>
+              </div>
+              <div class="row">
+                <div class="col-4 optional-service-column-1">
+                  <div class="checkbox mb-3">
+                    <div class="checker font-weight-bold">
+                      <span class="mr-2">
+                        <input type="checkbox" name="is_levy_charge" value="1">
+                      </span>
+                      Cancellation Cover
+                    </div>
+                  </div>
+                  <p class="m-0">Cancellation protection is extra protection & peace of mind if you need to cancel your booking.</p>
+                </div>
+                <div class="col-4 optional-service-column-2">
+                  <div class="checkbox mb-3">
+                    <div class="checker font-weight-bold">
+                      <span class="mr-2">
+                        <input type="checkbox" name="is_levy_charge" value="1">
+                      </span>
+                      Sms Confirmation 
+                    </div>
+                  </div>
+                  <p class="m-0">Select this option and you will receive your parking order confirmation Via sms text message.</p>
+                </div>
+              </div>
+              <div>
+                <h3 class="mt-5 mb-4">Vehicle Details</h3>
+              </div>
+             </div>
+            </div>
+            <div class="card-footer">
+              <button type="button" class="btn btn-primary w-100">Submit</button>        
+            </div>
+          </form>     
+          <!-- /.card-body -->
+        </div>
+      </div>
+    <!-- /.card -->
+      <div class="col-4">
+        <div class="card">
+          <div class="card-header text-center">
+            <h3 class="card-title">Your Booking Summary</h3>
+          </div>
+          <div class="card-body">
+            <div>
+            
+            </div>
+          </div>
+          <div class="card-footer">
+            <button type="button" class="btn btn-primary w-100">Submit</button>        
+          </div>  
+          <!-- /.card-body -->
+        </div>
+      </div>
+  </div>
 @stop
 @section('css')
-
+<style>
+  .booking-company-logo{
+    width: 100%;
+    height: 150px;
+    object-fit: contain;
+  }
+  #booking-form{
+    display: none;
+  }
+  .optional-service-column-1, .optional-service-column-2{
+    border: 1px solid orange;
+    padding: 17px 20px 17px 20px;
+  }
+  .optional-service-column-1{
+    margin-right: 20px;
+  }
+</style>
 @stop
 @section('js')
 <!-- DataTables  & Plugins -->
+ 
 <script type="text/javascript">
 $(document).ready(function(){
+   window.onload = function() {
+    history.replaceState("", "", '{{ route("search-booking-companies-get") }}');
+  }
 
+  $(document).on('click','.book-now',function(){
+      var company_id    = $(this).data('id');
+      console.log(`company_id:: ${company_id}`);
+      $("#company-list").hide();
+      $("#booking-form").css('display', 'flex');
+      // var href    = "{{ url('admin/fetch/terminal/details') }}"+"?airport_id="+airport_id;
+      // $.get(href, function(response) {
+      //     $('#terminal_id').html('<option value="">Select terminal</option>');
+      //     var response_data = response.result;
+      //     $.each(response_data.terminal, function (index, value) {
+      //       $('#terminal_id').append('<option value ="'+value.id+ '">'+value.terminal_name+'</option>');
+      //     });
+      // });
+  });
 
 });
 </script>

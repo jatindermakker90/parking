@@ -11,6 +11,9 @@ use App\Models\User;
 use App\Models\Bookings;
 use App\Models\Airport;
 use App\Models\Company;
+use App\Models\OfferType;
+use App\Models\CompanyType;
+use App\Models\ServiceType;
 
 class BookingsController extends WebController
 {
@@ -153,7 +156,29 @@ class BookingsController extends WebController
         $airports = Airport::where('airport_status',config('constant.STATUS.ACTIVE'))->get();
         $companies  = Company::where('company_status','!=',config('constant.STATUS.DELETED'))
                             ->where('airport_id', $request->select_airport)
-                            ->get(); 
+                            ->get();
+
+                            // echo "<pre>";
+        // dd($companies);
+        if($companies->count() > 0){
+            foreach ($companies as $key => $value) {
+                if(!empty($value->company_types)){
+                    $value->company_types =  CompanyType::wherein('id', explode(",", $value->company_types))->get();
+                }
+                if(!empty($value->offer_types)){
+                    $value->offer_types =  OfferType::wherein('id', explode(",", $value->offer_types))->get();
+                }
+                if(!empty($value->service_types)){
+                    $value->service_types =  ServiceType::wherein('id', explode(",", $value->service_types))->get();
+                }
+
+            }
+        }
+        // print_r($companies->toArray());
+        // die;
+        // $company_types = OfferType::whereIn('id', $companies->company_types)->get();
+        // $companies->merge(["company_types" => OfferType::whereIn('id', $companies->company_types)]);                     
+
         
         return view('admin.booking.create')->with([
             'title' =>"Booking Management", 
@@ -162,6 +187,11 @@ class BookingsController extends WebController
             'searchedCompanies' => $companies,
             'request' => $request->all()
         ]);
+    }
+
+    public function searchCompanyListGet()
+    {
+        return redirect()->route('bookings.create');
     }
 
 }
