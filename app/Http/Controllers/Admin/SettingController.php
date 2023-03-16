@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Validator;
 use App\Models\TwilioSetting;
 use App\Models\SiteScriptSetting;
+use App\Models\TermCondition;
 
 class SettingController extends WebController
 {
@@ -24,12 +25,14 @@ class SettingController extends WebController
         $email_settings = EmailSetting::first();
         $twilio_settings = TwilioSetting::first();
         $script_settings = SiteScriptSetting::first();
+        $term_condition_settings = TermCondition::first();
         return view('admin.settings.index')->with([
           'title' =>'Site Settings',
           "header" => "Please enter site settings details",
           'email_setting' => $email_settings,
           'twilio_setting'=> $twilio_settings,
-          'script_setting' => $script_settings
+          'script_setting' => $script_settings,
+          'term_condition_setting' => $term_condition_settings
         ]);
     }
 
@@ -119,6 +122,23 @@ class SettingController extends WebController
               //return $this->sendSuccess(['form_type'=>'email'],'Email Settings Updated',200);
             }
           }
+          if($tab_type == "term"){
+            $data_array = [
+              'user_id' => $user->id,
+              'term_condition_box' => $request->term_condition_box
+            ];
+            if($row_id == 0){
+              // New entry
+              TermCondition::create($data_array);
+              return redirect()->route('settings.index')->with(['success' => 'Term Condition Settings added successfully']);
+              //return $this->sendSuccess(['form_type'=>'email'],'Email Settings Created',200);
+            } else {
+              // Update Data
+              TermCondition::where('id',$row_id)->update($data_array);
+              return redirect()->route('settings.index')->with(['success' => 'Term Condition Settings updated successfully']);
+              //return $this->sendSuccess(['form_type'=>'email'],'Email Settings Updated',200);
+            }
+          }
         } catch (Exception $e) {
             $message = $e->getMessage()." at line ".$e->getLine()." in file ".$e->getFile();
             return $this->sendError($message);
@@ -172,5 +192,13 @@ class SettingController extends WebController
 
     public function getpagelist(){
       return view('admin.settings.pagelist')->with(['title' =>'Page List', "header" => "Config Page"]);
+    }
+
+    public function getemailtemplatepage(){
+      return view('admin.settings.emailtemplate')->with(['title' =>'Email Template Details', "header" => "Config Email Template"]);
+    }
+
+    public function getpaymentsettingpage(){
+      return view('admin.settings.payment')->with(['title' =>'Payment Gateways', "header" => "Please Enter Payment Gateways Details"]);
     }
 }
