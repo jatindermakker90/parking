@@ -41,48 +41,48 @@
                   </ul>
                   <div class="tab-content" id="myTabContent" style="padding: 20px;background: white;">
                     <div class="tab-pane fade show active" id="email" role="tabpanel" aria-labelledby="email-tab">
-                      {{ Form::open([ 'method' => 'post']) }}
+                      {{ Form::open(['route' => 'settings.store','method' => 'post']) }}
                           <h3>Stripe 3D Secure Details</h3>
                           <div class="row">
                             <div class="col-sm-6">
                               <div class="form-group">
                                 {{ Form::label('Live Private Key'); }}
-                                {{ Form::text('smtp2go_api_key',isset($email_setting->smtp2go_api_key) ? $email_setting->smtp2go_api_key : '',['class'=>'form-control m-t-xxs']); }}
+                                {{ Form::text('live_private_key',isset($payment_setting->live_private_key) ? $payment_setting->live_private_key : '',['class'=>'form-control m-t-xxs']); }}
                               </div>
                             </div>
                             <div class="col-sm-6">
                               <div class="form-group">
                                 {{ Form::label('Live Public Key'); }}
-                                {{ Form::text('smtp2go_base_url',isset($email_setting->smtp2go_base_url) ? $email_setting->smtp2go_base_url : '',['class'=>'form-control m-t-xxs']); }}
+                                {{ Form::text('live_public_key',isset($payment_setting->live_public_key) ? $payment_setting->live_public_key : '',['class'=>'form-control m-t-xxs']); }}
                               </div>
                             </div>
                             <div class="col-sm-6">
                               <div class="form-group">
                                 {{ Form::label('Test Private Key'); }}
-                                {{ Form::text('smtp2go_base_url',isset($email_setting->smtp2go_base_url) ? $email_setting->smtp2go_base_url : '',['class'=>'form-control m-t-xxs']); }}
+                                {{ Form::text('test_private_key',isset($payment_setting->test_private_key) ? $payment_setting->test_private_key : '',['class'=>'form-control m-t-xxs']); }}
                               </div>
                             </div>
                             <div class="col-sm-6">
                               <div class="form-group">
                                 {{ Form::label('Test Public Key'); }}
-                                {{ Form::text('smtp2go_base_url',isset($email_setting->smtp2go_base_url) ? $email_setting->smtp2go_base_url : '',['class'=>'form-control m-t-xxs']); }}
+                                {{ Form::text('test_public_key',isset($payment_setting->test_public_key) ? $payment_setting->test_public_key : '',['class'=>'form-control m-t-xxs']); }}
                               </div>
                             </div>
                             <div class="col-sm-12">
                               <div class="form-group">
                                 <label for="debug">
-                                  @if(isset($email_setting->smtp_debug_status) && $email_setting->smtp_debug_status == 1)
-                                  <div class="checker up"><span>{{ Form::checkbox('smtp_debug_status', '1', true) }}</span></div>
+                                  @if(isset($payment_setting->gateway_activation_status) && $payment_setting->gateway_activation_status == 1)
+                                  <div class="checker up"><span>{{ Form::checkbox('gateway_activation_status', '1', true) }}</span></div>
                                   @else
-                                  <div class="checker down"><span> {{ Form::checkbox('smtp_debug_status', '1', false) }} </span></div>
+                                  <div class="checker down"><span> {{ Form::checkbox('gateway_activation_status', '1', false) }} </span></div>
                                   @endif
                                 Check to Activate Stripe3DS Gateway
                                 </label>
                                 <label for="ssl">
-                                  @if(isset($email_setting->smtp_ssl_status) && $email_setting->smtp_ssl_status == 1)
-                                  <div class="checker"><span>{{ Form::checkbox('smtp_ssl_status', '1', true) }}</span></div>
+                                  @if(isset($payment_setting->stripe_testmode_status) && $payment_setting->stripe_testmode_status == 1)
+                                  <div class="checker"><span>{{ Form::checkbox('stripe_testmode_status', '1', true) }}</span></div>
                                   @else
-                                  <div class="checker"><span>{{ Form::checkbox('smtp_ssl_status', '1', false) }}</span></div>
+                                  <div class="checker"><span>{{ Form::checkbox('stripe_testmode_status', '1', false) }}</span></div>
                                   @endif
                                   Check to Activate Stripe3DS Test Mode
                                 </label>
@@ -91,8 +91,8 @@
                           </div>
                           <br> <hr> <br>
                           <div class="form-group" style="text-align: left;">
-                            {{ Form::hidden('form_type','email'); }}
-                            {{ Form::hidden('row_id',isset($email_setting->id) ? $email_setting->id : 0); }}
+                            {{ Form::hidden('form_type','payment_setting'); }}
+                            {{ Form::hidden('row_id',isset($payment_setting->id) ? $payment_setting->id : 0); }}
                             <button type="submit" name="submit" id="submitButton" class="btn btn-info">Submit</button>
                           </div>
                           {!! Form::close() !!}
