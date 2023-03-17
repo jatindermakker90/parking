@@ -81,6 +81,7 @@ Route::prefix('admin')->group(function () {
         Route::resource('bookings',                            BookingsController::class);
 
         Route::get('add/booking',                              [BookingsController::class, 'create']);
+        Route::post('store/booking',                            [BookingsController::class, 'store'])->name('booking-store');
         Route::get('cancelled/booking',                        [BookingsController::class, 'cancelledBookingList'])->name('cancelled_booking');
         Route::get('trasheded/booking',                        [BookingsController::class, 'trashededBookingList'])->name('trasheded_booking');
 

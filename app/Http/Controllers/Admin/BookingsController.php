@@ -55,7 +55,8 @@ class BookingsController extends WebController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request){
+    public function store(Request $request, Bookings $bookings){
+        dd($request->all());
         $validator = Validator::make($request->all(), [
             'select_airport'            => 'required',
             // 'dep_date'                  => 'required',
@@ -66,6 +67,36 @@ class BookingsController extends WebController
         if($validator->fails()){
            return redirect()->back()->withErrors($validator);      
         }
+
+
+        // $booking_data = [];
+        // $booking_data['airport_id'] = $request->select_airport;
+        // $booking_data['dep_date_time'] = $request->dep_date.' '.$request->dep_time;
+        // $booking_data['return_date_time'] = $request->return_date.' '.$request->return_time;
+        // $booking_data['discount_code'] = $request->discount_code;
+        // $booking_data['title'] = $request->title;
+        // $booking_data['first_name'] = $request->first_name;
+        // $booking_data['last_name'] = $request->last_name;
+        // $booking_data['email'] = $request->email;
+        // $booking_data['mobile'] = $request->mobile;
+        // $booking_data['cancellation_cover'] = $request->cancellation_cover;
+        // $booking_data['sms_confirmation'] = $request->sms_confirmation;
+        // $booking_data['no_of_people'] = $request->no_of_peopele;
+        // $booking_data['drop_off_terminal'] = $request->drop_off_terminal;
+        // $booking_data['return_terminal'] = $request->return_terminal;
+
+        $bookingSave = $bookings::addBooking($request);
+        // echo "<pre>";
+        dd($bookingSave->toArray());
+
+
+        $vehical_details = [];
+        $vehical_details['booking_id']  = ''; 
+        $vehical_details['vehicle_make']  = $request->vehicle_make;
+        $vehical_details['vehicle_model']  = $request->vehicle_model;
+        $vehical_details['vehicle_colour']  = $request->vehicle_colour;
+        $vehical_details['vehicle_reg']  = $request->vehicle_reg;
+
 
         $companies = Company::where(['airport_id' => $request->select_airport])->get();
         dd($companies);
