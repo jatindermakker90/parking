@@ -28,18 +28,37 @@ class BookingsController extends WebController
             $booking = Bookings::with(['vehicle', 'company', 'airport'])->where('booking_status','!=',config('constant.STATUS.DELETED'))->get();
             return Datatables::of($booking)
                     ->addIndexColumn()
+                    ->editColumn('created_at', function($row){
+                        return date("Y-m-d", strtotime($row->created_at));; 
+                    })
+                    ->editColumn('dep_date_time', function($row){
+                        return date("Y-m-d H:i:s", strtotime($row->dep_date_time));; 
+                    })
+                    ->editColumn('return_date_time', function($row){
+                        return date("Y-m-d H:i:s", strtotime($row->return_date_time));; 
+                    })
                     ->addColumn('customer', function($row){
                         return $full_name = $row->first_name.' '.$row->last_name; 
                     })
                     ->addColumn('ref_no', function($row){
                         return '123'; 
                     })
+                    ->addColumn('days', function($row){
+                        return '123'; 
+                    })
+                    ->addColumn('price', function($row){
+                        return '49'; 
+                    })
+                    ->addColumn('cnc', function($row){
+                        return '0'; 
+                    })
                     ->addColumn('action', function($row){
-                            $btn = '<a href="#" class="edit btn btn-warning btn-sm mr-2"><i class="fa fa-edit" aria-hidden="true"></i></a>';
-                            $btn .= '<a href="#" class="delete btn btn-danger btn-sm mr-2 delete_record" data-type =""><i class="fa fa-trash" aria-hidden="true"></i></a>';
+                            $btn = '<button class="edit-booking btn btn-warning btn-sm mr-2" title="Edit Booking" data-id="'.$row->id.'"><i class="fa fa-edit" aria-hidden="true"></i></button>';
+                            $btn .= '<button class="delete btn btn-danger btn-sm mr-2 delete_record" title="Delete Booking" data-type =""><i class="fa fa-trash" aria-hidden="true"></i></button>';
+                            $btn .= '<button class="btn btn-danger btn-sm mr-2" title="Change Status"><i class="fas fa-stream"></i></button>';
                             return $btn;
                     })
-                    ->rawColumns(['action', 'customer', 'ref_no'])
+                    ->rawColumns(['action', 'customer', 'ref_no', 'days', 'price', 'cnc'])
                     ->make(true);
         }
         $airports   = Airport::where('airport_status',config('constant.STATUS.ACTIVE'))->get(); 
@@ -218,6 +237,11 @@ class BookingsController extends WebController
     public function searchCompanyListGet()
     {
         return redirect()->route('bookings.create');
+    }
+
+    public function getSingleBooking(Request $request, Bookings $booking)
+    {
+        
     }
 
 }
