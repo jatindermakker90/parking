@@ -111,7 +111,7 @@
 @if(!empty($searchedCompanies) && $searchedCompanies->count() > 0)
   <div class="row" id="company-list">
     @foreach($searchedCompanies as $searchedCompanies_key => $searchedCompanies_value)
-      <div class="col-3">
+      <div class="col-3 company" data-id="{{ $searchedCompanies_value->id }}">
         <div class="card">     
           <div class="card-header text-center">
             <div>
@@ -145,6 +145,7 @@
       <div class="col-8">
         <div class="card">
           <form action="{{ route('bookings.store') }}" method="post" id="booking_form">
+            <input type="hidden" name="company_id" id="company_id">
             <div class="card-header text-center">
               <h3 class="card-title">Fill Your Deatils</h3>
             </div>
@@ -301,7 +302,7 @@
              </div>
             </div>
             <div class="card-footer">
-              <button type="submit" class="btn btn-primary w-100">Submit</button>        
+              <button type="submit" class="btn btn-primary w-100 submit-button">Submit</button>        
             </div>
           </form>     
           <!-- /.card-body -->
@@ -391,6 +392,7 @@ $(document).ready(function(){
 
       console.log('companyTitle:: ', companyTitle, 'dropOffDate', dropOffDate)
       
+      let bookingForm = $("#booking-form");
       let bookingSummaryEle = $("#booking-summary");
       bookingSummaryEle.find(".booking-company-logo").attr('src', imageUrl);
       bookingSummaryEle.find(".company-title").text(companyTitle);
@@ -401,11 +403,9 @@ $(document).ready(function(){
       bookingSummaryEle.find(".booking-charge").text('BOOKING CHARGE : 1.95');
       bookingSummaryEle.find(".total-charge").text('TOTAL : 94.49');
 
-
-
-
+      bookingForm.find(`input[name='company_id']`).val(company_id);
       $("#company-list").hide();
-      $("#booking-form").css('display', 'flex');
+      bookingForm.css('display', 'flex');
 
   });
 
@@ -413,6 +413,7 @@ $(document).ready(function(){
     e.preventDefault();
     let validationPass = true; 
     let form = $(this);
+    form.find('.submit-button').attr('disabled', true)
     let filterForm = $("#filter-form")
 
     let filterFormData = filterForm.serialize();
@@ -456,9 +457,12 @@ $(document).ready(function(){
         data: combineFormData,
         success: function(response){
           console.log(`form submited`, response);
-          // toastr["success"](response.message);
-          // window.user_access_token = response.result.token;
-          // window.location.href = response.result.path;
+          if(response.status_code == 200){
+            toastr["success"](response.message);
+            setTimeout(() => {
+              window.location.href = response.result.path;
+            }, 1000);
+          }
         },
         error: function(XHR, textStatus, errorThrown) {
           // console.log(XHR.responseJSON.message);

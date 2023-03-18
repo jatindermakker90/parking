@@ -207,6 +207,48 @@ $(document).ready(function(){
       "serverSide"  : true,
       "ajax"        :"{{ url('admin/bookings') }}?start_date="+start_date+"&end_date="+end_date+"&search_text="+search_text,
       "columns"     : [
+            // {
+            //   data: 'DT_RowIndex',         
+            //   name: 'DT_RowIndex',   
+            //   searchable: false,
+            //   orderable: false
+            // },
+            {
+              data: 'ref_no',
+              name: 'ref_no', 
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type === 'sort'){
+                    return data;
+                }else{
+                    return  data??'NA';
+                }
+              }
+            },
+            {
+              data: 'customer',
+              name: 'customer', 
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type === 'sort'){
+                    return data;
+                }else{
+                    return  data??'NA';
+                }
+              }
+            },
+            {
+              data: 'company.id',
+              name: 'company.id', 
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type === 'sort'){
+                    return data;
+                }else{
+                    return  data??'NA';
+                }
+              }
+            },
             {
               data: 'action',
               name: 'action', 

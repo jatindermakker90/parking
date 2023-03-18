@@ -14,6 +14,7 @@ use App\Models\Company;
 use App\Models\OfferType;
 use App\Models\CompanyType;
 use App\Models\ServiceType;
+use App\Models\VehicleDetails;
 
 class BookingsController extends WebController
 {
@@ -22,8 +23,25 @@ class BookingsController extends WebController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request){               
-        if ($request->ajax()) {}
+    public function index(Request $request){    
+        if ($request->ajax()) {
+            $booking = Bookings::with(['vehicle', 'company', 'airport'])->where('booking_status','!=',config('constant.STATUS.DELETED'))->get();
+            return Datatables::of($booking)
+                    ->addIndexColumn()
+                    ->addColumn('customer', function($row){
+                        return $full_name = $row->first_name.' '.$row->last_name; 
+                    })
+                    ->addColumn('ref_no', function($row){
+                        return '123'; 
+                    })
+                    ->addColumn('action', function($row){
+                            $btn = '<a href="#" class="edit btn btn-warning btn-sm mr-2"><i class="fa fa-edit" aria-hidden="true"></i></a>';
+                            $btn .= '<a href="#" class="delete btn btn-danger btn-sm mr-2 delete_record" data-type =""><i class="fa fa-trash" aria-hidden="true"></i></a>';
+                            return $btn;
+                    })
+                    ->rawColumns(['action', 'customer', 'ref_no'])
+                    ->make(true);
+        }
         $airports   = Airport::where('airport_status',config('constant.STATUS.ACTIVE'))->get(); 
         $companies  = Company::where('company_status','!=',config('constant.STATUS.DELETED'))->get();    
         return view('admin.booking.index')->with([
@@ -55,8 +73,8 @@ class BookingsController extends WebController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Bookings $bookings){
-        dd($request->all());
+    public function store(Request $request, Bookings $bookings, VehicleDetails $vehicle_details){
+        // dd($request->all());
         $validator = Validator::make($request->all(), [
             'select_airport'            => 'required',
             // 'dep_date'                  => 'required',
@@ -68,41 +86,18 @@ class BookingsController extends WebController
            return redirect()->back()->withErrors($validator);      
         }
 
-
-        // $booking_data = [];
-        // $booking_data['airport_id'] = $request->select_airport;
-        // $booking_data['dep_date_time'] = $request->dep_date.' '.$request->dep_time;
-        // $booking_data['return_date_time'] = $request->return_date.' '.$request->return_time;
-        // $booking_data['discount_code'] = $request->discount_code;
-        // $booking_data['title'] = $request->title;
-        // $booking_data['first_name'] = $request->first_name;
-        // $booking_data['last_name'] = $request->last_name;
-        // $booking_data['email'] = $request->email;
-        // $booking_data['mobile'] = $request->mobile;
-        // $booking_data['cancellation_cover'] = $request->cancellation_cover;
-        // $booking_data['sms_confirmation'] = $request->sms_confirmation;
-        // $booking_data['no_of_people'] = $request->no_of_peopele;
-        // $booking_data['drop_off_terminal'] = $request->drop_off_terminal;
-        // $booking_data['return_terminal'] = $request->return_terminal;
-
         $bookingSave = $bookings::addBooking($request);
-        // echo "<pre>";
-        dd($bookingSave->toArray());
 
-
-        $vehical_details = [];
-        $vehical_details['booking_id']  = ''; 
-        $vehical_details['vehicle_make']  = $request->vehicle_make;
-        $vehical_details['vehicle_model']  = $request->vehicle_model;
-        $vehical_details['vehicle_colour']  = $request->vehicle_colour;
-        $vehical_details['vehicle_reg']  = $request->vehicle_reg;
-
-
-        $companies = Company::where(['airport_id' => $request->select_airport])->get();
-        dd($companies);
-
-
-        return redirect()->route('bookings.index')->with(['success' => 'Booking added successfully']);
+        if($bookingSave->count() > 0  && $bookingSave->id){
+            $request->merge(['booking_id' => $bookingSave->id]);
+            $bookingVehicle = $vehicle_details::addVehical($request);
+        }
+        $response = [];
+        $response['booking_details'] = $bookingSave;
+        $response['vehicle_details'] = $bookingVehicle;
+        $response['path'] = route('bookings.index');
+        $message = 'Booking has been saved successfully !';
+        return $this->sendSuccess($response,$message,200);
     }
 
     /**
