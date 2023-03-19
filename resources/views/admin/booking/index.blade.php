@@ -132,8 +132,8 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-        <div>
+      <div class="modal-body" id="booking-edit-modal">
+        <!-- <div>
             <h4 id="assignAdminResponse"></h4>
             <form id="assign-admin-form" method="POST" action="{{ route('assign-user-to-companies') }}" enctype="multipart/form-data">
               @csrf
@@ -303,7 +303,7 @@
               </div>
               <button type="submit" class="btn btn-primary w-100">Assign</button>
           </form>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -520,8 +520,8 @@ $(document).ready(function(){
               }
             },
             {
-              data: 'price',
-              name: 'price', 
+              data: 'cnc',
+              name: 'cnc', 
               orderable: true,
               render: function ( data, type, row) {
                 if(type === 'sort'){
@@ -612,13 +612,35 @@ $(document).ready(function(){
   $(document).on('click','.edit-booking',function(e){
         e.preventDefault();
         let model = $("#modal-default");
-        // let user_element_id = $(e.target).attr('id');
-        console.log(`model open`)
+        console.log('e.target:: ', e.target);
+        let booking_id = $(e.target).attr('data-id');
+        let ajaxUrl = "{{ route('get-single-booking') }}";
+        ajaxUrl = `${ajaxUrl}?id=${booking_id}`;
+        console.log(`model open : booking_id :: `, booking_id, 'ajaxUrl:: ', ajaxUrl);
+        // return;
+        $.ajax({
+          type:"GET",
+          url: ajaxUrl,
+          success: function(response){
+            // console.log(`form submited`, response);
+            // if(response.status_code == 200){
+              $("#booking-edit-modal").html(response)
+              model.modal('show');
+            // }
+          },
+          error: function(XHR, textStatus, errorThrown) {
+            // console.log(XHR.responseJSON.message);
+            if(XHR.responseJSON.message != undefined){
+                toastr["error"](XHR.responseJSON.message);  
+            }else{
+                toastr["error"](errorThrown);  
+            }
+          }
+        });
         // $("#assignAdminResponse").removeClass().text(null).hide();
         // let user_email = $(e.target).parent().prev().text();
         // model.find('#user_element').val(user_element_id);
         // model.find('#assign-user-email').val(user_email);
-        model.modal('show');
     });
 });
 </script>

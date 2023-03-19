@@ -44,7 +44,7 @@
 
               <div class="form-group {{ $errors->has('dep_date') ? 'has-error' : '' }} col-4">
                 <label for="name">Departure Date</label>
-                <input type="date" class="form-control" name ="dep_date" placeholder="Select departure date" id="dep_date" value="<?php echo (isset($request) && $request['dep_date'])  ? $request['dep_date'] : '' ?>">
+                <input type="date" class="form-control" min="{{ now()->format('Y-m-d')  }}" name ="dep_date" placeholder="Select departure date" id="dep_date" value="<?php echo (isset($request) && $request['dep_date'])  ? $request['dep_date'] : '' ?>">
                 <span class="validationFail">Please select departure date</span>
                 @if($errors->first('dep_date'))
                 <span style="color:red;" class="form-error">Please enter departure date</span>
@@ -67,7 +67,7 @@
               
               <div class="form-group {{ $errors->has('return_date') ? 'has-error' : '' }} col-4">
                 <label for="return_date">Arrival Date</label>
-                  <input type="date" class="form-control" name ="return_date" id="return_date" value="<?php echo (isset($request) && $request['return_date'])  ? $request['return_date'] : '' ?>">
+                  <input type="date" class="form-control" min="{{ now()->format('Y-m-d')  }}" name ="return_date" id="return_date" value="<?php echo (isset($request) && $request['return_date'])  ? $request['return_date'] : '' ?>">
                   <span class="validationFail">Please select arrival date</span>
                   @if($errors->first('return_date'))
                     <span style="color:red;" class="form-error">Please enter arrival date</span>
@@ -97,7 +97,7 @@
           </div>
           <!-- /.card-body -->
           <div class="card-footer">
-            <button type="submit" class="btn btn-primary">Search Now</button>        
+            <button type="button" class="btn btn-primary" id="filter_form_submit">Search Now</button>        
           </div>
         </form>
       </div>
@@ -146,6 +146,12 @@
         <div class="card">
           <form action="{{ route('bookings.store') }}" method="post" id="booking_form">
             <input type="hidden" name="company_id" id="company_id">
+            <input type="hidden" name="select_airport" id="booking_airport_id">
+            <input type="hidden" name="dep_date" id="booking_dep_date">
+            <input type="hidden" name="dep_time" id="booking_dep_time">
+            <input type="hidden" name="return_date" id="booking_return_date">
+            <input type="hidden" name="return_time" id="booking_return_time">
+            <input type="hidden" name="discount_code" id="booking_discount_code">
             <div class="card-header text-center">
               <h3 class="card-title">Fill Your Deatils</h3>
             </div>
@@ -205,7 +211,7 @@
                   <div class="checkbox mb-3">
                     <div class="checker font-weight-bold">
                       <span class="mr-2">
-                        <input type="checkbox" name="cancellation_cover">
+                        <input type="checkbox" class="cancellation_cover" name="cancellation_cover">
                       </span>
                       Cancellation Cover
                     </div>
@@ -216,7 +222,7 @@
                   <div class="checkbox mb-3">
                     <div class="checker font-weight-bold">
                       <span class="mr-2">
-                        <input type="checkbox" name="sms_confirmation">
+                        <input type="checkbox" class="sms_confirmation" name="sms_confirmation">
                       </span>
                       Sms Confirmation 
                     </div>
@@ -324,15 +330,13 @@
                 <h6 class="airport font-weight-bold"></h6>
                 <hr>
                 <h6 class="booking-charge font-weight-bold"></h6>
+                <h6 class="cancellation_cover_charge font-weight-bold"></h6>
+                <h6 class="sms_confirmation_charge font-weight-bold"></h6>
                 <hr>
                 <h6 class="total-charge font-weight-bold"></h6>
               </div>
             </div>
           </div>
-          <!-- <div class="card-footer">
-            <button type="button" class="btn btn-primary w-100">Submit</button>        
-          </div>   -->
-          <!-- /.card-body -->
         </div>
       </div>
   </div>
@@ -361,89 +365,217 @@
     color: red;
     display: none;
   }
+  .cancellation_cover_charge{
+    display: none;
+  }
+  .sms_confirmation_charge{
+    display: none;
+  }
 </style>
 @stop
 @section('js')
 <!-- DataTables  & Plugins -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
  
 <script type="text/javascript">
 $(document).ready(function(){
-   window.onload = function() {
-    history.replaceState("", "", '{{ route("search-booking-companies-get") }}');
-  }
+  $(document).on('change', '#filter-form #return_date', (e)=>{
+    let departureDate = $("#filter-form #dep_date").val();
+    if(!departureDate){
+      console.log(`please select departure date`);
+      $("#filter-form #dep_date").addClass('jqueryValidation');
+      $("#filter-form #dep_date").siblings('.validationFail').show();
+      e.target.value = '';
+    }
+    else{
+      $("#filter-form #dep_date").removeClass('jqueryValidation');
+      $("#filter-form #dep_date").siblings('.validationFail').hide();
+    }
+  })
+
+  $(document).on('change', '#filter-form #dep_date', (e)=>{
+    $(e.target).removeClass('jqueryValidation');
+    $(e.target).siblings('.validationFail').hide();
+    let returnDate = moment(e.target.value).add(7, 'days').format('YYYY-MM-DD');
+    console.log(`dep date:: `, returnDate)
+    $("#filter-form #return_date").val(`${returnDate}`);
+  })
+
+  $(document).on('click', '#filter_form_submit', (e)=>{
+    e.preventDefault();
+    let filterForm = $('#filter-form');
+    let airport = filterForm.find("#select_airport").val();
+    let departureDate = filterForm.find("#dep_date").val();
+    let departureTime = filterForm.find("#dep_time").val();
+    let returnDate = filterForm.find("#return_date").val();
+    let returnTime = filterForm.find("#return_time").val();
+    if(!airport){
+      filterForm.find("#select_airport").addClass('jqueryValidation');
+      filterForm.find("#select_airport").siblings('.validationFail').show();
+    }
+    else{
+      filterForm.find("#select_airport").removeClass('jqueryValidation');
+      filterForm.find("#select_airport").siblings('.validationFail').hide();
+    }
+
+    if(!departureDate){
+      filterForm.find("#dep_date").addClass('jqueryValidation');
+      filterForm.find("#dep_date").siblings('.validationFail').show();
+    }
+    else{
+      filterForm.find("#dep_date").removeClass('jqueryValidation');
+      filterForm.find("#dep_date").siblings('.validationFail').hide();
+    }
+
+    if(!departureTime){
+      filterForm.find("#dep_time").addClass('jqueryValidation');
+      filterForm.find("#dep_time").siblings('.validationFail').show();
+    }
+    else{
+      filterForm.find("#dep_time").removeClass('jqueryValidation');
+      filterForm.find("#dep_time").siblings('.validationFail').hide();
+    }
+
+    if(!returnDate){
+      filterForm.find("#return_date").addClass('jqueryValidation');
+      filterForm.find("#return_date").siblings('.validationFail').show();
+    }
+    else{
+      filterForm.find("#return_date").removeClass('jqueryValidation');
+      filterForm.find("#return_date").siblings('.validationFail').hide();
+    }
+
+    if(!returnTime){
+      filterForm.find("#return_time").addClass('jqueryValidation');
+      filterForm.find("#return_time").siblings('.validationFail').show();
+    }
+    else{
+      filterForm.find("#return_time").removeClass('jqueryValidation');
+      filterForm.find("#return_time").siblings('.validationFail').hide();
+    }
+
+    if(!airport || !departureDate || !departureTime || !returnDate || !returnTime){
+      console.log(`form not submit`)
+      return;
+    }
+    else{
+      console.log(`form submit`)
+      $("#filter-form").submit();
+    }
+  })
+
 
   $(document).on('click','.book-now',function(){
-      var company_id    = $(this).data('id');
-      let filterEle = $("#filter-form");
-      
-      let airport = filterEle.find("#select_airport option:selected").text();
+    var company_id    = $(this).data('id');
+    let filterEle = $("#filter-form");
+    filterEle.find(`input, select, button`).attr('disabled', true);
+    let airport = filterEle.find("#select_airport option:selected").text();
 
-      let dropOffDate = filterEle.find("#dep_date").val();
-      let dropOffTime = filterEle.find("#dep_time").val();
+    let dropOffDate = filterEle.find("#dep_date").val();
+    let dropOffTime = filterEle.find("#dep_time").val();
 
-      let returnDate = filterEle.find("#return_date").val();
-      let returnfTime = filterEle.find("#return_time").val();
+    let returnDate = filterEle.find("#return_date").val();
+    let returnfTime = filterEle.find("#return_time").val();
 
-      let companyTab = $(this).parents('.card');
+    let companyTab = $(this).parents('.card');
 
-      let imageUrl = companyTab.find('img').attr('src');
-      let companyTitle = companyTab.find('.card-header .company-title').text();
+    let imageUrl = companyTab.find('img').attr('src');
+    let companyTitle = companyTab.find('.card-header .company-title').text();
+    
+    let bookingForm = $("#booking-form");
+    let bookingSummaryEle = $("#booking-summary");
 
-      console.log('companyTitle:: ', companyTitle, 'dropOffDate', dropOffDate)
-      
-      let bookingForm = $("#booking-form");
-      let bookingSummaryEle = $("#booking-summary");
-      bookingSummaryEle.find(".booking-company-logo").attr('src', imageUrl);
-      bookingSummaryEle.find(".company-title").text(companyTitle);
-      bookingSummaryEle.find(".drop-off").text(`DROP OFF : ${dropOffDate} at ${dropOffTime}`);
-      bookingSummaryEle.find(".pick-up").text(`PICK UP : ${returnDate} at ${returnfTime}`);
-      bookingSummaryEle.find(".airport").text(`AIRPORT : ${airport}`);
+    bookingSummaryEle.find(".booking-company-logo").attr('src', imageUrl);
+    bookingSummaryEle.find(".company-title").text(companyTitle);
+    bookingSummaryEle.find(".drop-off").text(`DROP OFF : ${dropOffDate} at ${dropOffTime}`);
+    bookingSummaryEle.find(".pick-up").text(`PICK UP : ${returnDate} at ${returnfTime}`);
+    bookingSummaryEle.find(".airport").text(`AIRPORT : ${airport}`);
+    bookingSummaryEle.find(".booking-charge").text('BOOKING CHARGE : 1.95');
+    bookingSummaryEle.find(".total-charge").text('TOTAL : 94.49');
 
-      bookingSummaryEle.find(".booking-charge").text('BOOKING CHARGE : 1.95');
-      bookingSummaryEle.find(".total-charge").text('TOTAL : 94.49');
-
-      bookingForm.find(`input[name='company_id']`).val(company_id);
-      $("#company-list").hide();
-      bookingForm.css('display', 'flex');
-
+    bookingForm.find(`input[name='company_id']`).val(company_id);
+    bookingForm.find(`input[name='select_airport']`).val(filterEle.find('#select_airport').val());
+    bookingForm.find(`input[name='dep_date']`).val(filterEle.find('#dep_date').val());
+    bookingForm.find(`input[name='dep_time']`).val(filterEle.find('#dep_time').val());
+    bookingForm.find(`input[name='return_date']`).val(filterEle.find('#return_date').val());
+    bookingForm.find(`input[name='return_time']`).val(filterEle.find('#return_time').val());
+    bookingForm.find(`input[name='discount_code']`).val(filterEle.find('#discount_code').val());
+    
+    $("#company-list").hide();
+    bookingForm.css('display', 'flex');
   });
+
+  $(document).on('change', '.cancellation_cover', (e)=>{
+    let totalBookingCharge = $("#booking-summary .total-charge").text().slice(8);
+    let cancellation_charge = "{{ config('constant.BOOKING.CANCELLATION_CHARGE') }}";
+    if(e.target.checked){
+      let newTotalCharge = parseFloat(totalBookingCharge) + parseFloat(cancellation_charge);
+      $("#booking-summary .total-charge").text(`TOTAL : ${newTotalCharge.toFixed(2)}`);
+      $("#booking-summary .cancellation_cover_charge").text('CANCELLATION CHARGE : 2').show();
+    }
+    else{
+      let newTotalCharge = parseFloat(totalBookingCharge) - parseFloat(cancellation_charge);
+      $("#booking-summary .total-charge").text(`TOTAL : ${newTotalCharge.toFixed(2)}`);
+      $("#booking-summary .cancellation_cover_charge").text('').hide();
+    }
+  })
+
+  $(document).on('change', '.sms_confirmation', (e)=>{
+    let totalBookingCharge = $("#booking-summary .total-charge").text().slice(8);
+    let confirmattion_charge = "{{ config('constant.BOOKING.SMS_CONFIRMATION') }}";
+    if(e.target.checked){
+      let newTotalCharge = parseFloat(totalBookingCharge) + parseFloat(confirmattion_charge);
+      $("#booking-summary .total-charge").text(`TOTAL : ${newTotalCharge.toFixed(2)}`);
+      $("#booking-summary .sms_confirmation_charge").text('SMS CONFIRMATION CHARGE : 0.99').show();
+    }
+    else{
+      let newTotalCharge = parseFloat(totalBookingCharge) - parseFloat(confirmattion_charge);
+      $("#booking-summary .total-charge").text(`TOTAL : ${newTotalCharge.toFixed(2)}`);
+      $("#booking-summary .sms_confirmation_charge").text('').hide();
+    }
+  })
 
   $(document).on('submit', '#booking_form', function(e) {
     e.preventDefault();
-    let validationPass = true; 
-    let form = $(this);
-    form.find('.submit-button').attr('disabled', true)
-    let filterForm = $("#filter-form")
 
-    let filterFormData = filterForm.serialize();
+    let validationPass = true; 
+    let excludeElementValidation = ['discount_code', 'cancellation_cover', 'sms_confirmation']
+    let form = $(this);
+
+    let getFinalPrice = $("#booking-summary .total-charge").text().slice(8);
+    
     let formData = form.serialize();
+    formData = formData +'&price='+getFinalPrice;
+    
+    console.log('formData:: ', formData);
     
     let ajaxUrl = "{{ route('booking-store') }}"
-    let combineFormData = filterFormData + '&'+ formData;
 
     // get array of both 
-    let filterFormDataArray = filterForm.serializeArray();
     let bookingFormArray = form.serializeArray();
-    let combinedFormDataArray = filterFormDataArray.concat(bookingFormArray);
+    let combinedFormDataArray = bookingFormArray;
 
-    console.log('combinedFormDataArray:: ', combinedFormDataArray);
 
     combinedFormDataArray.forEach(element => {
-      if(element.value == ''){
-        $(`input[name='${element.name}'], select[name='${element.name}']`).addClass('jqueryValidation');
-        $(`input[name='${element.name}'], select[name='${element.name}']`).siblings('.validationFail').show()
-      }
-      else{
-        $(`input[name='${element.name}'], select[name='${element.name}']`).removeClass('jqueryValidation');
-        $(`input[name='${element.name}'], select[name='${element.name}']`).siblings('.validationFail').hide()
+      if($.inArray(element.name, excludeElementValidation) == -1){
+        if(element.value == ''){
+          form.find(`input[name='${element.name}'], select[name='${element.name}']`).addClass('jqueryValidation');
+          form.find(`input[name='${element.name}'], select[name='${element.name}']`).siblings('.validationFail').show()
+        }
+        else{
+          form.find(`input[name='${element.name}'], select[name='${element.name}']`).removeClass('jqueryValidation');
+          form.find(`input[name='${element.name}'], select[name='${element.name}']`).siblings('.validationFail').hide()
+        }
       }
     });
 
     combinedFormDataArray.forEach(element => {
-      if(element.value == ''){
-        validationPass = false;
-        return;
+      if($.inArray(element.name, excludeElementValidation) == -1){
+        if(element.value == ''){
+          validationPass = false;
+          return;
+        }
       }
     });
 
@@ -451,10 +583,11 @@ $(document).ready(function(){
       console.log(`validationPass :: ${validationPass}`);
     }
     else{
+      form.find('.submit-button').attr('disabled', true)
       $.ajax({
         type:"POST",
         url: ajaxUrl,
-        data: combineFormData,
+        data: formData,
         success: function(response){
           console.log(`form submited`, response);
           if(response.status_code == 200){

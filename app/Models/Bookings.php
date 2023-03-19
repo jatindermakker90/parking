@@ -49,6 +49,9 @@ class Bookings extends Model
         if($data->has('discount_code') && $data->discount_code){
             $booking->discount_code = $data->discount_code;
         }
+        else{
+            $booking->discount_code = null;
+        }
         if($data->has('title') && $data->title){
             $booking->title = $data->title;
         }
@@ -69,6 +72,9 @@ class Bookings extends Model
         }
         if($data->has('sms_confirmation') && $data->sms_confirmation){
             $booking->sms_confirmation = 1;
+        }
+        if($data->has('price') && $data->price){
+            $booking->price = $data->price;
         }
         if($data->has('no_of_peopele') && $data->no_of_peopele){
             $booking->no_of_people = $data->no_of_peopele;

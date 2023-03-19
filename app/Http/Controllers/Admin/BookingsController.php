@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\WebController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Contracts\Routing\ResponseFactory;
 
 use DataTables;
 use Validator;
@@ -29,13 +30,13 @@ class BookingsController extends WebController
             return Datatables::of($booking)
                     ->addIndexColumn()
                     ->editColumn('created_at', function($row){
-                        return date("Y-m-d", strtotime($row->created_at));; 
+                        return date("d-m-Y", strtotime($row->created_at));; 
                     })
                     ->editColumn('dep_date_time', function($row){
-                        return date("Y-m-d H:i:s", strtotime($row->dep_date_time));; 
+                        return date("d-m-Y H:i:s", strtotime($row->dep_date_time));; 
                     })
                     ->editColumn('return_date_time', function($row){
-                        return date("Y-m-d H:i:s", strtotime($row->return_date_time));; 
+                        return date("d-m-Y H:i:s", strtotime($row->return_date_time));; 
                     })
                     ->addColumn('customer', function($row){
                         return $full_name = $row->first_name.' '.$row->last_name; 
@@ -46,19 +47,19 @@ class BookingsController extends WebController
                     ->addColumn('days', function($row){
                         return '123'; 
                     })
-                    ->addColumn('price', function($row){
-                        return '49'; 
-                    })
+                    // ->addColumn('price', function($row){
+                    //     return '49'; 
+                    // })
                     ->addColumn('cnc', function($row){
                         return '0'; 
                     })
                     ->addColumn('action', function($row){
-                            $btn = '<button class="edit-booking btn btn-warning btn-sm mr-2" title="Edit Booking" data-id="'.$row->id.'"><i class="fa fa-edit" aria-hidden="true"></i></button>';
-                            $btn .= '<button class="delete btn btn-danger btn-sm mr-2 delete_record" title="Delete Booking" data-type =""><i class="fa fa-trash" aria-hidden="true"></i></button>';
-                            $btn .= '<button class="btn btn-danger btn-sm mr-2" title="Change Status"><i class="fas fa-stream"></i></button>';
+                            $btn = '<button type="button" class="edit-booking btn btn-warning btn-sm mr-2" title="Edit Booking" data-id="'.$row->id.'"><i class="fa fa-edit" data-id="'.$row->id.'" aria-hidden="true"></i></button>';
+                            // $btn .= '<button class="delete btn btn-danger btn-sm mr-2 delete_record" title="Delete Booking" data-type =""><i class="fa fa-trash" aria-hidden="true"></i></button>';
+                            $btn .= '<button type="button" class="btn btn-danger btn-sm mr-2" title="Change Status"><i class="fas fa-stream"></i></button>';
                             return $btn;
                     })
-                    ->rawColumns(['action', 'customer', 'ref_no', 'days', 'price', 'cnc'])
+                    ->rawColumns(['action', 'customer', 'ref_no', 'days', 'cnc'])
                     ->make(true);
         }
         $airports   = Airport::where('airport_status',config('constant.STATUS.ACTIVE'))->get(); 
@@ -187,14 +188,16 @@ class BookingsController extends WebController
     }
 
     public function searchCompanyList(Request $request)
-    {
+    {   
+        // dd($request->all());
         $validator = Validator::make($request->all(), [
             'select_airport'            => 'required',
             // 'dep_date'                  => 'required',
             // 'dep_time'                  => 'required',
             // 'return_date'               => 'required',
         ]);
-      
+        
+        // dd($validator);
         if($validator->fails()){
            return redirect()->back()->withErrors($validator);      
         }
@@ -239,9 +242,27 @@ class BookingsController extends WebController
         return redirect()->route('bookings.create');
     }
 
-    public function getSingleBooking(Request $request, Bookings $booking)
+    public function getSingleBooking(Request $request, Bookings $booking, Company $company)
     {
+        if(!$request->id){
+            return response()->json([
+                'code' => 203,
+                'success' => 'Booking id is required !'
+            ]);
+        }
+        $all_companies = $company->where('company_status','!=',config('constant.STATUS.DELETED'))->get();
+        $get_booking = $booking->with(['vehicle', 'company', 'airport'])->find($request->id);
+        $get_booking->all_companies = $all_companies;
+
+        // return response()->json([
+        //             'code' => 200,
+        //             'success' => 'Assign admin successfully!',
+        //             'data' => $get_booking
+        //         ]);
+        return response()->view('admin.booking.edit', $get_booking, 200);
         
+                
+                
     }
 
 }
