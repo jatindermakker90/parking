@@ -85,6 +85,9 @@ class Bookings extends Model
         if($data->has('return_terminal') && $data->return_terminal){
              $booking->return_terminal = $data->return_terminal;
         }
+        if($data->has('flight_number') && $data->flight_number){
+             $booking->flight_number = $data->flight_number;
+        }
         $booking->booking_status  = 1;
         $booking->save();
         return $booking;

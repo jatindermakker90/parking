@@ -299,9 +299,9 @@
                 </div>
                 <div class="col-4">
                   <div class="form-group">
-                    <label for="vehicle_colour">Vehicle Colour</label>
-                    <input type="text" class="form-control" placeholder="Enter vehicle colour" name="vehicle_colour" id="vehicle_colour">
-                    <span class="validationFail">Please select vehicle colour</span>
+                    <label for="flight_number">Return Flight Number</label>
+                    <input type="text" class="form-control" placeholder="Enter flight number" name="flight_number" id="flight_number">
+                    <span class="validationFail">Please select flight number</span>
                   </div>
                 </div>
               </div>

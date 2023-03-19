@@ -253,7 +253,13 @@ class BookingsController extends WebController
         $all_companies = $company->where('company_status','!=',config('constant.STATUS.DELETED'))->get();
         $get_booking = $booking->with(['vehicle', 'company', 'airport'])->find($request->id);
         $get_booking->all_companies = $all_companies;
+        $get_booking->dep_date = date("Y-m-d", strtotime($get_booking->dep_date_time));
+        $get_booking->return_date = date("Y-m-d", strtotime($get_booking->return_date_time));
+        $get_booking->dep_time = date("H:i", strtotime($get_booking->dep_date_time));
+        $get_booking->return_time = date("H:i", strtotime($get_booking->return_date_time));
 
+
+        // dd($get_booking->toArray());
         // return response()->json([
         //             'code' => 200,
         //             'success' => 'Assign admin successfully!',
