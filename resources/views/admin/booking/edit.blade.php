@@ -1,33 +1,37 @@
-<div>
-    <h4 id="editBookingResponse"></h4>
-    <form id="edit-booking-form" method="POST" action="#" enctype="multipart/form-data">
-        @csrf
-        <nav>
-        <div class="nav nav-tabs nav-justified" id="nav-tab" role="tablist">
-            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" 
-                    data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
-                    aria-selected="true">Personal Details</button>
-            <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" 
-                    data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" 
-                    aria-selected="false">Flight Details</button>
-            <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" 
-                    data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" 
-                    aria-selected="false">Vehicle Details</button>
-            <button class="nav-link" id="nav-travel-tab" data-bs-toggle="tab" 
-                    data-bs-target="#nav-travel" type="button" role="tab" aria-controls="nav-contact" 
-                    aria-selected="false">Travel Details</button>
-            <button class="nav-link" id="nav-special-tab" data-bs-toggle="tab" 
-                    data-bs-target="#nav-special" type="button" role="tab" aria-controls="nav-contact" 
-                    aria-selected="false">Special Instruction</button>
-            <button class="nav-link" id="nav-shift-tab" data-bs-toggle="tab" 
-                    data-bs-target="#nav-shift" type="button" role="tab" aria-controls="nav-contact" 
-                    aria-selected="false">Shift Booking</button>
-        </div>
+
+        
+        
+
+
+
+
+<nav>
+            <div class="nav nav-tabs nav-justified" id="nav-tab" role="tablist">
+                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" 
+                        data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
+                        aria-selected="true">Personal Details</button>
+                <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" 
+                        data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" 
+                        aria-selected="false">Flight Details</button>
+                <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" 
+                        data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" 
+                        aria-selected="false">Vehicle Details</button>
+                <button class="nav-link" id="nav-travel-tab" data-bs-toggle="tab" 
+                        data-bs-target="#nav-travel" type="button" role="tab" aria-controls="nav-contact" 
+                        aria-selected="false">Travel Details</button>
+                <button class="nav-link" id="nav-special-tab" data-bs-toggle="tab" 
+                        data-bs-target="#nav-special" type="button" role="tab" aria-controls="nav-contact" 
+                        aria-selected="false">Special Instruction</button>
+                <button class="nav-link" id="nav-shift-tab" data-bs-toggle="tab" 
+                        data-bs-target="#nav-shift" type="button" role="tab" aria-controls="nav-contact" 
+                        aria-selected="false">Shift Booking</button>
+            </div>
         </nav>
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
             <div class="row">
                 <div class="col-2">
+                    <input type="hidden" name="booking_id" value="{{ $booking_id }}">
                     <div class="form-group">
                         <label for="title">Title</label>
                         <select class="form-control select2" style="width: 100%;" name="title" id="title">
@@ -42,24 +46,28 @@
                 <div class="form-group">
                     <label>First Name</label>
                     <input type="text" class="form-control" id ="first_name" name="first_name" value="{{$first_name}}">
+                    <span class="validationFail">Please select first name</span>
                 </div>
                 </div>
                 <div class="col-2">
                 <div class="form-group">
                     <label>Last Name</label>
                     <input type="text" class="form-control" id ="last_name" name="last_name" value="{{$last_name}}">
+                    <span class="validationFail">Please select last name</span>
                 </div>
                 </div>
                 <div class="col-4">
                 <div class="form-group">
                     <label>Email</label>
                     <input type="text" class="form-control" id ="email" name="email" value="{{$email}}">
+                    <span class="validationFail">Please select email</span>
                 </div>
                 </div>
                 <div class="col-2">
                 <div class="form-group">
                     <label>Mobile</label>
                     <input type="text" class="form-control" id ="mobile" name="mobile" value="{{$mobile}}">
+                    <span class="validationFail">Please select mobile</span>
                 </div>
                 </div>
             </div>
@@ -68,24 +76,28 @@
                 <div class="form-group">
                     <label>City/ Town</label>
                     <input type="text" class="form-control" id ="city_town" name="city_town" placeholder="Enter city">
+                    <span class="validationFail">Please select city/ Town</span>
                 </div>
                 </div>
                 <div class="col-4">
                 <div class="form-group">
                     <label>Address</label>
                     <input type="text" class="form-control" id ="address" name="address" placeholder="Enter address">
+                    <span class="validationFail">Please select address</span>
                 </div>
                 </div>
                 <div class="col-4">
                 <div class="form-group">
                     <label>Country</label>
                     <input type="text" class="form-control" id ="country" name="country" placeholder="Enter country">
+                    <span class="validationFail">Please select country</span>
                 </div>
                 </div>
                 <div class="col-2">
                 <div class="form-group">
                     <label>Postcode</label>
                     <input type="text" class="form-control" id ="postcode" name="postcode" placeholder="Enter postcode">
+                    <span class="validationFail">Please select postcode</span>
                 </div>
                 </div>
             </div>
@@ -105,16 +117,16 @@
                 <div class="form-group">
                     <label for="return_terminal">Return Terminal</label>
                     <select class="form-control select2" style="width: 100%;" name="return_terminal" id="return_terminal">
-                    <option value="tbc" <?php echo ($return_terminal == 'tbc')  ? 'selected' : '' ?>>TBC</option>
-                    <option value="main_terminal" <?php echo ($return_terminal == 'main_terminal')  ? 'selected' : '' ?>>Main Terminal</option>
+                        <option value="tbc" <?php echo ($return_terminal == 'tbc')  ? 'selected' : '' ?>>TBC</option>
+                        <option value="main_terminal" <?php echo ($return_terminal == 'main_terminal')  ? 'selected' : '' ?>>Main Terminal</option>
                     </select>
                 </div>
                 </div>
                 <div class="col-4">
                 <div class="form-group">
-                    <label for="vehicle_colour">Vehicle Colour</label>
-                    <input type="text" class="form-control" placeholder="Enter vehicle colour" name="vehicle_colour" id="vehicle_colour" value="{{ $vehicle['vehicle_colour'] }}">
-                    <span class="validationFail">Please select vehicle colour</span>
+                    <label for="flight_number">Flight Number</label>
+                    <input type="text" class="form-control" placeholder="Enter vehicle colour" name="flight_number" id="flight_number" value="{{ $flight_number }}">
+                    <span class="validationFail">Please select flight number</span>
                 </div>
                 </div>
             </div>
@@ -178,9 +190,6 @@
                                 @endforeach
                             </select>
                             <span class="validationFail">Please select departure time</span>
-                            @if($errors->first('dep_time'))
-                                <span style="color:red;" class="form-error">Please enter departure time</span>
-                            @endif
                         </div>
                     </div>
                     <div class="col-2">
@@ -207,6 +216,7 @@
             <div class="tab-pane fade" id="nav-special" role="tabpanel" aria-labelledby="nav-special-tab">
                 <label for="special_notes">Special Notes</label>
                 <textarea class="w-100" name="special_notes" id="special_notes" rows="5"></textarea>
+                <span class="validationFail">Please write some special notes</span>
             </div>
             <div class="tab-pane fade" id="nav-shift" role="tabpanel" aria-labelledby="nav-shift-tab">
                 <div class="form-group">
@@ -217,9 +227,7 @@
                             <option value="{{$value['id']}}" <?php echo ($company_id == $value['id'])  ? 'selected' : '' ?>>{{$value['company_title']}}</option>
                         @endforeach                              
                     </select>
+                    <span class="validationFail">Please select company</span>
                 </div>
             </div>
         </div>
-        <button type="button" class="btn btn-primary w-100" id="edit-booking-button">Update</button>
-    </form>
-</div>

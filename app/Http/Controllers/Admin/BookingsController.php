@@ -25,6 +25,7 @@ class BookingsController extends WebController
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request){    
+        // dd('index');
         if ($request->ajax()) {
             $booking = Bookings::with(['vehicle', 'company', 'airport'])->where('booking_status','!=',config('constant.STATUS.DELETED'))->get();
             return Datatables::of($booking)
@@ -151,7 +152,8 @@ class BookingsController extends WebController
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request){       
-         return $this->sendSuccess([],$message,200);
+        dd($request->all());
+        //  return $this->sendSuccess([],$message,200);
     }
 
     /**
@@ -252,6 +254,7 @@ class BookingsController extends WebController
         }
         $all_companies = $company->where('company_status','!=',config('constant.STATUS.DELETED'))->get();
         $get_booking = $booking->with(['vehicle', 'company', 'airport'])->find($request->id);
+        $get_booking->booking_id = $request->id;
         $get_booking->all_companies = $all_companies;
         $get_booking->dep_date = date("Y-m-d", strtotime($get_booking->dep_date_time));
         $get_booking->return_date = date("Y-m-d", strtotime($get_booking->return_date_time));

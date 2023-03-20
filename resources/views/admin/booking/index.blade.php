@@ -132,8 +132,18 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body" id="booking-edit-modal">
-        <!-- insert html from ajax -->
+      <div class="modal-body">
+        <div>
+            <h4 id="editBookingResponse"></h4>
+            <form id="edit_booking_form" method="POST" action="#" enctype="multipart/form-data">
+                @csrf
+                <div id="booking-edit-modal">
+
+                </div>
+                <!-- insert html from ajax -->
+                <button type="button" class="btn btn-primary w-100" id="edit_booking_button">Update</button>
+            </form>
+        </div>
       </div>
     </div>
   </div>
@@ -393,138 +403,100 @@ $(document).ready(function(){
               searchable: false
             },
       ],
-      fnDrawCallback: function (oSettings, json) {
+    });
+}
 
-          $("input[data-bootstrap-switch]").bootstrapSwitch({
-              'state':$(this).prop('checked'),
-                onSwitchChange: function(e, state) {
-                  var status   = state;
-                  var href     = $(this).data('href')+"?status="+status;
-                  $.get(href, function(data) {
-                    var message = null;
-                    var response_status  = data.success;
-                    if(data.success){
-                      message = data.message;
-                    }else{
-                      message = data.message;
-                    }
-                    Swal.fire({
-                        title: message,
-                        showDenyButton: false,
-                        showCancelButton: false,
-                        confirmButtonText: `OK`,
-                        }).then((result) => {
-                          window.location.reload();
-                       
-                        });
-                    });
+        $(document).on('click','.edit-booking',function(e){
+            e.preventDefault();
+            let model = $("#modal-default");
+            let booking_id = $(e.target).attr('data-id');
+            let ajaxUrl = "{{ route('get-single-booking') }}";
+            ajaxUrl = `${ajaxUrl}?id=${booking_id}`;
+            // return;
+            $.ajax({
+            type:"GET",
+            url: ajaxUrl,
+            success: function(response){
+                $("#booking-edit-modal").html(response)
+                model.modal('show');
+            },
+            error: function(XHR, textStatus, errorThrown) {
+                // console.log(XHR.responseJSON.message);
+                if(XHR.responseJSON.message != undefined){
+                    toastr["error"](XHR.responseJSON.message);  
+                }else{
+                    toastr["error"](errorThrown);  
                 }
-          });
-          
-      } 
-  });
-  }
+            }
+            });
+        });
 
-  $(document).on('click','.edit-booking',function(e){
-    e.preventDefault();
-    let model = $("#modal-default");
-    console.log('e.target:: ', e.target);
-    let booking_id = $(e.target).attr('data-id');
-    let ajaxUrl = "{{ route('get-single-booking') }}";
-    ajaxUrl = `${ajaxUrl}?id=${booking_id}`;
-    console.log(`model open : booking_id :: `, booking_id, 'ajaxUrl:: ', ajaxUrl);
-    // return;
-    $.ajax({
-      type:"GET",
-      url: ajaxUrl,
-      success: function(response){
-          $("#booking-edit-modal").html(response)
-          model.modal('show');
-      },
-      error: function(XHR, textStatus, errorThrown) {
-        // console.log(XHR.responseJSON.message);
-        if(XHR.responseJSON.message != undefined){
-            toastr["error"](XHR.responseJSON.message);  
-        }else{
-            toastr["error"](errorThrown);  
-        }
-      }
+        $(document).on('click', '#edit_booking_button', (e)=>{
+            e.preventDefault();
+            let validationPass = true; 
+            let excludeElementValidation = [
+                'discount_code', 'cancellation_cover', 'sms_confirmation', 'city_town',
+                'address', 'country', 'postcode', 'flight_number', 'special_notes'
+            ]
+            let ajaxUrl = "{{ route('booking-update') }}";
+            let editBookingForm = $("#edit_booking_form");
+
+            let formDataArray = editBookingForm.serializeArray();
+            let formDataSerialize = editBookingForm.serialize();
+            
+            console.log('formDataArray:: ', formDataArray, 'ajaxUrl:: ', ajaxUrl);
+
+            formDataArray.forEach(element => {
+                if($.inArray(element.name, excludeElementValidation) == -1){
+                    if(element.value == ''){
+                        editBookingForm.find(`input[name='${element.name}'], select[name='${element.name}']`).addClass('jqueryValidation');
+                        editBookingForm.find(`input[name='${element.name}'], select[name='${element.name}']`).siblings('.validationFail').show()
+                    }
+                    else{
+                        editBookingForm.find(`input[name='${element.name}'], select[name='${element.name}']`).removeClass('jqueryValidation');
+                        editBookingForm.find(`input[name='${element.name}'], select[name='${element.name}']`).siblings('.validationFail').hide()
+                    }
+                }
+            });
+
+            formDataArray.forEach(element => {
+                if($.inArray(element.name, excludeElementValidation) == -1){
+                    if(element.value == ''){
+                    validationPass = false;
+                    return;
+                    }
+                }
+            });
+
+            if(!validationPass){
+                toastr["error"]('Please check ! Some required filed is empty.');
+                console.log(`validationPass :: ${validationPass}`);
+            }
+            else{
+                editBookingForm.find('button').attr('disabled', true)
+                $.ajax({
+                    type:"POST",
+                    url: ajaxUrl,
+                    data: formDataSerialize,
+                    success: function(response){
+                    console.log(`form submited`, response);
+                    // if(response.status_code == 200){
+                    //     toastr["success"](response.message);
+                        
+                    // }
+                    },
+                    error: function(XHR, textStatus, errorThrown) {
+                    // console.log(XHR.responseJSON.message);
+                    if(XHR.responseJSON.message != undefined){
+                        toastr["error"](XHR.responseJSON.message);  
+                    }else{
+                        toastr["error"](errorThrown);  
+                    }
+                    }
+                });
+            }
+        })
+        
     });
-  });
-
-  $(document).on('click', '#edit-booking-button', (e)=>{
-    e.preventDefault();
-
-    let validationPass = true; 
-    let excludeElementValidation = [
-      'discount_code', 'cancellation_cover', 'sms_confirmation', 'city_town',
-      'address', 'country', 'postcode'
-    ]
-    let editBookingForm = $("#edit-booking-form");
-
-    let formDataArray = editBookingForm.serializeArray();
-    let formDataSerialize = editBookingForm.serialize();
-    
-    console.log('formDataSerialize:: ', formDataSerialize);
-    console.log('formDataArray:: ', formDataArray);
-    
-    let ajaxUrl = "{{ route('booking.update') }}";
-    console.log('ajaxUrl:: ', ajaxUrl);
-
-    formDataArray.forEach(element => {
-      if($.inArray(element.name, excludeElementValidation) == -1){
-        if(element.value == ''){
-          form.find(`input[name='${element.name}'], select[name='${element.name}']`).addClass('jqueryValidation');
-          form.find(`input[name='${element.name}'], select[name='${element.name}']`).siblings('.validationFail').show()
-        }
-        else{
-          form.find(`input[name='${element.name}'], select[name='${element.name}']`).removeClass('jqueryValidation');
-          form.find(`input[name='${element.name}'], select[name='${element.name}']`).siblings('.validationFail').hide()
-        }
-      }
-    });
-
-    formDataArray.forEach(element => {
-      if($.inArray(element.name, excludeElementValidation) == -1){
-        if(element.value == ''){
-          validationPass = false;
-          return;
-        }
-      }
-    });
-
-    if(!validationPass){
-      console.log(`validationPass :: ${validationPass}`);
-    }
-    else{
-      form.find('.submit-button').attr('disabled', true)
-      $.ajax({
-        type:"POST",
-        url: ajaxUrl,
-        data: formDataSerialize,
-        success: function(response){
-          console.log(`form submited`, response);
-          if(response.status_code == 200){
-            toastr["success"](response.message);
-            setTimeout(() => {
-              window.location.href = response.result.path;
-            }, 1000);
-          }
-        },
-        error: function(XHR, textStatus, errorThrown) {
-          // console.log(XHR.responseJSON.message);
-          if(XHR.responseJSON.message != undefined){
-              toastr["error"](XHR.responseJSON.message);  
-          }else{
-              toastr["error"](errorThrown);  
-          }
-        }
-      });
-    }
-
-
-
-  })
-});
 </script>
 @stop
