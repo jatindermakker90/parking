@@ -32,6 +32,7 @@
             <div class="row">
                 <div class="col-2">
                     <input type="hidden" name="booking_id" value="{{ $booking_id }}">
+                    <input type="hidden" name="vehicle_id" value="{{ $vehicle['id'] }}">
                     <div class="form-group">
                         <label for="title">Title</label>
                         <select class="form-control select2" style="width: 100%;" name="title" id="title">

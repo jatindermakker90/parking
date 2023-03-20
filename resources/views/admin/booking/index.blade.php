@@ -479,12 +479,14 @@ $(document).ready(function(){
                     url: ajaxUrl,
                     data: formDataSerialize,
                     success: function(response){
-                    console.log(`form submited`, response);
-                    // if(response.status_code == 200){
-                    //     toastr["success"](response.message);
-                        
-                    // }
-                    },
+                      console.log(`form submited`, response);
+                      if(response.code == 200){
+                        toastr["success"](response.success);
+                        setTimeout(() => {
+                          window.location.href = response.path;
+                        }, 1000);
+                      }
+                    },         
                     error: function(XHR, textStatus, errorThrown) {
                     // console.log(XHR.responseJSON.message);
                     if(XHR.responseJSON.message != undefined){
