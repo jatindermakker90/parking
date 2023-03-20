@@ -151,8 +151,47 @@ class BookingsController extends WebController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request){       
-        dd($request->all());
+    public function update(Request $request, Bookings $booking, VehicleDetails $vehicle_details){       
+        // dd($request->all());
+        if(!$request->booking_id){
+            return response()->json([
+                'code' => 203,
+                'success' => 'Booking id is required !'
+            ]);
+        }
+        if($request->has('dep_date')){
+            if($request->has('dep_time')){
+                $dep_date_time = $request->dep_date.' '.$request->dep_time;
+            }
+            else{
+                $dep_date_time = $request->dep_date.' 00:00';
+            }
+            $request->merge(['dep_date_time' => $dep_date_time]);
+        }
+        if($request->has('return_date')){
+            if($request->has('return_time')){
+                $return_date_time = $request->return_date.' '.$request->return_time;
+            }
+            else{
+                $return_date_time = $request->return_date.' 00:00';
+            }
+            $request->merge(['return_date_time' => $return_date_time]);
+        }
+        // dd($request->all());
+        $booking_updated_data = $booking->updateBooking($request);
+        $vehicle_update_data = $vehicle_details->updateVehicle($request);
+        
+        if($booking_updated_data->id && $vehicle_update_data->id){
+            return response()->json([
+                'code' => 200,
+                'path' => route('bookings.index'),
+                'success' => 'Booking updated successfully !'
+            ]);
+        }
+
+
+
+        
         //  return $this->sendSuccess([],$message,200);
     }
 

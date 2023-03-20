@@ -92,4 +92,48 @@ class Bookings extends Model
         $booking->save();
         return $booking;
     }
+
+    public static function updateBooking($data){
+
+        $booking = Bookings::find($data->booking_id) ?? new Bookings();
+        
+        if($data->has('company') && $data->company){
+            $booking->company_id = $data->company;
+        }
+        if($data->has('dep_date_time') && $data->dep_date_time){
+            $booking->dep_date_time = $data->dep_date_time;
+        }
+        if($data->has('return_date_time') && $data->return_date_time ){
+            $booking->return_date_time = $data->return_date_time;
+        }
+        if($data->has('title') && $data->title){
+            $booking->title = $data->title;
+        }
+        if($data->has('first_name') && $data->first_name){
+            $booking->first_name = $data->first_name;
+        }
+        if($data->has('last_name') && $data->last_name){
+            $booking->last_name = $data->last_name;
+        }
+        if($data->has('email') && $data->email){
+            $booking->email = $data->email;
+        }
+        if($data->has('mobile') && $data->mobile){
+            $booking->mobile = $data->mobile;
+        }
+        if($data->has('price') && $data->price){
+            $booking->price = $data->price;
+        }
+        if($data->has('drop_off_terminal') && $data->drop_off_terminal){
+            $booking->drop_off_terminal = $data->drop_off_terminal;
+        }
+        if($data->has('return_terminal') && $data->return_terminal){
+            $booking->return_terminal = $data->return_terminal;
+        }
+        if($data->has('flight_number') && $data->flight_number){
+            $booking->flight_number = $data->flight_number;
+        }
+        $booking->save();
+        return $booking;
+    }
 }
