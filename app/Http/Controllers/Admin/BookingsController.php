@@ -57,7 +57,7 @@ class BookingsController extends WebController
                     ->addColumn('action', function($row){
                             $btn = '<button type="button" class="edit-booking btn btn-warning btn-sm mr-2" title="Edit Booking" data-id="'.$row->id.'"><i class="fa fa-edit" data-id="'.$row->id.'" aria-hidden="true"></i></button>';
                             // $btn .= '<button class="delete btn btn-danger btn-sm mr-2 delete_record" title="Delete Booking" data-type =""><i class="fa fa-trash" aria-hidden="true"></i></button>';
-                            $btn .= '<button type="button" class="btn btn-danger btn-sm mr-2" title="Change Status"><i class="fas fa-stream"></i></button>';
+                            $btn .= '<button type="button" class="btn btn-danger btn-sm mr-2 change-status" title="Change Status" data-id="'.$row->id.'"><i class="fas fa-stream" data-id="'.$row->id.'"></i></button>';
                             return $btn;
                     })
                     ->rawColumns(['action', 'customer', 'ref_no', 'days', 'cnc'])
@@ -311,6 +311,32 @@ class BookingsController extends WebController
         
                 
                 
+    }
+
+    public function getChangeStatusHtml(Request $request, Bookings $booking)
+    {
+        $booking_status =  $booking->select(['id','booking_status'])->find($request->id);
+        // dd($booking_status);
+        return response()->view('admin.booking.change-status-model-body', $booking_status, 200);
+    }
+
+    public function getChangeBookingStatus(Request $request, Bookings $booking)
+    {
+        // dd($request->all());
+        $get_booking = $booking->find($request->booking_id) ?? $booking;
+        if($request->has('status') && $request->status){
+            $get_booking->booking_status = $request->status;
+        }
+        $updated_booking = $get_booking->save();
+        // dd($updated_booking);
+        if($updated_booking){
+            return response()->json([
+                'code' => 200,
+                'path' => route('bookings.index'),
+                'success' => 'Booking status updated successfully !'
+            ]);
+        }
+        
     }
 
 }

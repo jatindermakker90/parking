@@ -90,6 +90,8 @@ Route::prefix('admin')->group(function () {
         Route::post('booking/search-booking-companies',         [BookingsController::class, 'searchCompanyList'])->name('search-booking-companies');
         Route::get('booking/search-booking-companies',          [BookingsController::class, 'searchCompanyListGet'])->name('search-booking-companies-get');
         Route::get('booking/get-single-booking',                [BookingsController::class, 'getSingleBooking'])->name('get-single-booking');
+        Route::get('booking/get-change-status-html',            [BookingsController::class, 'getChangeStatusHtml'])->name('get-change-status-html');
+        Route::post('booking/change-booking-status',            [BookingsController::class, 'getChangeBookingStatus'])->name('change-booking-status');
 
         Route::resource('invoices',                            InvoiceController::class);
         Route::get('change/invoice/status/{table_id}',           [InvoiceController::class, 'changeInvoiceStatus'])->name('change_invoice_status');

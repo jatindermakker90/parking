@@ -128,7 +128,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title">Edit Booking</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close close-edit-booking-button" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -147,6 +147,29 @@
       </div>
     </div>
   </div>
+</div>
+
+<div class="modal fade" id="change_status_modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="change_booking_status_form" enctype="multipart/form-data">
+        <div class="modal-header">
+          <h4 class="modal-title">Change Booking Status</h4>
+          <button type="button" class="close close-status-button" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          
+        </div>
+        <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-primary w-100" id="change_booking_status_button">Update2</button>
+        </div>
+      </form>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
 </div>
 @stop
 @section('css')
@@ -186,8 +209,14 @@
 <script src="{{ asset('vendor/bootstrap-switch/js/bootstrap-switch.min.js') }}"></script> 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script type="text/javascript">
-
+function closeStatusModel(){
+  $("#change_status_modal").modal('show');
+}
 $(document).ready(function(){
+    $('.select2').select2();
+    let changeStatusModel = $('#change_status_modal').modal({
+      keyboard: false
+    })
     var today = new Date();
     var time   = $('#reservationtime').val();
     var start_time = null;
@@ -481,6 +510,7 @@ $(document).ready(function(){
                     success: function(response){
                       console.log(`form submited`, response);
                       if(response.code == 200){
+                        $("#modal-default").modal('hide');
                         toastr["success"](response.success);
                         setTimeout(() => {
                           window.location.href = response.path;
@@ -497,8 +527,79 @@ $(document).ready(function(){
                     }
                 });
             }
+        });
+
+        $(document).on('click', '.change-status', (e)=>{
+          e.preventDefault();
+          console.log(`change status`)
+          let booking_id = $(e.target).attr('data-id');
+
+          let ajaxUrl = "{{ route('get-change-status-html') }}";
+            ajaxUrl = `${ajaxUrl}?id=${booking_id}`;
+            $.ajax({
+              type:"GET",
+              url: ajaxUrl,
+              success: function(response){
+                  $("#change_status_modal .modal-body").html(response)
+                  $("#change_status_modal").modal('show');
+                  $('.select2').select2();
+              },
+              error: function(XHR, textStatus, errorThrown) {
+                  // console.log(XHR.responseJSON.message);
+                  if(XHR.responseJSON.message != undefined){
+                      toastr["error"](XHR.responseJSON.message);  
+                  }else{
+                      toastr["error"](errorThrown);  
+                  }
+              }
+            });
         })
+
+        $(document).on('click', '.close-status-button', (e)=>{
+          $("#change_status_modal").modal('hide');
+        })
+
+        $(document).on('click', '.close-edit-booking-button', (e)=>{
+          $("#modal-default").modal('hide');
+        })
+
+        $(document).on('click', '#change_booking_status_button', (e)=>{
+          e.preventDefault();
+          console.log(`update status`)
+  
+          let ajaxUrl = "{{ route('change-booking-status') }}";
+          let formDataSerialize = $("#change_booking_status_form").serialize();
+          ajaxUrl = ajaxUrl +'?'+formDataSerialize
+          console.log('formDataSerialize:: ', formDataSerialize, 'ajaxUrl:: ', ajaxUrl);
         
+
+          
+          $("#change_booking_status_form").find("#change_booking_status_button").attr('disabled', true)
+          $.ajax({
+            type:"POST",
+            url: ajaxUrl,
+            data: formDataSerialize,
+            success: function(response){
+              console.log(`form submited`, response);
+              if(response.code == 200){
+                $("#modal-default").modal('hide');
+                toastr["success"](response.success);
+                setTimeout(() => {
+                  window.location.href = response.path;
+                }, 1000);
+              }
+            },         
+            error: function(XHR, textStatus, errorThrown) {
+              // console.log(XHR.responseJSON.message);
+              if(XHR.responseJSON.message != undefined){
+                  toastr["error"](XHR.responseJSON.message);  
+              }else{
+                  toastr["error"](errorThrown);  
+              }
+            }
+          });
+          
+      })
     });
 </script>
 @stop
