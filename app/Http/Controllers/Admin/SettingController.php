@@ -14,6 +14,9 @@ use App\Models\SiteScriptSetting;
 use App\Models\TermCondition;
 use App\Models\EmailTemplates;
 use App\Models\Stripe3D;
+use App\Models\Stripe;
+use App\Models\PaypalExpress;
+use App\Models\Paypal;
 
 class SettingController extends WebController
 {
@@ -184,6 +187,75 @@ class SettingController extends WebController
               //return $this->sendSuccess(['form_type'=>'email'],'Email Settings Updated',200);
             }
           }
+          if($tab_type == "payment_setting1"){
+            $data_array = [
+              'user_id' => $user->id,
+              'live_private_key' => $request->live_private_key,
+              'live_public_key' => $request->live_public_key,
+              'test_private_key' => $request->test_private_key,
+              'test_public_key' => $request->test_public_key,
+              'gateway_activation_status' => $request->gateway_activation_status,
+              'stripe_testmode_status' => $request->stripe_testmode_status
+            ];
+            if($row_id == 0){
+              // New entry
+              Stripe::create($data_array);
+              return redirect()->route('get_payment_setting_page')->with(['success' => 'Payment Settings added successfully']);
+              //return $this->sendSuccess(['form_type'=>'email'],'Email Settings Created',200);
+            } else {
+              // Update Data
+              Stripe::where('id',$row_id)->update($data_array);
+              return redirect()->route('get_payment_setting_page')->with(['success' => 'Payment Settings updated successfully']);
+              //return $this->sendSuccess(['form_type'=>'email'],'Email Settings Updated',200);
+            }
+          }
+          if($tab_type == "payment_setting2"){
+            $data_array = [
+              'user_id' => $user->id,
+              'live_email' => $request->live_email,
+              'test_email' => $request->test_email,
+              'live_url' => $request->live_url,
+              'test_url' => $request->test_url,
+              'live_private_key' => $request->live_private_key,
+              'live_public_key' => $request->live_public_key,
+              'test_private_key' => $request->test_private_key,
+              'test_public_key' => $request->test_public_key,
+              'gateway_activation_status' => $request->gateway_activation_status,
+              'testmode_status' => $request->testmode_status
+            ];
+            if($row_id == 0){
+              // New entry
+              PaypalExpress::create($data_array);
+              return redirect()->route('get_payment_setting_page')->with(['success' => 'Payment Settings added successfully']);
+              //return $this->sendSuccess(['form_type'=>'email'],'Email Settings Created',200);
+            } else {
+              // Update Data
+              PaypalExpress::where('id',$row_id)->update($data_array);
+              return redirect()->route('get_payment_setting_page')->with(['success' => 'Payment Settings updated successfully']);
+              //return $this->sendSuccess(['form_type'=>'email'],'Email Settings Updated',200);
+            }
+          }
+          if($tab_type == "payment_setting3"){
+            $data_array = [
+              'user_id' => $user->id,
+              'paypal_email' => $request->paypal_email,
+              'paypal_url' => $request->paypal_url,
+              'test_url' => $request->test_url,
+              'gateway_activation_status' => $request->gateway_activation_status,
+              'testmode_status' => $request->testmode_status
+            ];
+            if($row_id == 0){
+              // New entry
+              Paypal::create($data_array);
+              return redirect()->route('get_payment_setting_page')->with(['success' => 'Payment Settings added successfully']);
+              //return $this->sendSuccess(['form_type'=>'email'],'Email Settings Created',200);
+            } else {
+              // Update Data
+              Paypal::where('id',$row_id)->update($data_array);
+              return redirect()->route('get_payment_setting_page')->with(['success' => 'Payment Settings updated successfully']);
+              //return $this->sendSuccess(['form_type'=>'email'],'Email Settings Updated',200);
+            }
+          }
         } catch (Exception $e) {
             $message = $e->getMessage()." at line ".$e->getLine()." in file ".$e->getFile();
             return $this->sendError($message);
@@ -250,9 +322,15 @@ class SettingController extends WebController
 
     public function getpaymentsettingpage(){
       $payment_settings = Stripe3D::first();
+      $payment_setting1 = Stripe::first();
+      $payment_setting2 = PaypalExpress::first();
+      $payment_setting3 = Paypal::first();
       return view('admin.settings.payment')->with(['title' =>'Payment Gateways',
         "header" => "Please Enter Payment Gateways Details",
-        'payment_setting' => $payment_settings
+        'payment_setting' => $payment_settings,
+        'payment_setting1' => $payment_setting1,
+        'payment_setting2' => $payment_setting2,
+        'payment_setting3' => $payment_setting3
       ]);
     }
 }
