@@ -17,6 +17,7 @@ use App\Models\Stripe3D;
 use App\Models\Stripe;
 use App\Models\PaypalExpress;
 use App\Models\Paypal;
+use App\Models\Message;
 
 class SettingController extends WebController
 {
@@ -256,6 +257,40 @@ class SettingController extends WebController
               //return $this->sendSuccess(['form_type'=>'email'],'Email Settings Updated',200);
             }
           }
+          if($tab_type == "message_details"){
+            $data_array = [
+              'user_id' => $user->id,
+              'message_details' => $request->message_details
+            ];
+            if($row_id == 0){
+              // New entry
+              Message::create($data_array);
+              return redirect()->route('get_sms_setting_page')->with(['success' => 'Payment Settings added successfully']);
+              //return $this->sendSuccess(['form_type'=>'email'],'Email Settings Created',200);
+            } else {
+              // Update Data
+              Message::where('id',$row_id)->update($data_array);
+              return redirect()->route('get_sms_setting_page')->with(['success' => 'Payment Settings updated successfully']);
+              //return $this->sendSuccess(['form_type'=>'email'],'Email Settings Updated',200);
+            }
+          }
+          if($tab_type == "pre_message_details"){
+            $data_array = [
+              'user_id' => $user->id,
+              'pre_message_details' => $request->pre_message_details
+            ];
+            if($row_id == 0){
+              // New entry
+              Message::create($data_array);
+              return redirect()->route('get_sms_setting_page')->with(['success' => 'Payment Settings added successfully']);
+              //return $this->sendSuccess(['form_type'=>'email'],'Email Settings Created',200);
+            } else {
+              // Update Data
+              Message::where('id',$row_id)->update($data_array);
+              return redirect()->route('get_sms_setting_page')->with(['success' => 'Payment Settings updated successfully']);
+              //return $this->sendSuccess(['form_type'=>'email'],'Email Settings Updated',200);
+            }
+          }
         } catch (Exception $e) {
             $message = $e->getMessage()." at line ".$e->getLine()." in file ".$e->getFile();
             return $this->sendError($message);
@@ -331,6 +366,14 @@ class SettingController extends WebController
         'payment_setting1' => $payment_setting1,
         'payment_setting2' => $payment_setting2,
         'payment_setting3' => $payment_setting3
+      ]);
+    }
+
+    public function getsmssettingpage(){
+      $sms_settings = Message::first();
+      return view('admin.settings.sms')->with(['title' =>'Edit Rating Details',
+        "header" => "Please Enter Rating Details",
+        'sms_setting' => $sms_settings
       ]);
     }
 }
