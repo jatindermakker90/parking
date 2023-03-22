@@ -21,7 +21,7 @@
             </div>            
             <div class="col-sm-2">
                 <div class="form-group">
-                    <label>Airport:</label>
+                    <label for="#search_select_airport">Airport:</label>
                     <select class="form-control select2" name ="search_select_airport" id ="search_select_airport">
 		                <option value="">All</option>
 		                @foreach ($airports as $airport_key => $airport_value)
@@ -59,8 +59,8 @@
 		                  <option value="">Status</option>
                       @foreach(config('constant.BOOKING_STATUS') as $status_key => $status_value)
                         <option value="{{$status_value}}">{{$status_key}}</option>
-                      @endforeach                             
-		                </select>
+                      @endforeach                          
+		            </select>
                 </div>
             </div>
             <div class="col-sm-2">
@@ -167,9 +167,6 @@
 $(document).ready(function(){
     $('.select2').select2();
     var today = new Date();
-    let changeStatusModel = $('#change_status_modal').modal({
-      keyboard: false
-    })
     var time   = $('#reservationtime').val();
     
     var start_time = null;
@@ -199,6 +196,7 @@ $(document).ready(function(){
        end_time   = `${end.format('Y-M-D')} 23:59:59`;
        $("#reservationtime").val(start.format('MM/DD/YYYY')+"-"+end.format('MM/DD/YYYY'));
        $('#data_collection').dataTable().fnDestroy();
+      //  searchData(start.format('Y-M-D'),end.format('Y-M-D'),$('#search').val());
        searchData();
   });
   
@@ -207,7 +205,7 @@ $(document).ready(function(){
        start_time = "";
        end_time = "";
        $('#data_collection').dataTable().fnDestroy();
-       searchData();
+       searchData(null,null,$('#search').val());
   });
 
   $(document).on('click','#search_text',function(){
@@ -229,12 +227,12 @@ $(document).ready(function(){
   })
 
   $(document).on('change', '#search_booking_status', (e) => {
+    console.log($(e.target).val())
     booking_status = $(e.target).val();
     $('#data_collection').dataTable().fnDestroy();
     searchData();
   })
 
-  
   function searchData(start = null,end = null,search = null){
      let start_date      = start_time ?? '';
      let end_date        = end_time ?? '';
@@ -254,7 +252,7 @@ $(document).ready(function(){
       "responsive"  : true,
       "processing"  : true,
       "serverSide"  : true,
-      "ajax"        :"{{ url('admin/cancelled/booking') }}?start_date="+start_date+"&end_date="+end_date+"&search_text="+search_text+"&selected_airport="+selectedAirport+"&selected_company="+selectedCompany+"&booking_status="+bookingStatus,
+      "ajax"        :"{{ route('trasheded_booking') }}?start_date="+start_date+"&end_date="+end_date+"&search_text="+search_text+"&selected_airport="+selectedAirport+"&selected_company="+selectedCompany+"&booking_status="+bookingStatus,
       "columns"     : [
             // {
             //   data: 'DT_RowIndex',         
@@ -497,7 +495,7 @@ $(document).ready(function(){
           $("#modal-default").modal('hide');
           toastr["success"](response.success);
           setTimeout(() => {
-            window.location.href = "{{ route('cancelled_booking') }}" //response.path;
+            window.location.href = "{{ route('trasheded_booking') }}" //response.path;
           }, 1000);
         }
       },         

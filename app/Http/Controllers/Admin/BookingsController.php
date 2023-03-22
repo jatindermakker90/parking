@@ -27,8 +27,35 @@ class BookingsController extends WebController
     public function index(Request $request){    
         // dd('index');
         if ($request->ajax()) {
-            $booking = Bookings::with(['vehicle', 'company', 'airport'])->where('booking_status','!=',config('constant.STATUS.DELETED'))->get();
-            return Datatables::of($booking)
+            // dd($request->selected_airport);
+            $booking = Bookings::with(['vehicle', 'company', 'airport']);
+            
+            if($request->selected_airport && $request->selected_airport != null){
+                $booking->where('airport_id', $request->selected_airport);
+            }
+            if($request->selected_company && $request->selected_company != null){
+                $booking->where('company_id', $request->selected_company);
+            }
+
+            if($request->booking_status && $request->booking_status != null){
+                $booking->where('booking_status','=',$request->booking_status);
+            }
+            else{
+                $booking->where('booking_status','=',config('constant.BOOKING_STATUS.ACTIVE'));
+            }
+
+            if($request->start_date && $request->start_date != null){
+                $booking->where('dep_date_time','>=',$request->start_date);
+            }
+            if($request->end_date && $request->end_date != null){
+                $booking->where('return_date_time','<=',$request->end_date);
+            }
+            
+
+            $booking->orderBy('id', 'desc');
+            $booking_data = $booking->get();
+            
+            return Datatables::of($booking_data)
                     ->addIndexColumn()
                     ->editColumn('created_at', function($row){
                         return date("d-m-Y", strtotime($row->created_at));; 
@@ -203,6 +230,72 @@ class BookingsController extends WebController
      * @return \Illuminate\Http\Response
      */
     public function cancelledBookingList(Request $request){       
+        if ($request->ajax()) {
+            // $booking = Bookings::with(['vehicle', 'company', 'airport'])->where('booking_status','=',config('constant.BOOKING_STATUS.CANCEL'))->get();
+            // dd($booking);
+            $booking = Bookings::with(['vehicle', 'company', 'airport']);
+            
+            if($request->selected_airport && $request->selected_airport != null){
+                $booking->where('airport_id', $request->selected_airport);
+            }
+            if($request->selected_company && $request->selected_company != null){
+                $booking->where('company_id', $request->selected_company);
+            }
+
+            if($request->booking_status && $request->booking_status != null){
+                $booking->where('booking_status','=',$request->booking_status);
+            }
+            else{
+                $booking->where('booking_status','=',config('constant.BOOKING_STATUS.CANCEL'));
+            }
+
+            if($request->start_date && $request->start_date != null){
+                $booking->where('dep_date_time','>=',$request->start_date);
+            }
+            if($request->end_date && $request->end_date != null){
+                $booking->where('return_date_time','<=',$request->end_date);
+            }
+            
+
+            $booking->orderBy('id', 'desc');
+            $booking_data = $booking->get();
+
+            return Datatables::of($booking)
+                    ->addIndexColumn()
+                    ->editColumn('created_at', function($row){
+                        return date("d-m-Y", strtotime($row->created_at));; 
+                    })
+                    ->editColumn('dep_date_time', function($row){
+                        return date("d-m-Y H:i:s", strtotime($row->dep_date_time));; 
+                    })
+                    ->editColumn('return_date_time', function($row){
+                        return date("d-m-Y H:i:s", strtotime($row->return_date_time));; 
+                    })
+                    ->addColumn('customer', function($row){
+                        return $full_name = $row->first_name.' '.$row->last_name; 
+                    })
+                    ->addColumn('ref_no', function($row){
+                        return '123'; 
+                    })
+                    ->addColumn('days', function($row){
+                        return '123'; 
+                    })
+                    // ->addColumn('price', function($row){
+                    //     return '49'; 
+                    // })
+                    ->addColumn('cnc', function($row){
+                        return '0'; 
+                    })
+                    ->addColumn('action', function($row){
+                            $btn = '';
+                            // $btn = '<button type="button" class="edit-booking btn btn-warning btn-sm mr-2" title="Edit Booking" data-id="'.$row->id.'"><i class="fa fa-edit" data-id="'.$row->id.'" aria-hidden="true"></i></button>';
+                            // $btn .= '<button class="delete btn btn-danger btn-sm mr-2 delete_record" title="Delete Booking" data-type =""><i class="fa fa-trash" aria-hidden="true"></i></button>';
+                            $btn .= '<button type="button" class="btn btn-danger btn-sm mr-2 change-status" title="Change Status" data-id="'.$row->id.'"><i class="fas fa-stream" data-id="'.$row->id.'"></i></button>';
+                            return $btn;
+                    })
+                    ->rawColumns(['action', 'customer', 'ref_no', 'days', 'cnc'])
+                    ->make(true);
+        }
         $airports   = Airport::where('airport_status',config('constant.STATUS.ACTIVE'))->get(); 
         $companies  = Company::where('company_status','!=',config('constant.STATUS.DELETED'))->get();
         return view('admin.booking.cancelled')->with(['title' => 'Booking Management', "header" => "Cancelled Booking List", 'airports' => $airports, 'companies' => $companies]);
@@ -215,7 +308,79 @@ class BookingsController extends WebController
      * @return \Illuminate\Http\Response
      */
     public function trashededBookingList(Request $request){
-        return view('admin.booking.cancelled')->with(['title' => 'Booking Management', "header" => "Trashed Booking List"]);
+        if ($request->ajax()) {
+            // $booking = Bookings::with(['vehicle', 'company', 'airport'])->where('booking_status','=',config('constant.BOOKING_STATUS.TRASHED'))->get();
+            // dd($booking);
+            $booking = Bookings::with(['vehicle', 'company', 'airport']);
+            
+            if($request->selected_airport && $request->selected_airport != null){
+                $booking->where('airport_id', $request->selected_airport);
+            }
+            if($request->selected_company && $request->selected_company != null){
+                $booking->where('company_id', $request->selected_company);
+            }
+
+            if($request->booking_status && $request->booking_status != null){
+                $booking->where('booking_status','=',$request->booking_status);
+            }
+            else{
+                $booking->where('booking_status','=',config('constant.BOOKING_STATUS.TRASHED'));
+            }
+
+            if($request->start_date && $request->start_date != null){
+                $booking->where('dep_date_time','>=',$request->start_date);
+            }
+            if($request->end_date && $request->end_date != null){
+                $booking->where('return_date_time','<=',$request->end_date);
+            }
+            
+
+            $booking->orderBy('id', 'desc');
+            $booking_data = $booking->get();
+            return Datatables::of($booking)
+                    ->addIndexColumn()
+                    ->editColumn('created_at', function($row){
+                        return date("d-m-Y", strtotime($row->created_at));; 
+                    })
+                    ->editColumn('dep_date_time', function($row){
+                        return date("d-m-Y H:i:s", strtotime($row->dep_date_time));; 
+                    })
+                    ->editColumn('return_date_time', function($row){
+                        return date("d-m-Y H:i:s", strtotime($row->return_date_time));; 
+                    })
+                    ->addColumn('customer', function($row){
+                        return $full_name = $row->first_name.' '.$row->last_name; 
+                    })
+                    ->addColumn('ref_no', function($row){
+                        return '123'; 
+                    })
+                    ->addColumn('days', function($row){
+                        return '123'; 
+                    })
+                    // ->addColumn('price', function($row){
+                    //     return '49'; 
+                    // })
+                    ->addColumn('cnc', function($row){
+                        return '0'; 
+                    })
+                    ->addColumn('action', function($row){
+                            $btn = '';
+                            // $btn = '<button type="button" class="edit-booking btn btn-warning btn-sm mr-2" title="Edit Booking" data-id="'.$row->id.'"><i class="fa fa-edit" data-id="'.$row->id.'" aria-hidden="true"></i></button>';
+                            // $btn .= '<button class="delete btn btn-danger btn-sm mr-2 delete_record" title="Delete Booking" data-type =""><i class="fa fa-trash" aria-hidden="true"></i></button>';
+                            $btn .= '<button type="button" class="btn btn-danger btn-sm mr-2 change-status" title="Change Status" data-id="'.$row->id.'"><i class="fas fa-stream" data-id="'.$row->id.'"></i></button>';
+                            return $btn;
+                    })
+                    ->rawColumns(['action', 'customer', 'ref_no', 'days', 'cnc'])
+                    ->make(true);
+        }
+        $airports   = Airport::where('airport_status',config('constant.STATUS.ACTIVE'))->get(); 
+        $companies  = Company::where('company_status','!=',config('constant.STATUS.DELETED'))->get();
+        return view('admin.booking.trasheded')->with([
+            'title' => 'Booking Management', 
+            "header" => "Trashed Booking List",
+            'airports' => $airports, 
+            'companies' => $companies
+        ]);
     }
 
     /**
