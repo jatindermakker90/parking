@@ -130,7 +130,8 @@ Route::prefix('admin')->group(function () {
         Route::resource('site/settings',                                     SettingController::class);
         Route::get('pages/list',                                         [SettingController::class, 'getpagelist'])->name('get_page_list');
         Route::get('email/template',                                         [SettingController::class, 'getemailtemplatepage'])->name('get_email_template');
-        Route::get('payment/settings',                                         [SettingController::class, 'getpaymentsettingpage'])->name('get_payment_setting_page');  
+        Route::get('payment/settings',                                         [SettingController::class, 'getpaymentsettingpage'])->name('get_payment_setting_page');
+        Route::get('sms/settings',                                         [SettingController::class, 'getsmssettingpage'])->name('get_sms_setting_page');  
         //============================= End ===================================//
 
         // ========================== discount =====================================//

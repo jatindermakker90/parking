@@ -349,12 +349,12 @@ return [
             'icon'        => 'fas fa-id-card',
             'submenu' => [
                 [
-                    'text'        => 'Bookings',
-                    'url'         => 'admin/bookings',
-                ],
-                [
                     'text'        => 'Add Booking',
                     'url'         => 'admin/add/booking',
+                ],
+                [
+                    'text'        => 'Bookings',
+                    'url'         => 'admin/bookings',
                 ],
                 [
                     'text'        => 'Cancelled Booking',
@@ -411,6 +411,20 @@ return [
             ]
         ],
         [
+            'text'        => 'Review',
+            'icon'        => 'fa fa-star',
+            'submenu' => [
+                 [
+                     'text'        => 'Review List',
+                     'url'         => '/',
+                 ],
+                 [
+                    'text'        => 'Review Checklist',
+                    'url'         => '/',
+                ],
+            ]
+        ],
+        [
             'text'        => 'Settings',
             'icon'        => 'fa fa-cog',
             'submenu' => [
@@ -426,6 +440,10 @@ return [
                    'text'        => 'Email Settings',
                    'url'         => 'admin/email/template',
                ],
+               [
+                  'text'        => 'SMS Settings',
+                  'url'         => 'admin/sms/settings',
+              ],
                [
                   'text'        => 'Payment Settings',
                   'url'         => 'admin/payment/settings',
