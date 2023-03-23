@@ -29,6 +29,7 @@ use App\Http\Controllers\Admin\AddDiscountController;
 use App\Http\Controllers\Admin\FlatDiscountController;
 use App\Http\Controllers\Admin\AssignDiscountController;
 use App\Http\Controllers\Admin\AffiliateDiscountController;
+use App\Http\Controllers\Admin\ReviewController;
 
 use App\Http\Controllers\HomeController;
 
@@ -131,9 +132,15 @@ Route::prefix('admin')->group(function () {
         Route::get('pages/list',                                         [SettingController::class, 'getpagelist'])->name('get_page_list');
         Route::get('email/template',                                         [SettingController::class, 'getemailtemplatepage'])->name('get_email_template');
         Route::get('payment/settings',                                         [SettingController::class, 'getpaymentsettingpage'])->name('get_payment_setting_page');
-        Route::get('sms/settings',                                         [SettingController::class, 'getsmssettingpage'])->name('get_sms_setting_page');  
+        Route::get('sms/settings',                                         [SettingController::class, 'getsmssettingpage'])->name('get_sms_setting_page');
         //============================= End ===================================//
 
+        // ========================== Review =====================================//
+        Route::prefix('review')->group(function () {
+            Route::resource('list',                           ReviewController::class);
+            Route::get('review/checklist',                       [ReviewController::class,'reviewchecklistpage'])->name('review_checklist');
+
+        });
         // ========================== discount =====================================//
         Route::prefix('discount')->group(function () {
             Route::resource('offer-type',                           OfferTypeController::class);
