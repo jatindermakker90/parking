@@ -28,8 +28,8 @@
             </div>            
             <div class="col-sm-2">
                 <div class="form-group">
-                    <label>Airport:</label>
-                    <select class="form-control select2" name ="select_airport" id ="select_airport">
+                    <label for="search_select_airport">Airport:</label>
+                    <select class="form-control select2" name ="search_select_airport" id ="search_select_airport">
                     <option value="">All</option>
                     @foreach ($airports as $airport_key => $airport_value)
                       <option value="{{ $airport_value->id }}">{{ $airport_value->airport_name }}</option>
@@ -39,8 +39,8 @@
             </div>
             <div class="col-sm-2">
                 <div class="form-group">
-                    <label>Company:</label>
-                    <select class="form-control select2" name ="select_airport" id ="select_airport">
+                    <label for="search_select_company">Company:</label>
+                    <select class="form-control select2" name ="search_select_company" id ="search_select_company">
                     <option value="">All</option>
                     @foreach ($companies ?? '' as $company_key => $company_value)
                       <option value="{{ $company_value->id }}">{{ $company_value->company_title }}</option>
@@ -50,8 +50,8 @@
             </div>
             <div class="col-sm-1">
                 <div class="form-group">
-                    <label>Type:</label>
-                    <select class="form-control select2" name ="select_airport" id ="select_airport">
+                    <label for="search_type">Type:</label>
+                    <select class="form-control select2" name ="search_type" id ="search_type">
                     <option value="">All</option>
                     <option value="">Booking Date</option>
                     <option value="">Departure Date</option>
@@ -61,12 +61,12 @@
             </div>
             <div class="col-sm-1">
                 <div class="form-group">
-                    <label>Status:</label>
-                    <select class="form-control select2" name ="select_airport" id ="select_airport">
-                      <option value="">All</option>
-                      <option value="">Active</option>
-                      <option value="">InActive</option>
-                      <option value="">Cancelled</option>                              
+                    <label for="search_booking_status">Status:</label>
+                    <select class="form-control select2" name ="search_booking_status" id ="search_booking_status">
+                      <option value="">Status</option>
+                      @foreach(config('constant.BOOKING_STATUS') as $status_key => $status_value)
+                        <option value="{{$status_value}}">{{$status_key}}</option>
+                      @endforeach                           
                     </select>
                 </div>
             </div>
@@ -163,7 +163,7 @@
           
         </div>
         <div class="modal-footer justify-content-between">
-            <button type="button" class="btn btn-primary w-100" id="change_booking_status_button">Update2</button>
+            <button type="button" class="btn btn-primary w-100" id="change_booking_status_button">Update</button>
         </div>
       </form>
     </div>
@@ -221,7 +221,11 @@ $(document).ready(function(){
     var time   = $('#reservationtime').val();
     var start_time = null;
     var end_time   = null;
-    var search = $('#search').val();
+    var search = null;
+    var selected_airport = null;
+    var selected_company = null;
+    var booking_status = null;
+
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
@@ -238,11 +242,12 @@ $(document).ready(function(){
   },function(start, end) {
       console.log("Start time",start.format('Y-M-D'));
        console.log("end time",end.format('Y-M-D'));
-       start_time = start.format('Y-M-D');
-       end_time   = end.format('Y-M-D');
+       start_time = `${start.format('Y-M-D')} 00:00:00`;
+       end_time   = `${end.format('Y-M-D')} 23:59:59`;
        $("#reservationtime").val(start.format('MM/DD/YYYY')+"-"+end.format('MM/DD/YYYY'));
        $('#data_collection').dataTable().fnDestroy();
-       searchData(start.format('Y-M-D'),end.format('Y-M-D'),$('#search').val());
+      //  searchData(start.format('Y-M-D'),end.format('Y-M-D'),$('#search').val());
+       searchData();
   });
   
   $(document).on('click','.cancelBtn',function(){
@@ -250,18 +255,40 @@ $(document).ready(function(){
        start_time = "";
        end_time = "";
        $('#data_collection').dataTable().fnDestroy();
-       searchData(null,null,$('#search').val());
+       searchData();
   });
 
   $(document).on('click','#search_text',function(){
+        search = $('#search').val();
         $('#data_collection').dataTable().fnDestroy();
-        searchData(start_time,end_time,$('#search').val());
+        searchData();
   });
 
-  function searchData(start = null,end = null,search = null){
-     let start_date      = start ?? '';
-     let end_date        = end ?? '';
+  $(document).on('change', '#search_select_airport', (e) => {
+    selected_airport = $(e.target).val();
+    $('#data_collection').dataTable().fnDestroy();
+    searchData();
+  })
+
+  $(document).on('change', '#search_select_company', (e) => {
+    selected_company = $(e.target).val();
+    $('#data_collection').dataTable().fnDestroy();
+    searchData();
+  })
+
+  $(document).on('change', '#search_booking_status', (e) => {
+    booking_status = $(e.target).val();
+    $('#data_collection').dataTable().fnDestroy();
+    searchData();
+  })
+
+  function searchData(){
+     let start_date      = start_time ?? '';
+     let end_date        = end_time ?? '';
      let search_text     = search ?? '';
+     let selectedAirport = selected_airport ?? '';
+     let selectedCompany = selected_company ?? '';
+     let bookingStatus   = booking_status ?? '';
      $('#data_collection').DataTable({
       "paging"      : true,
       "pageLength"  : 10,
@@ -273,7 +300,7 @@ $(document).ready(function(){
       "responsive"  : true,
       "processing"  : true,
       "serverSide"  : true,
-      "ajax"        :"{{ url('admin/bookings') }}?start_date="+start_date+"&end_date="+end_date+"&search_text="+search_text,
+      "ajax"        :"{{ url('admin/bookings') }}?start_date="+start_date+"&end_date="+end_date+"&search_text="+search_text+"&selected_airport="+selectedAirport+"&selected_company="+selectedCompany+"&booking_status="+bookingStatus,
       "columns"     : [
             // {
             //   data: 'DT_RowIndex',         
@@ -598,8 +625,7 @@ $(document).ready(function(){
               }
             }
           });
-          
-      })
+        })
     });
 </script>
 @stop

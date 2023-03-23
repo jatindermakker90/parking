@@ -349,12 +349,12 @@ return [
             'icon'        => 'fas fa-id-card',
             'submenu' => [
                 [
-                    'text'        => 'Bookings',
-                    'url'         => 'admin/bookings',
-                ],
-                [
                     'text'        => 'Add Booking',
                     'url'         => 'admin/add/booking',
+                ],
+                [
+                    'text'        => 'Bookings',
+                    'url'         => 'admin/bookings',
                 ],
                 [
                     'text'        => 'Cancelled Booking',
