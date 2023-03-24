@@ -416,11 +416,11 @@ return [
             'submenu' => [
                  [
                      'text'        => 'Review List',
-                     'url'         => '/',
+                     'url'         => 'admin/review/list',
                  ],
                  [
                     'text'        => 'Review Checklist',
-                    'url'         => '/',
+                    'url'         => 'admin/review/checklist',
                 ],
             ]
         ],
@@ -432,10 +432,10 @@ return [
                      'text'        => 'Site Settings',
                      'url'         => 'admin/site/settings',
                  ],
-                 [
-                    'text'        => 'Add pages',
-                    'url'         => 'admin/pages/list',
-                ],
+                //  [
+                //     'text'        => 'Add pages',
+                //     'url'         => 'admin/pages/list',
+                // ],
                 [
                    'text'        => 'Email Settings',
                    'url'         => 'admin/email/template',
@@ -448,10 +448,10 @@ return [
                   'text'        => 'Payment Settings',
                   'url'         => 'admin/payment/settings',
               ],
-              [
-                 'text'        => 'Import/Export User',
-                 'url'         => 'admin/pages/list',
-             ],
+             //  [
+             //     'text'        => 'Import/Export User',
+             //     'url'         => 'admin/pages/list',
+             // ],
             ]
         ],
 
