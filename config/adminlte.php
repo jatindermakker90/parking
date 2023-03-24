@@ -312,6 +312,11 @@ return [
             ]
         ],
         [
+            'text'        => 'Dashboard',
+            'url'         => 'admin/bookings',
+            'icon'        => 'fa fa-dashboard',
+        ],
+        [
             'text'        => 'Customer Management',
             'url'         => 'admin/users',
             'icon'        => 'fas fa-users',

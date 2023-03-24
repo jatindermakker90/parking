@@ -102,10 +102,10 @@
             <th>Company</th>
             <th>Contact</th>
             <th>Added On</th>
-            <th>Dep Date/time</th>
-            <th>Return Data/time</th>
+            <th>Departure</th>
+            <th>Return</th>
             <th>Days</th>
-            <th>Vehicle Reg No.</th>
+            <th>Veh Reg No.</th>
             <th>Price</th>
             <th>CNC</th>
             <th>SMS</th>

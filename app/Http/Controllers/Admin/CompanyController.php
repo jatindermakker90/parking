@@ -194,8 +194,6 @@ class CompanyController extends WebController
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $company_id){
-        // echo($company_id);
-        // dd($request->all());
         $validator = Validator::make($request->all(), [
             'airport_id'                => 'required',
             'terminal_id'               => 'required',

@@ -63,9 +63,7 @@ class BookingsController extends WebController
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request){    
-        // dd('index');
         if ($request->ajax()) {
-            // dd($request->selected_airport);
             $booking = Bookings::with(['vehicle', 'company', 'airport']);
             
             if($request->selected_airport && $request->selected_airport != null){
@@ -99,10 +97,10 @@ class BookingsController extends WebController
                         return date("d-m-Y", strtotime($row->created_at));; 
                     })
                     ->editColumn('dep_date_time', function($row){
-                        return date("d-m-Y H:i:s", strtotime($row->dep_date_time));; 
+                        return date("d-m-Y H:i", strtotime($row->dep_date_time));; 
                     })
                     ->editColumn('return_date_time', function($row){
-                        return date("d-m-Y H:i:s", strtotime($row->return_date_time));; 
+                        return date("d-m-Y H:i", strtotime($row->return_date_time));; 
                     })
                     ->addColumn('customer', function($row){
                         return $full_name = $row->first_name.' '.$row->last_name; 
@@ -202,7 +200,6 @@ class BookingsController extends WebController
         if($validator->fails()){
            return redirect()->back()->withErrors($validator);      
         }
-
         $dep_date = $request->dep_date.' '.$request->dep_time.':00';
         $return_date = $request->return_date.' '.$request->return_time.':00';
         $total_days = $this->getDaysFromDates($dep_date, $return_date);
@@ -218,8 +215,9 @@ class BookingsController extends WebController
         if($lastBookingRefId == null){
             $nextBookingRefId = $nextBookingRefId.'000001'; 
         }else{
+            $add = 1;
             $get_number = substr($lastBookingRefId->ref_id,7);
-            $increaseRefId = $get_number + 1;
+            $increaseRefId = $get_number+$add;
             $increasedId = str_pad($increaseRefId,strlen($get_number),"0",STR_PAD_LEFT);
             $nextBookingRefId = $nextBookingRefId.$increasedId;
         }
