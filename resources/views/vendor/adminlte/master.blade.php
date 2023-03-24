@@ -36,6 +36,8 @@
         <link rel="stylesheet" href="{{ asset('assets/css/inner-style.css') }}"></link>
         <link rel="stylesheet" href="{{ asset('vendor/daterangepicker/daterangepicker.css') }}">
         <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
+        <!-- CSS OF STAR RATING -->
+        <link rel="stylesheet" href="{{ asset('vendor/barrating-css/fontawesome-stars.css') }}">
 
 
     @else

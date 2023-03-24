@@ -420,7 +420,7 @@ return [
                  ],
                  [
                     'text'        => 'Review Checklist',
-                    'url'         => '/',
+                    'url'         => 'admin/review/checklist',
                 ],
             ]
         ],

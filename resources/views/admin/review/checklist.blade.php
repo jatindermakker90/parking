@@ -21,14 +21,12 @@
                 <table id="data_collection" class="table table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th>Review id</th>
-                    <th>Company</th>
-                    <th>Review Date</th>
-                    <th>Publish Date</th>
-                    <th>Reference Number</th>
+                    <th>Ref id</th>
                     <th>Name</th>
-                    <th>Email</th>
-                    <th>Over All Rating</th>
+                    <th>Contact No</th>
+                    <th>Date Added</th>
+                    <th>Dep Date/Time</th>
+                    <th>Status</th>
                     <th>Action</th>
                   </tr>
                   </thead>
@@ -65,7 +63,6 @@
 <script src="{{ asset('vendor/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 <script src="{{ asset('vendor/bootstrap-switch/js/bootstrap-switch.min.js') }}"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-<script src="{{ asset('vendor/jquery-barrating/barrating.min.js') }}"></script>
 <script type="text/javascript">
 
 $(document).ready(function(){
@@ -81,12 +78,21 @@ $(document).ready(function(){
       "responsive"  : true,
       "processing"  : true,
       "serverSide"  : true,
-      "ajax"        :"{{ url('admin/review/list') }}",
+      "ajax"        :"{{ url('admin/review/checklist') }}",
       "columns"     : [
             {
               data: 'id',
               name: 'id',
-              orderable: true
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type == 'display'){
+                    return 'P4U-112234';
+                }else if(type === 'sort'){
+                    return 'P4U-112234';
+                }else{
+                    return 'P4U-112234';
+                }
+              }
             },
             {
               data: 'airport_name',
@@ -98,11 +104,37 @@ $(document).ready(function(){
               name: 'operating_location',
               render: function ( data, type, row) {
                 if(type == 'display'){
-                    return '2023-02-23';
+                    return '9876543210';
                 }else if(type === 'sort'){
-                    return '2023-02-23';
+                    return '9876543210';
                 }else{
-                    return '2023-02-23';
+                    return '9876543210';
+                }
+              }
+            },
+            {
+              data: 'date_added',
+              name: 'date_added',
+              render: function ( data, type, row) {
+                if(type == 'display'){
+                    return '2023-03-24';
+                }else if(type === 'sort'){
+                    return '2023-03-24';
+                }else{
+                    return '2023-03-24';
+                }
+              }
+            },
+            {
+              data: 'dep_date_added',
+              name: 'dep_date_added',
+              render: function ( data, type, row) {
+                if(type == 'display'){
+                    return '2023-03-24';
+                }else if(type === 'sort'){
+                    return '2023-03-24';
+                }else{
+                    return '2023-03-24';
                 }
               }
             },
@@ -118,51 +150,6 @@ $(document).ready(function(){
                     return '2023-02-23';
                 }
               }
-            },
-            {
-              data: 'reference_number',
-              name: 'reference_number',
-              render: function ( data, type, row) {
-                if(type == 'display'){
-                    return 'P4U-430856';
-                }else if(type === 'sort'){
-                    return 'P4U-430856';
-                }else{
-                    return 'P4U-430856';
-                }
-              }
-            },
-            {
-              data: 'name',
-              name: 'name',
-              render: function ( data, type, row) {
-                if(type == 'display'){
-                    return 'Test User';
-                }else if(type === 'sort'){
-                    return 'Test User';
-                }else{
-                    return 'Test User';
-                }
-              }
-            },
-            {
-              data: 'email',
-              name: 'email',
-              render: function ( data, type, row) {
-                if(type == 'display'){
-                    return 'test@gmail.com';
-                }else if(type === 'sort'){
-                    return 'test@gmail.com';
-                }else{
-                    return 'test@gmail.com';
-                }
-              }
-            },
-            {
-              data: 'stars',
-              name: 'stars',
-              orderable:false,
-              searchable:false
             },
             {
               data: 'action',
@@ -234,54 +221,5 @@ $(document).ready(function(){
   });
 
 });
-$(function(){ $('#overall_1').barrating({
-			                    theme: 'fontawesome-stars',
-			                    initialRating: '1',
-			                    readonly : 'true',
-		                    	initialRating: '5'
-		                  });
-		            });
-		            	$(document).ready(function(){
-							$("#approve_1").click(function(){
-							setTimeout(function() {
-							var reviewID = '';
-					        reviewID = $.QueryString("reviewID");
-					        //for this function you have to include querystring library
-					        $.ajax({
-							 	data: {reviewID : reviewID},
-								type: "POST",
-								success: function(data){
-									console.log(data);
-									if (data === 'approved')
-										{
-										$("#approve_1").text("unapprove");
-										}
-										if (data === 'unapproved')
-										{
-											$("#approve_1").text("Approve");
-										}
-									}
-								});
-					        }, 200);
-							});
-							//for delete button
-							$("#delete_1").click(function(){
-							setTimeout(function() {
-							var DeleteID = '';
-					        DeleteID = $.QueryString("DeleteID");
-					        $.ajax({
-							 	data: {DeleteID : DeleteID},
-								type: "POST",
-								success: function(data){
-										if (data === 'Deleted') {
-											setTimeout(function(){
-											       window.location.reload();
-											      }, 100);
-										}
-									}
-								});
-					        }, 200);
-							});
-						});
 </script>
 @stop

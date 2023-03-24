@@ -138,7 +138,7 @@ Route::prefix('admin')->group(function () {
         // ========================== Review =====================================//
         Route::prefix('review')->group(function () {
             Route::resource('list',                           ReviewController::class);
-            Route::get('review/checklist',                       [ReviewController::class,'reviewchecklistpage'])->name('review_checklist');
+            Route::get('checklist',                       [ReviewController::class,'reviewchecklistpage'])->name('review_checklist');
 
         });
         // ========================== discount =====================================//
