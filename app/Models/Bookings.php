@@ -34,6 +34,10 @@ class Bookings extends Model
     public static function addBooking($data){
 
         $booking = new Bookings();
+        // dd($data);
+        if($data->has('ref_id') && $data->ref_id){
+            $booking->ref_id = $data->ref_id;
+        }
         if($data->has('select_airport') && $data->select_airport){
             $booking->airport_id = $data->select_airport;
         }
@@ -42,9 +46,11 @@ class Bookings extends Model
         }
         if($data->has('dep_date') && $data->dep_date && $data->has('dep_time') && $data->dep_time){
             $booking->dep_date_time = $data->dep_date.' '.$data->dep_time;
+            $booking->updated_dep_date_time = $data->dep_date.' '.$data->dep_time;
         }
         if($data->has('return_date') && $data->return_date && $data->has('return_time') && $data->return_time){
             $booking->return_date_time = $data->return_date.' '.$data->return_time;
+            $booking->updated_return_date_time = $data->return_date.' '.$data->return_time;
         }
         if($data->has('discount_code') && $data->discount_code){
             $booking->discount_code = $data->discount_code;
@@ -88,6 +94,9 @@ class Bookings extends Model
         if($data->has('flight_number') && $data->flight_number){
              $booking->flight_number = $data->flight_number;
         }
+        if($data->has('total_days') && $data->total_days){
+            $booking->total_days = $data->total_days;
+        }
         $booking->booking_status  = 1;
         $booking->save();
         return $booking;
@@ -100,11 +109,18 @@ class Bookings extends Model
         if($data->has('company') && $data->company){
             $booking->company_id = $data->company;
         }
-        if($data->has('dep_date_time') && $data->dep_date_time){
-            $booking->dep_date_time = $data->dep_date_time;
+        if($data->has('updated_dep_date_time') && $data->updated_dep_date_time){
+            $booking->dep_date_time = $data->updated_dep_date_time;
+            $booking->updated_dep_date_time = $data->updated_dep_date_time;
         }
-        if($data->has('return_date_time') && $data->return_date_time ){
-            $booking->return_date_time = $data->return_date_time;
+        if($data->has('updated_return_date_time') && $data->updated_return_date_time ){
+            $booking->updated_return_date_time = $data->updated_return_date_time;
+        }
+        if($data->has('discount_code') && $data->discount_code){
+            $booking->discount_code = $data->discount_code;
+        }
+        else{
+            $booking->discount_code = null;
         }
         if($data->has('title') && $data->title){
             $booking->title = $data->title;
@@ -121,6 +137,18 @@ class Bookings extends Model
         if($data->has('mobile') && $data->mobile){
             $booking->mobile = $data->mobile;
         }
+        if($data->has('city_town') && $data->city_town){
+            $booking->city_town = $data->city_town;
+        }
+        if($data->has('address') && $data->address){
+            $booking->address = $data->address;
+        }
+        if($data->has('country') && $data->country){
+            $booking->country = $data->country;
+        }
+        if($data->has('postcode') && $data->postcode){
+            $booking->postcode = $data->postcode;
+        }
         if($data->has('price') && $data->price){
             $booking->price = $data->price;
         }
@@ -132,6 +160,18 @@ class Bookings extends Model
         }
         if($data->has('flight_number') && $data->flight_number){
             $booking->flight_number = $data->flight_number;
+        }
+        if($data->has('admin_charge') && $data->admin_charge){
+            $booking->admin_charge = $data->admin_charge;
+        }
+        if($data->has('total_days') && $data->total_days){
+            $booking->total_days = $data->total_days;
+        }
+        if($data->has('extended_price') && $data->extended_price){
+            $booking->extanded_price = $data->extended_price;
+        }
+        if($data->has('special_notes') && $data->special_notes){
+            $booking->special_notes = $data->special_notes;
         }
         $booking->save();
         return $booking;

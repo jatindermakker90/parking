@@ -102,12 +102,14 @@
             <th>Company</th>
             <th>Contact</th>
             <th>Added On</th>
-            <th>Dep Date/time</th>
-            <th>Return Data/time</th>
+            <th>Departure</th>
+            <th>Return</th>
             <th>Days</th>
-            <th>Vehicle Reg No.</th>
+            <th>Veh Reg No.</th>
             <th>Price</th>
             <th>CNC</th>
+            <th>SMS</th>
+            <th>DIS</th>
             <th>Status</th>                    
             <th>Action</th>                    
           </tr>
@@ -309,8 +311,8 @@ $(document).ready(function(){
             //   orderable: false
             // },
             {
-              data: 'ref_no',
-              name: 'ref_no', 
+              data: 'ref_id',
+              name: 'ref_id', 
               orderable: true,
               render: function ( data, type, row) {
                 if(type === 'sort'){
@@ -393,8 +395,8 @@ $(document).ready(function(){
               }
             },
             {
-              data: 'days',
-              name: 'days', 
+              data: 'total_days',
+              name: 'total_days', 
               orderable: true,
               render: function ( data, type, row) {
                 if(type === 'sort'){
@@ -429,8 +431,8 @@ $(document).ready(function(){
               }
             },
             {
-              data: 'cnc',
-              name: 'cnc', 
+              data: 'cancellation_cover',
+              name: 'cancellation_cover', 
               orderable: true,
               render: function ( data, type, row) {
                 if(type === 'sort'){
@@ -441,8 +443,32 @@ $(document).ready(function(){
               }
             },
             {
-              data: 'booking_status',
-              name: 'booking_status', 
+              data: 'sms_confirmation',
+              name: 'sms_confirmation', 
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type === 'sort'){
+                    return data;
+                }else{
+                    return  data??'NA';
+                }
+              }
+            },
+            {
+              data: 'discount_code',
+              name: 'discount_code', 
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type === 'sort'){
+                    return data;
+                }else{
+                    return  data??'NA';
+                }
+              }
+            },
+            {
+              data: 'status',
+              name: 'status', 
               orderable: true,
               render: function ( data, type, row) {
                 if(type === 'sort'){
@@ -464,8 +490,11 @@ $(document).ready(function(){
 
         $(document).on('click','.edit-booking',function(e){
             e.preventDefault();
+            console.log('$(e.target):: ', $(e.target));
             let model = $("#modal-default");
             let booking_id = $(e.target).attr('data-id');
+            let booking_ref_id = $(e.target).attr('data-ref-id');
+            $("#modal-default").find('.modal-title').text(`Edit Booking - ${booking_ref_id}`);
             let ajaxUrl = "{{ route('get-single-booking') }}";
             ajaxUrl = `${ajaxUrl}?id=${booking_id}`;
             // return;
@@ -492,7 +521,8 @@ $(document).ready(function(){
             let validationPass = true; 
             let excludeElementValidation = [
                 'discount_code', 'cancellation_cover', 'sms_confirmation', 'city_town',
-                'address', 'country', 'postcode', 'flight_number', 'special_notes'
+                'address', 'country', 'postcode', 'flight_number', 'special_notes', 'admin_charge',
+                'extended_price', 'payment_amount', 'payment_method', 'payment_status', 'transaction_id', 'transaction_id_get'
             ]
             let ajaxUrl = "{{ route('booking-update') }}";
             let editBookingForm = $("#edit_booking_form");
@@ -529,30 +559,53 @@ $(document).ready(function(){
                 console.log(`validationPass :: ${validationPass}`);
             }
             else{
-                editBookingForm.find('button').attr('disabled', true)
+                let updated_dep_date = $("#updated_dep_date").val();
+                let updated_dep_time = $("#updated_dep_time").val();
+                let updated_return_date = $("#updated_return_date").val();
+                let updated_return_time = $("#updated_return_time").val();
+
+                let start_date = `${updated_dep_date} ${updated_dep_time}:00`;
+                let end_date = `${updated_return_date} ${updated_return_time}:00`;
+                let ajaxUrl2 = "{{ route('compare-two-date') }}"
                 $.ajax({
-                    type:"POST",
-                    url: ajaxUrl,
-                    data: formDataSerialize,
-                    success: function(response){
-                      console.log(`form submited`, response);
-                      if(response.code == 200){
-                        $("#modal-default").modal('hide');
-                        toastr["success"](response.success);
-                        setTimeout(() => {
-                          window.location.href = response.path;
-                        }, 1000);
-                      }
-                    },         
-                    error: function(XHR, textStatus, errorThrown) {
-                    // console.log(XHR.responseJSON.message);
-                    if(XHR.responseJSON.message != undefined){
-                        toastr["error"](XHR.responseJSON.message);  
-                    }else{
-                        toastr["error"](errorThrown);  
+                  type:"POST",
+                  url: ajaxUrl2,
+                  data: {"start_date": start_date,"end_date": end_date},
+                  success: function(response){
+                    console.log(` date comparision:: `, response);
+                    if(response.data == false){
+                      toastr["error"]('Arrival date time shouldn\'t be less then to Departure date time');
+                      editBookingForm.find('button').attr('disabled', false)
                     }
+                    else{
+                      editBookingForm.find('button').attr('disabled', true)
+                      $.ajax({
+                          type:"POST",
+                          url: ajaxUrl,
+                          data: formDataSerialize,
+                          success: function(response){
+                            console.log(`form submited`, response);
+                            if(response.code == 200){
+                              $("#modal-default").modal('hide');
+                              toastr["success"](response.success);
+                              setTimeout(() => {
+                                window.location.href = response.path;
+                              }, 1000);
+                            }
+                          },         
+                          error: function(XHR, textStatus, errorThrown) {
+                          // console.log(XHR.responseJSON.message);
+                          if(XHR.responseJSON.message != undefined){
+                              toastr["error"](XHR.responseJSON.message);  
+                          }else{
+                              toastr["error"](errorThrown);  
+                          }
+                          }
+                      });
                     }
+                  }
                 });
+                
             }
         });
 

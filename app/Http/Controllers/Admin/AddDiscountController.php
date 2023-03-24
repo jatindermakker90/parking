@@ -268,4 +268,53 @@ class AddDiscountController extends WebController
             'header' => "Discount Code Details Report"
         ]);
     }
+
+    public function validateCouponCode(Request $request, AddDiscount $addDiscount)
+    {
+        
+        if(!$request->coupon){
+            return response()->json([
+                'code' => 203,
+                'success' => 'Coupon is required !'
+            ]);
+        }
+        $isValid = false;
+        $couponData = $addDiscount->where('name', trim($request->coupon))->first();
+        if($couponData == null){
+            return response()->json([
+                'code' => 203,
+                'messsage' => 'Coupon is invalid !',
+                'data' => ["isValid" => $isValid, "amount"=> 0]
+            ]);
+        }
+        $todayDate = date('d-m-Y', strtotime(now()));
+        $startDate = date('d-m-Y', strtotime($couponData->start_date)); 
+        $lastDate = date('d-m-Y', strtotime($couponData->end_date));
+        
+        if($startDate > $todayDate){
+            $isValid = false;
+        }
+        else if($startDate <= $todayDate && $todayDate < $lastDate){
+            $isValid = true;
+        }
+        else{
+            $isValid = false;
+        }
+        
+        if($isValid == true){
+            return response()->json([
+                'code' => 200,
+                'messsage' => 'Coupon is valid !',
+                'data' => ["isValid" => $isValid, "amount"=> 0]
+            ]);
+        }
+        else{
+            return response()->json([
+                'code' => 203,
+                'messsage' => 'Coupon is invalid !',
+                'data' => ["isValid" => $isValid, "amount"=> 0]
+            ]);
+        }
+
+    }
 }

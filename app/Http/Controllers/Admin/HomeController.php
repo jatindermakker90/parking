@@ -11,6 +11,9 @@ use App\Models\Roles;
 use App\Models\UserRoles;
 use App\Models\Services;
 use App\Models\Countries;
+use App\Models\Bookings;
+use App\Models\Airport;
+use App\Models\Company;
 use Validator;
 use Session;
 use DB;
@@ -36,14 +39,23 @@ class HomeController extends WebController
         $user_role  = $user->roles->first();
         $default_role = $user_role->key;
         Session::put('default_role', $default_role);
-        //print_r($default_role);die;
+        // print_r($default_role);die;
         if($default_role == 'superadmin'){
-            $country    = $request->has('country') ? $request->input('country') : null;
-            $service    = $request->has('service') && $request->service ? $request->service : null;
-            $countries  = Countries::where('status','!=',config('constant.STATUS.DELETED'))->get();
-            $customer   = UserRoles::join('roles','roles.id','=','user_roles.role_id')->select('roles.*')->where('roles.key','CUSTOMER')->count();
-            $driver     = UserRoles::join('roles','roles.id','=','user_roles.role_id')->select('roles.*')->where('roles.key','DRIVER')->count();
-            return view('admin.home',compact('customer','driver','countries','country'));
+            // $country    = $request->has('country') ? $request->input('country') : null;
+            // $service    = $request->has('service') && $request->service ? $request->service : null;
+            // $countries  = Countries::where('status','!=',config('constant.STATUS.DELETED'))->get();
+            // $customer   = UserRoles::join('roles','roles.id','=','user_roles.role_id')->select('roles.*')->where('roles.key','CUSTOMER')->count();
+            // $driver     = UserRoles::join('roles','roles.id','=','user_roles.role_id')->select('roles.*')->where('roles.key','DRIVER')->count();
+            // return view('admin.home',compact('customer','driver','countries','country'));
+            $airports   = Airport::where('airport_status',config('constant.STATUS.ACTIVE'))->get(); 
+            $companies  = Company::where('company_status','!=',config('constant.STATUS.DELETED'))->get();    
+            return view('admin.booking.index')->with([
+                'title' => 'Booking Management', 
+                "header" => "Booking  List", 
+                "airports" => $airports, 
+                "companies" => $companies
+            ]);
+
         }
 
          if($default_role == 'admin'){

@@ -101,6 +101,8 @@
             <th>Vehicle Reg No.</th>
             <th>Price</th>
             <th>CNC</th>
+            <th>SMS</th>
+            <th>DIS</th>
             <th>Status</th>                    
             <th>Action</th>                    
           </tr>
@@ -261,8 +263,8 @@ $(document).ready(function(){
             //   orderable: false
             // },
             {
-              data: 'ref_no',
-              name: 'ref_no', 
+              data: 'ref_id',
+              name: 'ref_id', 
               orderable: true,
               render: function ( data, type, row) {
                 if(type === 'sort'){
@@ -345,8 +347,8 @@ $(document).ready(function(){
               }
             },
             {
-              data: 'days',
-              name: 'days', 
+              data: 'total_days',
+              name: 'total_days', 
               orderable: true,
               render: function ( data, type, row) {
                 if(type === 'sort'){
@@ -381,8 +383,8 @@ $(document).ready(function(){
               }
             },
             {
-              data: 'cnc',
-              name: 'cnc', 
+              data: 'cancellation_cover',
+              name: 'cancellation_cover', 
               orderable: true,
               render: function ( data, type, row) {
                 if(type === 'sort'){
@@ -393,8 +395,32 @@ $(document).ready(function(){
               }
             },
             {
-              data: 'booking_status',
-              name: 'booking_status', 
+              data: 'sms_confirmation',
+              name: 'sms_confirmation', 
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type === 'sort'){
+                    return data;
+                }else{
+                    return  data??'NA';
+                }
+              }
+            },
+            {
+              data: 'discount_code',
+              name: 'discount_code', 
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type === 'sort'){
+                    return data;
+                }else{
+                    return  data??'NA';
+                }
+              }
+            },
+            {
+              data: 'status',
+              name: 'status', 
               orderable: true,
               render: function ( data, type, row) {
                 if(type === 'sort'){
