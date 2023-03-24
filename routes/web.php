@@ -161,5 +161,7 @@ Route::prefix('admin')->group(function () {
         });
        //======================================================================//
     });
+    Route::post('/compare-two-date',  [BookingsController::class, 'checkIfEndDateIsGreater'])->name('compare-two-date');
+    Route::post('/validate-coupon-code',  [AddDiscountController::class, 'validateCouponCode'])->name('validate-coupon-code');
 
 });

@@ -91,6 +91,8 @@ return [
       'ACTIVE' => 1,
       'TRASHED' => 2,
       'CANCEL' => 3
-    ]
+    ],
+    'PAYMENT_METHODS' => ['Paypal', 'Stripe', 'Stripe 3DS', 'WorldPay', 'Online Payment', 'Cash', 'Phone'],
+
 
 ];

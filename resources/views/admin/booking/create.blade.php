@@ -92,6 +92,7 @@
                 <label for="discount_code">Discount Code</label>
                 <input type="text" class="form-control"  placeholder="Enter Test Cost" name ="discount_code" id ="discount_code" value="<?php echo (isset($request) && $request['discount_code'])  ? $request['discount_code'] : '' ?>">           
                 <span class="validationFail">Please select discount code</span>
+                <span class="isValid"></span>
               </div>                 
             </div>            
           </div>
@@ -371,6 +372,9 @@
   .sms_confirmation_charge{
     display: none;
   }
+  .isValid{
+    display: none;
+  }
 </style>
 @stop
 @section('js')
@@ -454,15 +458,35 @@ $(document).ready(function(){
       filterForm.find("#return_time").removeClass('jqueryValidation');
       filterForm.find("#return_time").siblings('.validationFail').hide();
     }
+    let start_date = `${departureDate} ${departureTime}:00`;
+    let end_date = `${returnDate} ${returnTime}:00`;
+    let ajaxUrl = "{{ route('compare-two-date') }}"
+    $.ajax({
+      type:"POST",
+      url: ajaxUrl,
+      data: {"start_date": start_date,"end_date": end_date},
+      success: function(response){
+        console.log(` date comparision:: `, response);
+        if(response.data == false){
+          toastr["error"]('Arrival date time shouldn\'t be less then to Departure date time');
+          filterForm.find("#return_date").addClass('jqueryValidation');
+          filterForm.find("#return_time").addClass('jqueryValidation');
+        }
+        else{
+          filterForm.find("#return_date").removeClass('jqueryValidation');
+          filterForm.find("#return_time").removeClass('jqueryValidation');
 
-    if(!airport || !departureDate || !departureTime || !returnDate || !returnTime){
-      console.log(`form not submit`)
-      return;
-    }
-    else{
-      console.log(`form submit`)
-      $("#filter-form").submit();
-    }
+          if(!airport || !departureDate || !departureTime || !returnDate || !returnTime){
+            console.log(`form not submit`)
+            return;
+          }
+          else{
+            console.log(`form submit`)
+            $("#filter-form").submit();
+          }
+        }
+      }
+    });
   })
 
 
@@ -611,6 +635,45 @@ $(document).ready(function(){
 
 
 
+  })
+
+  $(document).on('change', '#discount_code', (e) => {
+    e.preventDefault();
+    let couponCode = $(e.target).val().trim();
+    if(!couponCode){
+      $(e.target).siblings(".isValid").text(null).hide();
+      return;
+    }
+    let formData = {
+      "coupon" : couponCode
+    }
+
+    console.log('couponCode:: ', couponCode);
+    let ajaxUrl = "{{ route('validate-coupon-code') }}";
+    $.ajax({
+      type:"POST",
+      url: ajaxUrl,
+      data: formData,
+      success: function(response){
+        console.log(`form submited`, response);
+        if(response.code == 200){
+          $(e.target).siblings(".isValid").text(response.messsage).css('color', 'green').show();
+          // toastr["success"](response.message);
+        }
+        if(response.code == 203){
+          $(e.target).siblings(".isValid").text(response.messsage).css('color', 'red').show();
+          // toastr["success"](response.message);
+        }
+      },
+      error: function(XHR, textStatus, errorThrown) {
+        // console.log(XHR.responseJSON.message);
+        if(XHR.responseJSON.message != undefined){
+            toastr["error"](XHR.responseJSON.message);  
+        }else{
+            toastr["error"](errorThrown);  
+        }
+      }
+    });
   })
 
 });
