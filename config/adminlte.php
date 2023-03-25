@@ -314,7 +314,7 @@ return [
         [
             'text'        => 'Dashboard',
             'url'         => 'admin/bookings',
-            'icon'        => 'fa fa-dashboard',
+            'icon'        => 'fas fa-tv',
         ],
         [
             'text'        => 'Customer Management',
@@ -379,7 +379,7 @@ return [
         ],
         [
             'text'        => 'Discount',
-            'icon'        => 'fas fa-building',
+            'icon'        => 'fas fa-money-check-alt',
             'submenu' => [
                 [
                     'text'        => 'Add Flat Discount',
