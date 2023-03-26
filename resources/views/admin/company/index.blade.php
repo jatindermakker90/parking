@@ -36,6 +36,7 @@
                     <th>Airport ID</th>
                     <th>Terminal ID</th>
                     <th>Logo</th>
+                    <th>Manage Price</th>
                     <th>Company Status</th>
                     <th>Action</th>
                   </tr>
@@ -50,6 +51,71 @@
           </div>
           <!-- /.col -->
         </div>
+
+        <div class="modal fade" id="manage_price_modal">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <form id="manage_price_modal_form" enctype="multipart/form-data">
+                <div class="modal-header">
+                  <h4 class="modal-title">Manage Price</h4>
+                  <button type="button" class="close close-manage-price-modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div>
+                    <form action="" method="post">
+                      <input type="hidden" name="company_id">
+                      <div class="row">
+                        <div class="col-3" >
+                          <div class="form-group">
+                            <label for="base_price">Enter Base Price</label>
+                            <input type="text" class="form-control" placeholder="Enter price" name="base_price" id="base_price">
+                            <span class="validationFail">Please enter base price</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-4">
+                          <div class="checkbox">
+                            <div class="checker">
+                              <span>
+                                <label for="base_price"></label><br>
+                                <input type="checkbox" value="true" name="per_day_increment_status" class="per-day-increment-status">
+                              </span>
+                              <b>is per day increse price ?</b>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-3 per-day-increment-type-div">
+                          <div class="form-group">
+                            <label for="per_day_increment_type">Select type</label>
+                            <select class="form-control select2" style="width: 100%;" name="per_day_increment_type" id="per_day_increment_type">
+                              <option value="FLAT">FLAT</option>
+                              <option value="PERCENTAGE">PERCENTAGE</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col-3 per-day-increment-amount-div">
+                          <div class="form-group">
+                            <label for="per_day_increment_amount">Enter amount</label>
+                            <input type="text" class="form-control" placeholder="Enter amount" name="per_day_increment_amount" id="per_day_increment_amount">
+                            <span class="validationFail">Please enter amount</span>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-primary w-100" id="manage_price_submit_button">Update</button>
+                </div>
+              </form>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
 @stop
 @section('css')
 <link rel="stylesheet" href="{{ asset('vendor/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
@@ -60,6 +126,25 @@
   /* .dataTables_wrapper{
     overflow-x: scroll;
   } */
+
+  input[type=checkbox]{
+    transform: scale(1.5);
+    padding-right: 16px;
+    margin-right: 12px;
+    margin-left: 4px;
+  }
+  .per-day-increment-type-div,
+  .per-day-increment-amount-div{
+    display: none;
+  }
+  .jqueryValidation{
+    border: 1px solid red !important;
+  }
+  .validationFail{
+    color: red;
+    display: none;
+  }
+
 </style>
 @stop
 @section('js')
@@ -81,6 +166,12 @@
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script type="text/javascript">
 $(document).ready(function(){
+    let managePlanModel = $('#manage_price_modal').modal({
+      keyboard: false
+    })
+    function closeManagePriceModal(){
+      managePlanModel.modal('hide');
+    }
     $('.select2').select2();
     var country = $('#country').val();
     $('#data_collection').DataTable({
@@ -188,6 +279,20 @@ $(document).ready(function(){
               }
             },
             {
+              data: 'manage_price',
+              name: 'manage_price',
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type == 'display'){
+                    return data;
+                }else if(type === 'sort'){
+                    return data;
+                }else{
+                    return data;
+                }
+              }
+            },
+            {
               data: 'company_status',
               name: 'company_status',
               orderable: true,
@@ -280,6 +385,74 @@ $(document).ready(function(){
             }
       });
   });
+  $(document).on('click', '.manage-plan-button', (e) => {
+    e.preventDefault();
+    let company_id  = $(e.target).attr('data-companyId');
+    console.log('company_id:: ', company_id, 'managePlanModel:: ', managePlanModel);
+    managePlanModel.find('input[name=company_id]').val(company_id);
+    managePlanModel.modal('show');
+  })
+  $(document).on('click', '.close-manage-price-modal', (e)=>{
+    managePlanModel.modal('hide');
+  })
+  $(document).on('change', '.per-day-increment-status', (e) => {
+    let isChecked = $(e.target).is(':checked');
+  
+    if(isChecked){
+      $('.per-day-increment-type-div, .per-day-increment-amount-div').show();
+    }
+    else{
+      $('.per-day-increment-type-div, .per-day-increment-amount-div').hide();
+    }
+
+  })
+  $(document).on('click', '#manage_price_submit_button', (e) => {
+    e.preventDefault();
+    let form = $('#manage_price_modal_form');
+    let formDara = '';
+    let base_price = managePlanModel.find('#base_price').val();
+    let isIncrementInPrice = managePlanModel.find('input[name="per_day_increment_status"]').is(':checked');
+    let incrementType = managePlanModel.find('#per_day_increment_type').val();
+    let incrementAmount = managePlanModel.find('input[name="per_day_increment_amount"]').val();
+
+    console.log('base_price:: ', base_price, 'isIncrementInPrice:: ', isIncrementInPrice, 'incrementType:: ', incrementType, 'incrementAmount:: ', incrementAmount);
+    
+    if(!base_price){
+      managePlanModel.find('#base_price').addClass('jqueryValidation');
+      managePlanModel.find('#base_price').siblings('.validationFail').show();
+    }
+    else{
+      managePlanModel.find('#base_price').removeClass('jqueryValidation');
+      managePlanModel.find('#base_price').siblings('.validationFail').hide();
+    }
+
+    if(isIncrementInPrice){
+      if(!incrementAmount){
+        managePlanModel.find('input[name="per_day_increment_amount"]').addClass('jqueryValidation');
+        managePlanModel.find('input[name="per_day_increment_amount"]').siblings('.validationFail').show();
+      }
+      else{
+        managePlanModel.find('input[name="per_day_increment_amount"]').removeClass('jqueryValidation');
+        managePlanModel.find('input[name="per_day_increment_amount"]').siblings('.validationFail').hide();
+      }
+    }
+
+    if(!isIncrementInPrice){
+      formDara = form.serialize()+'&per_day_increment_status='+isIncrementInPrice;
+      if(!base_price){
+        return;
+      }
+    }
+    else{
+      formDara = form.serialize();
+      if(!base_price || !incrementAmount){
+        return;
+      }
+    }
+
+    console.log("price submit", formDara)
+
+  })
     
 });
 </script>

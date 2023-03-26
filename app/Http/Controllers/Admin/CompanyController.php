@@ -51,6 +51,10 @@ class CompanyController extends WebController
                         $btn = '<input type="checkbox" name="change_status" data-bootstrap-switch data-off-color="danger" data-on-color="success"  data-on-text="ACTIVE" data-off-text="INACTIVE" data-href ="'.$modify_url.'">';
                         return $btn;
                     })
+                    ->addColumn('manage_price',function($row){
+                        $btn = '<button type="button" class="btn btn-xs btn-outline-secondary manage-plan-button" data-companyId="'.$row->id.'">Manage Price</button>';
+                        return $btn;
+                    })
                     ->addColumn('action', function($row) use ($user){
                             $view_url    =  route('companies.show',[$row->id]);
                             $edit_url    =  route('companies.edit',[$row->id]);
@@ -64,7 +68,7 @@ class CompanyController extends WebController
                             }
                            return $btn;
                     })
-                    ->rawColumns(['action','company_status'])
+                    ->rawColumns(['action', 'manage_price', 'company_status'])
                     ->make(true);
         }
         return view('admin.company.index')->with(['title' => 'Company', "header" => "Company Listing"]);
