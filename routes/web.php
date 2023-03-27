@@ -110,8 +110,11 @@ Route::prefix('admin')->group(function () {
         Route::get('change/company/status/{table_id}',          [CompanyController::class, 'changeCompanyStatus'])->name('change_company_status');
         Route::post('company/assign-user-to-companies',         [CompanyController::class, 'assignUserToCompanies'])->name('assign-user-to-companies');
         Route::post('company/remove-user-to-companies',         [CompanyController::class, 'removeUserToCompanies'])->name('remove-user-to-companies');
-        Route::get('company/close-company',                    [CompanyController::class, 'closeCompany'])->name('close-company');
-        Route::post('company/close-company-store',                    [CompanyController::class, 'closeCompanyStore'])->name('close-company-store');
+        Route::get('company/close-company',                     [CompanyController::class, 'closeCompany'])->name('close-company');
+        Route::post('company/close-company-store',              [CompanyController::class, 'closeCompanyStore'])->name('close-company-store');
+        Route::get('company/get-edit-close-company-html',       [CompanyController::class, 'getcloseCompanyEditHtml'])->name('get-edit-close-company-html');
+        Route::post('company/close-company-update',             [CompanyController::class, 'closeCompanyUpdate'])->name('close-company-update');
+        Route::delete('company/close-company-delete/{id}',            [CompanyController::class, 'closeCompanyDelete'])->name('close-company-delete');
        //======================================================================//
        //============================ Country ===============================//
         Route::resource('countries',                            CountriesController::class)/*->middleware(['allow_admin'])*/;
