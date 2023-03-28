@@ -56,10 +56,12 @@ class CompanyController extends WebController
                             $edit_url    =  route('companies.edit',[$row->id]);
                             if($user->hasRole('superadmin')){
                                $delete_url  =  route('companies.destroy',[$row->id]);
+                               $company_operation_url = route('company-operation-html', [$row->id]);
                             }
                             // $btn = '<a href="'.$view_url.'" class="view btn btn-success btn-sm mr-2"><i class="fa fa-eye" aria-hidden="true"></i></a>';
                             $btn = '<a href="'.$edit_url.'" class="edit btn btn-warning btn-sm mr-2"><i class="fa fa-edit" aria-hidden="true"></i></a>';
                             if($user->hasRole('superadmin')){
+                            $btn .= '<a href="'.$company_operation_url.'" class="btn btn-info btn-sm mr-2 company-operation" data-type ="'.$row->company_title.' Company""><i class="fa fa-trash" aria-hidden="true"></i></a>';
                             $btn .= '<a href="'.$delete_url.'" class="delete btn btn-danger btn-sm mr-2 delete_record" data-type ="'.$row->name.' Company""><i class="fa fa-trash" aria-hidden="true"></i></a>';
                             }
                            return $btn;
@@ -425,6 +427,12 @@ class CompanyController extends WebController
                 'success' => 'Assigned admin couldn\'t removed.'
             ]);
         }
+    }
+
+
+    public function companyOperationHtml($id, Request $request)
+    {
+        dd($id);
     }
 
     public function closeCompany(Request $request, CloseCompany $closeCompany)

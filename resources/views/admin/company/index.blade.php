@@ -280,6 +280,12 @@ $(document).ready(function(){
             }
       });
   });
+
+  $(document).on('click','.company-operation',function(e){
+    e.preventDefault();
+    var href            = $(this).attr('href');
+    console.log('href:: ', href);
+  });
     
 });
 </script>
