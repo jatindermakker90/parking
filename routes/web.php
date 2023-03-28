@@ -139,7 +139,7 @@ Route::prefix('admin')->group(function () {
         Route::prefix('review')->group(function () {
             Route::resource('list',                           ReviewController::class);
             Route::get('checklist',                       [ReviewController::class,'reviewchecklistpage'])->name('review_checklist');
-
+            Route::get('insert',                          [ReviewController::class,'reviewinsertpage'])->name('review_insert');
         });
         // ========================== discount =====================================//
         Route::prefix('discount')->group(function () {

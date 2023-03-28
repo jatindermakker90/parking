@@ -126,6 +126,13 @@ class ReviewController extends Controller
       ]);
     }
 
+    public function reviewinsertpage(Request $request){
+      return view('admin.review.insert')->with([
+          'title' => 'Insert Reviews',
+          "header" => "Rating Insert"
+      ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
