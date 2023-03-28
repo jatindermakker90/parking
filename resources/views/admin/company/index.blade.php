@@ -453,6 +453,12 @@ $(document).ready(function(){
     console.log("price submit", formDara)
 
   })
+
+  $(document).on('click','.company-operation',function(e){
+    e.preventDefault();
+    var href            = $(this).attr('href');
+    console.log('href:: ', href);
+  });
     
 });
 </script>
