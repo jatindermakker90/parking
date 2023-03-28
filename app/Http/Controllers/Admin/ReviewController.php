@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Validator;
 use App\Models\Airport;
 use DataTables;
+use App\Models\Company;
+use App\Models\Bookings;
 
 class ReviewController extends Controller
 {
@@ -52,29 +54,76 @@ class ReviewController extends Controller
     }
 
     public function reviewchecklistpage(Request $request){
-      $data            = Airport::where('airport_status','!=',config('constant.STATUS.DELETED'));
       if ($request->ajax()) {
-          return Datatables::of($data)
-                 // ->addIndexColumn()
-                  ->addColumn('status_name',function($row){
-                      $modify_url = route('change_airport_status',[$row->id]);
-                      if($row->airport_status)
-                      $btn = '<input type="checkbox" name="change_status" checked data-bootstrap-switch data-off-color="danger" data-on-color="success"  data-on-text="ACTIVE" data-off-text="INACTIVE" data-href ="'.$modify_url.'">';
-                      else
-                      $btn = '<input type="checkbox" name="change_status" data-bootstrap-switch data-off-color="danger" data-on-color="success"  data-on-text="ACTIVE" data-off-text="INACTIVE" data-href ="'.$modify_url.'">';
-                      return $btn;
+          $booking = Bookings::with(['vehicle', 'company', 'airport']);
+
+          if($request->selected_airport && $request->selected_airport != null){
+              $booking->where('airport_id', $request->selected_airport);
+          }
+          if($request->selected_company && $request->selected_company != null){
+              $booking->where('company_id', $request->selected_company);
+          }
+
+          if($request->booking_status && $request->booking_status != null){
+              $booking->where('booking_status','=',$request->booking_status);
+          }
+          else{
+              $booking->where('booking_status','=',config('constant.BOOKING_STATUS.ACTIVE'));
+          }
+
+          if($request->start_date && $request->start_date != null){
+              $booking->where('dep_date_time','>=',$request->start_date);
+          }
+
+
+          $booking->orderBy('id', 'desc');
+          $booking_data = $booking->get();
+
+          return Datatables::of($booking_data)
+                  ->addIndexColumn()
+                  ->editColumn('created_at', function($row){
+                      return date("d-m-Y", strtotime($row->created_at));;
+                  })
+                  ->editColumn('dep_date_time', function($row){
+                      return date("d-m-Y H:i", strtotime($row->dep_date_time));;
+                  })
+                  ->editColumn('return_date_time', function($row){
+                      return date("d-m-Y H:i", strtotime($row->return_date_time));;
+                  })
+                  ->addColumn('customer', function($row){
+                      return $full_name = $row->first_name.' '.$row->last_name;
+                  })
+                  ->editColumn('status', function($row){
+                      if($row->is_review_status == 1){
+                          return 'Review Given';
+                      }
+                      else{
+                          return 'Review Not Given';
+                      }
                   })
                   ->addColumn('action', function($row){
-                         $view_url    =  route('airport.show',[$row->id]);
-                         $edit_url    =  route('airport.edit',[$row->id]);
-                         $delete_url  =  route('airport.destroy',[$row->id]);
-                         $btn = '<a href="#" class="review-details btn btn-success btn-sm mr-2 delete_record" data-type ="'.$row->airport_name.' Airport"><i class="fa fa-plus" aria-hidden="true"></i></a>';
-                         return $btn;
+                    if($row->is_review_status == 1){
+                      $btn = '<button type="button" class="edit-booking btn btn-success btn-sm mr-2" title="Review Done"><i class="fa fa-check" aria-hidden="true"></i></button>';
+                    } else {
+                      $btn = '<button type="button" class="edit-booking btn btn-danger btn-sm mr-2" title="Insert Review" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"><i class="fa fa-plus" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'" aria-hidden="true"></i></button>';
+                    }
+                      return $btn;
                   })
-                  ->rawColumns(['action','status_name'])
+                  ->rawColumns([
+                      'action',
+                      'customer',
+                      'status'
+                  ])
                   ->make(true);
       }
-      return view('admin.review.checklist')->with(['title' => 'Review', "header" => "Website Booking List"]);
+      $airports   = Airport::where('airport_status',config('constant.STATUS.ACTIVE'))->get();
+      $companies  = Company::where('company_status','!=',config('constant.STATUS.DELETED'))->get();
+      return view('admin.review.checklist')->with([
+          'title' => 'Website Booking List',
+          "header" => "Review Checklist",
+          "airports" => $airports,
+          "companies" => $companies
+      ]);
     }
 
     /**
