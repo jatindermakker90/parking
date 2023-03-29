@@ -102,10 +102,11 @@ class ReviewController extends Controller
                       }
                   })
                   ->addColumn('action', function($row){
+                    $view_url    =  route('review_insert',[$row->ref_id]);
                     if($row->is_review_status == 1){
                       $btn = '<button type="button" class="edit-booking btn btn-success btn-sm mr-2" title="Review Done"><i class="fa fa-check" aria-hidden="true"></i></button>';
                     } else {
-                      $btn = '<button type="button" class="edit-booking btn btn-danger btn-sm mr-2" title="Insert Review" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"><i class="fa fa-plus" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'" aria-hidden="true"></i></button>';
+                      $btn = '<a href="'.$view_url.'" class="edit-booking btn btn-danger btn-sm mr-2" title="Insert Review" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"><i class="fa fa-plus" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'" aria-hidden="true"></i></a>';
                     }
                       return $btn;
                   })
