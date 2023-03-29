@@ -30,7 +30,7 @@
               </div>
               <div class="col-md-2">
                 <div class="form-group">
-                  <span>28-Mar-2023 6:41 pm</span>
+                  <span>{{ $data->created_at }}</span>
                 </div>
               </div>
               <div class="col-md-2">
@@ -38,7 +38,7 @@
               </div>
             <div class="col-md-2">
               <div class="form-group">
-                <span>29-March-2023</span>
+                <span>{{ $data->dep_date_time }}</span>
               </div>
             </div>
             <div class="col-md-2">
@@ -46,48 +46,52 @@
             </div>
             <div class="col-md-2">
               <div class="form-group">
-                <span>01-April-2023</span>
+                <span>{{ $data->return_date_time }}</span>
               </div>
             </div>
            </div>
           <br>
           <div class="row">
-            <div class="col-md-5">
+            <div class="col-md-6">
               <label><b>Review Date</b></label>
             </div>
-          <div class="col-md-7">
+          <div class="col-md-6">
             <div class="form-group">
-              <input type="text" name="review_date" id="from" class="form-control hasDatepicker" value="" readonly="readOnly" placeholder="Review Date"><span class="ui-helper-hidden-accessible"></span>
+              <input type="date" class="form-control" name="review_date" id="date">
+              <!-- <input type="text" name="review_date" id="from" class="form-control hasDatepicker" value="" readonly="readOnly" placeholder="Review Date"><span class="ui-helper-hidden-accessible"></span> -->
             </div>
           </div>
           </div>
           <div class="row">
-            <div class="col-md-5">
-              <label><b>publish Date</b></label>
+            <div class="col-md-6">
+              <label><b>Publish Date</b></label>
             </div>
-          <div class="col-md-7">
+          <div class="col-md-6">
             <div class="form-group">
-              <input type="text" name="publish" id="to" class="form-control hasDatepicker" value="" readonly="readOnly" placeholder="Publish Date"><span class="ui-helper-hidden-accessible"></span>
+              <input type="date" class="form-control" name="publish_date" id="date">
+              <!-- <input type="text" name="publish" id="to" class="form-control hasDatepicker" value="" readonly="readOnly" placeholder="Publish Date"><span class="ui-helper-hidden-accessible"></span> -->
             </div>
           </div>
           </div>
           <div class="form-group row">
-            <label class="col-md-5"><b>Would you recommend to a friend</b></label>
-            <div class="col-md-7">
-              <span id="yes">Yes</span><div class="radio"><span class="checked"><input type="radio" name="recommend" value="yes" checked="checked"></span></div>
-              <span id="no">No</span> <div class="radio"><span><input type="radio" value="no" name="recommend"></span></div>
+            <label class="col-md-6"><b>Would you recommend to a friend</b></label>
+            <div class="col-md-1">
+              <span id="yes">Yes</span> <span class="checked"><input type="radio" name="recommend" value="yes" checked="checked"></span>
+            </div>
+            <div class="col-md-1">
+              <span id="no">No</span> <span><input type="radio" value="no" name="recommend"></span>
             </div>
           </div>
           <div class="form-group row">
-            <label for="review_title" class="col-md-5"><b>Please Write Review Title</b></label>
-              <div class="col-md-7">
+            <label for="review_title" class="col-md-6"><b>Please Write Review Title</b></label>
+              <div class="col-md-6">
                 <input type="text" name="review_title" class="form-control form-control-sm" id="review_title" placeholder="Enter Title">
                 <input type="hidden" name="reference_no" class="form-control form-control-sm" id="" value="P4U-500945">
               </div>
           </div>
           <div class="form-group row">
-            <label for="comments" class="col-md-5"><b>Please Write Your Review</b></label>
-            <div class="col-md-7">
+            <label for="comments" class="col-md-6"><b>Please Write Your Review</b></label>
+            <div class="col-md-6">
               <textarea rows="8" name="comments" class="form-control form-control-sm" id="comments" placeholder="Enter Your Comments ........."></textarea>
             </div>
           </div>
@@ -154,7 +158,7 @@
           </div>
           <div class="form-group row">
             <div class="col-md-12">
-              <input type="submit" name="submit" class="btn button btn-medium sky-blue1 uppercase" style="width:100%;background: #3F9EBC;color: #fff; font-weight: bold;" value="Submit">
+              <input type="submit" name="submit" class="btn button btn-primary sky-blue1 uppercase" style="width:100%;color: #fff; font-weight: bold;" value="Submit">
             </div>
           </div>
           </form>

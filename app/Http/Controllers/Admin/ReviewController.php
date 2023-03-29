@@ -127,10 +127,12 @@ class ReviewController extends Controller
       ]);
     }
 
-    public function reviewinsertpage(Request $request){
+    public function reviewinsertpage($ref_id,Request $request){
+      $data = Bookings::where('ref_id',$ref_id)->first();
       return view('admin.review.insert')->with([
           'title' => 'Insert Reviews',
-          "header" => "Rating Insert"
+          "header" => "Rating Insert",
+          'data' => $data
       ]);
     }
 
