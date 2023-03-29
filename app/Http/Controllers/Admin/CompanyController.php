@@ -56,10 +56,12 @@ class CompanyController extends WebController
                             $edit_url    =  route('companies.edit',[$row->id]);
                             if($user->hasRole('superadmin')){
                                $delete_url  =  route('companies.destroy',[$row->id]);
+                               $company_operation_url = route('company-operation-html', [$row->id]);
                             }
                             // $btn = '<a href="'.$view_url.'" class="view btn btn-success btn-sm mr-2"><i class="fa fa-eye" aria-hidden="true"></i></a>';
                             $btn = '<a href="'.$edit_url.'" class="edit btn btn-warning btn-sm mr-2"><i class="fa fa-edit" aria-hidden="true"></i></a>';
                             if($user->hasRole('superadmin')){
+                            $btn .= '<a href="'.$company_operation_url.'" class="btn btn-info btn-sm mr-2 company-operation" data-type ="'.$row->company_title.' Company""><i class="fa fa-trash" aria-hidden="true"></i></a>';
                             $btn .= '<a href="'.$delete_url.'" class="delete btn btn-danger btn-sm mr-2 delete_record" data-type ="'.$row->name.' Company""><i class="fa fa-trash" aria-hidden="true"></i></a>';
                             }
                            return $btn;
@@ -139,8 +141,6 @@ class CompanyController extends WebController
      */
     public function show($user_id,Request $request)
     {
-        echo "company show";
-        die;
         $user_id = 1;
         $user            = Company::where('id',$user_id)->first();
         $countries       = Countries::where('status','!=',config('constant.STATUS.DELETED'))->get();
@@ -429,9 +429,41 @@ class CompanyController extends WebController
         }
     }
 
-    public function closeCompany()
+
+    public function companyOperationHtml($id, Request $request)
     {
+        dd($id);
+    }
+
+    public function closeCompany(Request $request, CloseCompany $closeCompany)
+    {
+        $user = Auth::user();
         $companies = Company::where('company_status', '!=', config('constant.STATUS.DELETED'))->get();
+        if ($request->ajax()) {
+            $close_companies = $closeCompany->with(['company'])->get();
+            return Datatables::of($close_companies)
+                    ->addIndexColumn()
+                    ->editColumn('status',function($row){
+                        
+                        if($row->status)
+                        $btn = '<button type="button" class="btn btn-sm btn-success">Active</button>';
+                        else
+                        $btn = '<button type="button" class="btn btn-sm btn-danger">Unactive</button>';
+                        return $btn;
+                    })
+                    ->addColumn('action', function($row) use ($user){
+                        if($user->hasRole('superadmin')){
+                            $delete_url  =  route('close-company-delete',[$row->id]);
+                        }
+                        $btn = '<a href="javascript:void(0);" class="btn btn-sm btn-warning mr-2 edit-close-company" data-id="'.$row->id.'"><i class="fa fa-edit" aria-hidden="true" data-id="'.$row->id.'"></i></a>';
+                        if($user->hasRole('superadmin')){
+                            $btn .= '<a href="'.$delete_url.'" class="delete btn btn-danger btn-sm mr-2 delete_record" data-type ="'.$row->company->company_title.' Company""><i class="fa fa-trash" aria-hidden="true"></i></a>';
+                        }
+                        return $btn;
+                    })
+                    ->rawColumns(['action','status'])
+                    ->make(true);
+        }
         return view('admin/company/close-company')->with([
             'title' => 'Close Company',
             'header' => 'Close Company',
@@ -443,17 +475,45 @@ class CompanyController extends WebController
     {
         // dd($request);
         $validator = Validator::make($request->all(), [
-            'company_id'    => 'required|exists:companies,id',
+            'company_id'    => 'required',
             'date'          => 'required',
             'journey_type'  => 'required',
             'status'        => 'required'
         ]);
-   
+        // dd($validator);
         if($validator->fails()){
-            return $this->sendError($validator->getMessageBag()->first());       
+            // return $this->sendError($validator->getMessageBag()->first());  
+            return redirect()->back()->withErrors($validator);      
         }
 
         $closeCompany->closeCompanySave($request);
         return redirect()->route('close-company')->with(['success' => 'Close company updated successfully']);
+    }
+
+    public function getcloseCompanyEditHtml(Request $request, CloseCompany $closeCompany)
+    {
+        $companies = Company::select('id', 'company_title')->where('company_status', '!=', config('constant.STATUS.DELETED'))->get();
+        $close_company = $closeCompany->with(['company'])->find($request->id);
+        $close_company->date = date("Y-m-d", strtotime($close_company->date));
+        $close_company->all_companies = $companies;
+        // dd($close_company);
+        return response()->view('admin.company.edit-close-company', $close_company, 200);
+    }
+
+    public function closeCompanyUpdate(Request $request, CloseCompany $closeCompany)
+    {
+        // dd($request->all());
+        $closeCompany->closeCompanyUpdate($request);
+        $response = [];
+        $response['path'] = route('close-company');
+        $message = 'Company details has been updated successfully !';
+        return $this->sendSuccess($response,$message,200);
+    }
+
+    public function closeCompanyDelete($id,Request $request)
+    {
+        CloseCompany::where('id',$id)->delete();
+       $message         = "Company deleted successfully";
+        return $this->sendSuccess([],$message,200);    
     }
 }

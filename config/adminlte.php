@@ -373,9 +373,36 @@ return [
             ]
 
         ],[
-            'text'        => 'Site Settings',
-            'icon'        => 'fas fa-cog',
-
+            'text'        => 'Booking Reports',
+            'icon'        => 'fas fa-book',
+            'submenu' => [
+                [
+                    'text'        => 'Bookings Revenue',
+                    'url'         => '#',
+                ],
+                [
+                    'text'        => 'Bookings Revenue Airport',
+                    'url'         => '#',
+                ],
+                [
+                    'text'        => 'Bookings Revenue List',
+                    'url'         => '#',
+                ], 
+                [
+                    'text'        => 'Daily Bookings',
+                    'url'         => '#',
+                ],                
+            ]
+        ],
+        [
+            'text'        => 'Invoice',
+            'icon'        => 'fas fa-file-invoice',
+            'submenu' => [
+                [
+                    'text'        => 'Company Invoice',
+                    'url'         => '#',
+                ],
+            ],
         ],
         [
             'text'        => 'Discount',
