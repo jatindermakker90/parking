@@ -105,7 +105,11 @@
               <option value="3">3</option>
               <option value="4" selected="selected">4</option>
               <option value="5">5</option>
-              </select><div class="br-widget"><a href="#" data-rating-value="1" data-rating-text="1" class="br-selected br-current"></a><a href="#" data-rating-value="2" data-rating-text="2" class=""></a><a href="#" data-rating-value="3" data-rating-text="3" class=""></a><a href="#" data-rating-value="4" data-rating-text="4" class=""></a><a href="#" data-rating-value="5" data-rating-text="5" class=""></a><div class="br-current-rating">1</div></div></div>
+              </select>
+              <div class="br-widget"><a href="#" data-rating-value="1" data-rating-text="1" class="br-selected br-current"></a><a href="#" data-rating-value="2" data-rating-text="2" class=""></a><a href="#" data-rating-value="3" data-rating-text="3" class=""></a>
+                <a href="#" data-rating-value="4" data-rating-text="4" class=""></a>
+                <a href="#" data-rating-value="5" data-rating-text="5" class=""></a>
+                <div class="br-current-rating">1</div></div></div>
               </div>
           </div>
           <div class="form-group row">
@@ -162,7 +166,15 @@
             </div>
           </div>
           </form>
-      <script src="assets/jquery.barrating.min.js"></script>
+          <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script> -->
+      <script src="http://127.0.0.1:8000/vendor/jquery-barrating/barrating.min.js"></script>
+      <!-- <script type="text/javascript">
+         $(function() {
+            $('#convenience').barrating({
+              theme: 'fontawesome-stars'
+            });
+         });
+      </script> -->
       <script>
                 $(function(){
 
