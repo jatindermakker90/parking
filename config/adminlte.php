@@ -329,7 +329,7 @@ return [
         [
             'text'        => 'Terminal Management',
             'url'         => 'admin/terminals',
-            'icon'        => 'fa fa-plane-departure',
+            'icon'        => 'fas fa-plane-departure',
         ],
         [
             'text'        => 'Company Management',
