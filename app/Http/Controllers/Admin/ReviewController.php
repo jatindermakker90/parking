@@ -136,6 +136,16 @@ class ReviewController extends Controller
       ]);
     }
 
+    public function postreview($ref_id,Request $request){
+      print_r($request->all());
+      // $data = Bookings::where('ref_id',$ref_id)->first();
+      // return view('admin.review.insert')->with([
+      //     'title' => 'Inse1rt Reviews',
+      //     "header" => "Rating Insert",
+      //     'data' => $data
+      // ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -154,7 +164,7 @@ class ReviewController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        print_r($request->all());
     }
 
     /**

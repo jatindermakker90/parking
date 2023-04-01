@@ -23,7 +23,7 @@
 <div class="col-md-12">
 <div class="panel panel-white">
       <div class="panel-body">
-          <form method="post" action="review.php">
+          {{ Form::open(['route' => 'list.store','method' => 'post']) }}
             <div class="row">
               <div class="col-md-2">
                 <label><b>Booking Date</b></label>
@@ -86,7 +86,7 @@
             <label for="review_title" class="col-md-6"><b>Please Write Review Title</b></label>
               <div class="col-md-6">
                 <input type="text" name="review_title" class="form-control form-control-sm" id="review_title" placeholder="Enter Title">
-                <input type="hidden" name="reference_no" class="form-control form-control-sm" id="" value="P4U-500945">
+                <input type="hidden" name="booking_id" class="form-control form-control-sm" id="" value="{{ $data->id }}">
               </div>
           </div>
           <div class="form-group row">
@@ -165,7 +165,7 @@
               <input type="submit" name="submit" class="btn button btn-primary sky-blue1 uppercase" style="width:100%;color: #fff; font-weight: bold;" value="Submit">
             </div>
           </div>
-          </form>
+        {!! Form::close() !!}
           <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
       <script>
             $(function(){
