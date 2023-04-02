@@ -10,6 +10,7 @@ use App\Models\Airport;
 use DataTables;
 use App\Models\Company;
 use App\Models\Bookings;
+use App\Models\Review;
 
 class ReviewController extends Controller
 {
@@ -164,7 +165,32 @@ class ReviewController extends Controller
      */
     public function store(Request $request)
     {
-        print_r($request->all());
+        $validator = Validator::make($request->all(), [
+            'review_date'    => 'required',
+            'publish_date'       => 'required',
+            'review_title'    => 'required',
+        ]);
+
+        if($validator->fails()){
+           return redirect()->back()->withErrors($validator);
+        }
+
+        $save_review = new Review();
+        $save_review->booking_id = $request->booking_id;
+        $save_review->review_date = $request->review_date;
+        $save_review->publish_date = $request->publish_date;
+        $save_review->is_recommend = ($request->recommend == 'yes') ? 1 : 0;
+        $save_review->comments = $request->comments;
+        $save_review->convenience = $request->convenience;
+        $save_review->punctuality = $request->punctuality;
+        $save_review->customer_service = $request->customer_service;
+        $save_review->collection_vehicle = $request->collection_vehicle;
+        $save_review->overall = $request->overall;
+
+        if($save_review->save()){
+            $update_status = Bookings::where('id',$save_review->booking_id)->update(['is_review_status' => '1']);
+        }
+        return redirect()->route('terminals.index')->with(['success' => 'Terminal added successfully']);
     }
 
     /**

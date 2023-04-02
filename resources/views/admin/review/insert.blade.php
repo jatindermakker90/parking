@@ -57,7 +57,7 @@
             </div>
           <div class="col-md-6">
             <div class="form-group">
-              <input type="date" class="form-control" name="review_date" id="date">
+              <input type="date" class="form-control" name="review_date" required id="date">
               <!-- <input type="text" name="review_date" id="from" class="form-control hasDatepicker" value="" readonly="readOnly" placeholder="Review Date"><span class="ui-helper-hidden-accessible"></span> -->
             </div>
           </div>
@@ -68,7 +68,7 @@
             </div>
           <div class="col-md-6">
             <div class="form-group">
-              <input type="date" class="form-control" name="publish_date" id="date">
+              <input type="date" class="form-control" name="publish_date" required id="date">
               <!-- <input type="text" name="publish" id="to" class="form-control hasDatepicker" value="" readonly="readOnly" placeholder="Publish Date"><span class="ui-helper-hidden-accessible"></span> -->
             </div>
           </div>
@@ -92,7 +92,7 @@
           <div class="form-group row">
             <label for="comments" class="col-md-6"><b>Please Write Your Review</b></label>
             <div class="col-md-6">
-              <textarea rows="8" name="comments" class="form-control form-control-sm" id="comments" placeholder="Enter Your Comments ........."></textarea>
+              <textarea rows="8" name="comments" class="form-control form-control-sm" id="comments" required placeholder="Enter Your Comments ........."></textarea>
             </div>
           </div>
           <hr><h2><span>Your Ratings</span></h2><hr>
@@ -162,7 +162,7 @@
           </div>
           <div class="form-group row">
             <div class="col-md-12">
-              <input type="submit" name="submit" class="btn button btn-primary sky-blue1 uppercase" style="width:100%;color: #fff; font-weight: bold;" value="Submit">
+              <input type="submit" class="btn button btn-primary sky-blue1 uppercase" style="width:100%;color: #fff; font-weight: bold;" value="Submit">
             </div>
           </div>
         {!! Form::close() !!}
