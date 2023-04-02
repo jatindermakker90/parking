@@ -21,18 +21,24 @@ class ReviewController extends Controller
      */
     public function index(Request $request)
     {
-      $data            = Airport::where('airport_status','!=',config('constant.STATUS.DELETED'));
+      //$data            = Airport::where('airport_status','!=',config('constant.STATUS.DELETED'));
+      $data = Bookings::with('review','company')->where('is_review_status','1')->get();
+      //print_r($data); die();
       if ($request->ajax()) {
           return Datatables::of($data)
                  // ->addIndexColumn()
-                  ->addColumn('status_name',function($row){
-                      $modify_url = route('change_airport_status',[$row->id]);
-                      if($row->airport_status)
-                      $btn = '<input type="checkbox" name="change_status" checked data-bootstrap-switch data-off-color="danger" data-on-color="success"  data-on-text="ACTIVE" data-off-text="INACTIVE" data-href ="'.$modify_url.'">';
-                      else
-                      $btn = '<input type="checkbox" name="change_status" data-bootstrap-switch data-off-color="danger" data-on-color="success"  data-on-text="ACTIVE" data-off-text="INACTIVE" data-href ="'.$modify_url.'">';
-                      return $btn;
-                  })
+                 ->addColumn('company', function($row){
+                     return $company = $row->company->company_title;
+                 })
+                 ->addColumn('review_date', function($row){
+                     return $review_date = $row->review->review_date;
+                 })
+                 ->addColumn('publish_date', function($row){
+                     return $publish_date = $row->review->publish_date;
+                 })
+                 ->addColumn('name', function($row){
+                     return $name = $row->first_name.' '.$row->last_name;
+                 })
                   ->addColumn('action', function($row){
                          $view_url    =  route('airport.show',[$row->id]);
                          $edit_url    =  route('airport.edit',[$row->id]);
@@ -48,7 +54,7 @@ class ReviewController extends Controller
                     $star = '<div class="br-wrapper br-theme-fontawesome-stars"><select id="overall_1" name="overall" style="display: none;"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select><div class="br-widget br-readonly"><a href="#" class="br-selected" data-rating-text="1" data-rating-value="1"></a><a href="#" data-rating-value="2" data-rating-text="2" class="br-selected"></a><a href="#" data-rating-value="3" data-rating-text="3" class="br-selected"></a><a href="#" data-rating-value="4" data-rating-text="4" class="br-selected"></a><a href="#" data-rating-value="5" data-rating-text="5" class="br-selected br-current"></a><div class="br-current-rating">5</div></div></div>';
                             return $star;
                   })
-                  ->rawColumns(['action','status_name','stars'])
+                  ->rawColumns(['company','review_date','publish_date','name','action','status_name','stars'])
                   ->make(true);
       }
       return view('admin.review.index')->with(['title' => 'Review', "header" => "Rating List"]);

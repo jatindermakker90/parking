@@ -8,6 +8,7 @@ use App\Models\Products;
 use App\Models\User;
 use App\Models\Company;
 use App\Models\Airport;
+use App\Models\Review;
 
 class Bookings extends Model
 {
@@ -105,7 +106,7 @@ class Bookings extends Model
     public static function updateBooking($data){
 
         $booking = Bookings::find($data->booking_id) ?? new Bookings();
-        
+
         if($data->has('company') && $data->company){
             $booking->company_id = $data->company;
         }
@@ -175,5 +176,10 @@ class Bookings extends Model
         }
         $booking->save();
         return $booking;
+    }
+
+    public function review()
+    {
+        return $this->belongsTo(Review::class, 'id', 'booking_id');
     }
 }

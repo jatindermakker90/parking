@@ -89,46 +89,38 @@ $(document).ready(function(){
               orderable: true
             },
             {
-              data: 'airport_name',
-              name: 'airport_name',
-              orderable: true
-            },
-            {
-              data: 'operating_location',
-              name: 'operating_location',
+              data: 'company',
+              name: 'company',
               render: function ( data, type, row) {
                 if(type == 'display'){
-                    return '2023-02-23';
-                }else if(type === 'sort'){
-                    return '2023-02-23';
-                }else{
-                    return '2023-02-23';
+                    return row.company;
                 }
               }
             },
             {
-              data: 'status_name',
-              name: 'status_name',
+              data: 'review_date',
+              name: 'review_date',
               render: function ( data, type, row) {
                 if(type == 'display'){
-                    return '2023-02-23';
-                }else if(type === 'sort'){
-                    return '2023-02-23';
-                }else{
-                    return '2023-02-23';
+                    return row.review_date;
                 }
               }
             },
             {
-              data: 'reference_number',
+              data: 'publish_date',
+              name: 'publish_date',
+              render: function ( data, type, row) {
+                if(type == 'display'){
+                    return row.review.publish_date;
+                }
+              }
+            },
+            {
+              data: 'ref_id',
               name: 'reference_number',
               render: function ( data, type, row) {
                 if(type == 'display'){
-                    return 'P4U-430856';
-                }else if(type === 'sort'){
-                    return 'P4U-430856';
-                }else{
-                    return 'P4U-430856';
+                    return row.ref_id;
                 }
               }
             },
@@ -137,11 +129,7 @@ $(document).ready(function(){
               name: 'name',
               render: function ( data, type, row) {
                 if(type == 'display'){
-                    return 'Test User';
-                }else if(type === 'sort'){
-                    return 'Test User';
-                }else{
-                    return 'Test User';
+                    return row.name;
                 }
               }
             },
@@ -150,11 +138,7 @@ $(document).ready(function(){
               name: 'email',
               render: function ( data, type, row) {
                 if(type == 'display'){
-                    return 'test@gmail.com';
-                }else if(type === 'sort'){
-                    return 'test@gmail.com';
-                }else{
-                    return 'test@gmail.com';
+                    return row.email;
                 }
               }
             },
