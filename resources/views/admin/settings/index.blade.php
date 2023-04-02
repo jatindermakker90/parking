@@ -229,7 +229,7 @@
                           <div class="form-group" style="text-align: right;">
                             {{ Form::hidden('form_type','email'); }}
                             {{ Form::hidden('row_id',isset($email_setting->id) ? $email_setting->id : 0); }}
-                            <button type="submit" name="submit" id="submitButton" class="btn btn-info">Submit</button>
+                            <button type="submit" name="submit" id="submitButton" class="btn btn-primary">Submit</button>
                           </div>
                           {!! Form::close() !!}
                       </div>
@@ -272,7 +272,7 @@
                         <div class="form-group" style="text-align: right;">
                           {{ Form::hidden('form_type','twilio'); }}
                           {{ Form::hidden('row_id',isset($twilio_setting->id) ? $twilio_setting->id : 0); }}
-                          <button type="submit" name="submit" id="submitButton" class="btn btn-info">Submit</button>
+                          <button type="submit" name="submit" id="submitButton" class="btn btn-primary">Submit</button>
                         </div>
                       {!! Form::close() !!}
                     </div>
@@ -309,7 +309,7 @@
                       <div class="form-group" style="text-align: right;">
                         {{ Form::hidden('form_type','script'); }}
                         {{ Form::hidden('row_id',isset($script_setting->id) ? $script_setting->id : 0); }}
-                        <button type="submit" name="submit" id="submitButton" class="btn btn-info">Submit</button>
+                        <button type="submit" name="submit" id="submitButton" class="btn btn-primary">Submit</button>
                       </div>
                      {!! Form::close() !!}
                     </div>
@@ -350,7 +350,7 @@
                       <div class="form-group" style="text-align: right;">
                         {{ Form::hidden('form_type','term'); }}
                         {{ Form::hidden('row_id',isset($term_condition_setting->id) ? $term_condition_setting->id : 0); }}
-                        <button type="submit" name="submit" id="submitButton" class="btn btn-info">Submit</button>
+                        <button type="submit" name="submit" id="submitButton" class="btn btn-primary">Submit</button>
                       </div>
                       {!! Form::close() !!}
                     </div>

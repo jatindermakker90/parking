@@ -42,6 +42,27 @@
           </div>
           <!-- /.col -->
         </div>
+        <div class="modal show" id="modal-default" style="display:none;">
+          <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title">Review Details</h4>
+                <button type="button" class="close close-edit-booking-button" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div>
+                    <h4 id="editBookingResponse"></h4>
+                        @csrf
+                        <div id="booking-edit-modal">
+
+                        </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 @stop
 @section('css')
 <link rel="stylesheet" href="{{ asset('vendor/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">

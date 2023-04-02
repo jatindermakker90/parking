@@ -21,7 +21,6 @@ class ReviewController extends Controller
      */
     public function index(Request $request)
     {
-      //$data            = Airport::where('airport_status','!=',config('constant.STATUS.DELETED'));
       $data = Bookings::with('review','company')->where('is_review_status','1')->get();
       //print_r($data); die();
       if ($request->ajax()) {
@@ -76,8 +75,6 @@ class ReviewController extends Controller
                       default:
                       $star = '';
                     }
-                    // $star = '<div class="br-wrapper br-theme-fontawesome-stars">
-                    // <div class="br-widget br-readonly"><a href="#" class="br-selected" data-rating-text="1" data-rating-value="1"></a><a href="#" data-rating-value="2" data-rating-text="2" class="br-selected"></a><a href="#" data-rating-value="3" data-rating-text="3" class="br-selected"></a><a href="#" data-rating-value="4" data-rating-text="4" class="br-selected"></a><a href="#" data-rating-value="5" data-rating-text="5" class="br-selected br-current"></a><div class="br-current-rating">5</div></div></div>';
                       return $star;
                   })
                   ->rawColumns(['company','review_date','publish_date','name','action','status_name','stars'])
