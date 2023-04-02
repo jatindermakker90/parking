@@ -51,8 +51,34 @@ class ReviewController extends Controller
                          return $btn;
                   })
                   ->addColumn('stars', function($row){
-                    $star = '<div class="br-wrapper br-theme-fontawesome-stars"><select id="overall_1" name="overall" style="display: none;"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select><div class="br-widget br-readonly"><a href="#" class="br-selected" data-rating-text="1" data-rating-value="1"></a><a href="#" data-rating-value="2" data-rating-text="2" class="br-selected"></a><a href="#" data-rating-value="3" data-rating-text="3" class="br-selected"></a><a href="#" data-rating-value="4" data-rating-text="4" class="br-selected"></a><a href="#" data-rating-value="5" data-rating-text="5" class="br-selected br-current"></a><div class="br-current-rating">5</div></div></div>';
-                            return $star;
+                    $total_rating = Review::getOverAllRatingByBookingID($row->id);
+                    switch($total_rating){
+                      case 1:
+                      $star = '<div class="br-wrapper br-theme-fontawesome-stars">
+                      <div class="br-widget br-readonly"><a href="#" class="br-selected" data-rating-text="1" data-rating-value="1"></a><a href="#" data-rating-value="2" data-rating-text="2"></a><a href="#" data-rating-value="3" data-rating-text="3"></a><a href="#" data-rating-value="4" data-rating-text="4"></a><a href="#" data-rating-value="5" data-rating-text="5"></a><div class="br-current-rating">5</div></div></div>';
+                      break;
+                      case 2:
+                      $star = '<div class="br-wrapper br-theme-fontawesome-stars">
+                      <div class="br-widget br-readonly"><a href="#" class="br-selected" data-rating-text="1" data-rating-value="1"></a><a href="#" data-rating-value="2" data-rating-text="2" class="br-selected"></a><a href="#" data-rating-value="3" data-rating-text="3"></a><a href="#" data-rating-value="4" data-rating-text="4"></a><a href="#" data-rating-value="5" data-rating-text="5"></a><div class="br-current-rating">5</div></div></div>';
+                      break;
+                      case 3:
+                      $star = '<div class="br-wrapper br-theme-fontawesome-stars">
+                      <div class="br-widget br-readonly"><a href="#" class="br-selected" data-rating-text="1" data-rating-value="1"></a><a href="#" data-rating-value="2" data-rating-text="2" class="br-selected"></a><a href="#" data-rating-value="3" data-rating-text="3" class="br-selected"></a><a href="#" data-rating-value="4" data-rating-text="4"></a><a href="#" data-rating-value="5" data-rating-text="5"></a><div class="br-current-rating">5</div></div></div>';
+                      break;
+                      case 4:
+                      $star = '<div class="br-wrapper br-theme-fontawesome-stars">
+                      <div class="br-widget br-readonly"><a href="#" class="br-selected" data-rating-text="1" data-rating-value="1"></a><a href="#" data-rating-value="2" data-rating-text="2" class="br-selected"></a><a href="#" data-rating-value="3" data-rating-text="3" class="br-selected"></a><a href="#" data-rating-value="4" data-rating-text="4" class="br-selected"></a><a href="#" data-rating-value="5" data-rating-text="5"></a><div class="br-current-rating">5</div></div></div>';
+                      break;
+                      case 5:
+                      $star = '<div class="br-wrapper br-theme-fontawesome-stars">
+                      <div class="br-widget br-readonly"><a href="#" class="br-selected" data-rating-text="1" data-rating-value="1"></a><a href="#" data-rating-value="2" data-rating-text="2" class="br-selected"></a><a href="#" data-rating-value="3" data-rating-text="3" class="br-selected"></a><a href="#" data-rating-value="4" data-rating-text="4" class="br-selected"></a><a href="#" data-rating-value="5" data-rating-text="5" class="br-selected"></a><div class="br-current-rating">5</div></div></div>';
+                      break;
+                      default:
+                      $star = '';
+                    }
+                    // $star = '<div class="br-wrapper br-theme-fontawesome-stars">
+                    // <div class="br-widget br-readonly"><a href="#" class="br-selected" data-rating-text="1" data-rating-value="1"></a><a href="#" data-rating-value="2" data-rating-text="2" class="br-selected"></a><a href="#" data-rating-value="3" data-rating-text="3" class="br-selected"></a><a href="#" data-rating-value="4" data-rating-text="4" class="br-selected"></a><a href="#" data-rating-value="5" data-rating-text="5" class="br-selected br-current"></a><div class="br-current-rating">5</div></div></div>';
+                      return $star;
                   })
                   ->rawColumns(['company','review_date','publish_date','name','action','status_name','stars'])
                   ->make(true);
@@ -196,7 +222,7 @@ class ReviewController extends Controller
         if($save_review->save()){
             $update_status = Bookings::where('id',$save_review->booking_id)->update(['is_review_status' => '1']);
         }
-        return redirect()->route('terminals.index')->with(['success' => 'Terminal added successfully']);
+        return redirect()->route('admin.review.insert')->with(['success' => 'Review added successfully']);
     }
 
     /**
