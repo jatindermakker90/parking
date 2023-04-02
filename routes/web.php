@@ -145,6 +145,7 @@ Route::prefix('admin')->group(function () {
             Route::resource('list',                           ReviewController::class);
             Route::get('checklist',                       [ReviewController::class,'reviewchecklistpage'])->name('review_checklist');
             Route::get('insert/{ref}',                          [ReviewController::class,'reviewinsertpage'])->name('review_insert');
+            //Route::post('insert/{ref}',                          [ReviewController::class,'postreview'])->name('review_post');
         });
         // ========================== discount =====================================//
         Route::prefix('discount')->group(function () {
