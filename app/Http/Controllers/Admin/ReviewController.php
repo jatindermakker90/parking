@@ -43,10 +43,14 @@ class ReviewController extends Controller
                          $edit_url    =  route('airport.edit',[$row->id]);
                          $delete_url  =  route('airport.destroy',[$row->id]);
                          $btn  = '<a href="'.$view_url.'" class="view btn btn-success btn-sm mr-2"><i class="fa fa-eye" aria-hidden="true"></i></a>';
-                         $btn = '<a href="#" class="edit btn btn-warning btn-sm mr-2"><i class="fa fa-edit" aria-hidden="true"></i></a>';
-                         $btn .= '<a href="#" class="delete btn btn-danger btn-sm mr-2 delete_record" data-type ="'.$row->airport_name.' Airport"><i class="fa fa-trash" aria-hidden="true"></i></a>';
-                         $btn .= '<a href="#" class="unapprove btn btn-primary btn-sm mr-2 delete_record" data-type ="'.$row->airport_name.' Airport"><i class="fa fa-check" aria-hidden="true"></i></a>';
-                         $btn .= '<a href="#" class="review-details btn btn-success btn-sm mr-2 delete_record" data-type ="'.$row->airport_name.' Airport"><i class="fa fa-eye" aria-hidden="true"></i></a>';
+                         $btn = '<a href="#" class="edit btn btn-warning btn-sm mr-2" title="Edit"><i class="fa fa-edit" aria-hidden="true"></i></a>';
+                         $btn .= '<a href="#" class="delete btn btn-danger btn-sm mr-2 delete_record" title="Delete" data-type ="'.$row->airport_name.' Airport"><i class="fa fa-trash" aria-hidden="true"></i></a>';
+                         if($row->review->is_approve == 0){
+                           $btn .= '<a href="#" class="unapprove btn btn-primary btn-sm mr-2 delete_record" title="Approve" data-type ="'.$row->airport_name.' Airport"><i class="fa fa-check" aria-hidden="true"></i></a>';
+                         } else {
+                           $btn .= '<a href="#" class="unapprove btn btn-primary btn-sm mr-2 delete_record" title="Unapprove" data-type ="'.$row->airport_name.' Airport"><i class="fa fa-ban" aria-hidden="true"></i></a>';
+                         }
+                         $btn .= '<a href="#" class="review-details btn btn-success btn-sm mr-2 delete_record" title="Review Details" data-type ="'.$row->airport_name.' Airport"><i class="fa fa-eye" aria-hidden="true"></i></a>';
                          return $btn;
                   })
                   ->addColumn('stars', function($row){
