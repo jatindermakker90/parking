@@ -211,9 +211,9 @@ $(document).ready(function(){
 
     e.preventDefault();
       var delete_type     = $(this).data('type');
-      var delete_message  = 'Do you want to delete '+delete_type+'?';
-      var success_message = delete_type+' deleted successfully';
-      var deny_message    = delete_type+' not deleted.';
+      var delete_message  = 'Do you want to delete Review';
+      var success_message = 'Review deleted successfully';
+      var deny_message    = 'Review not deleted.';
       var href            = $(this).attr('href');
       Swal.fire({
           title: delete_message,
@@ -225,6 +225,37 @@ $(document).ready(function(){
               $.ajax({
                 url: href,
                 type: 'DELETE',
+                success:function(data){
+                //  console.log(data);
+                   Swal.fire(success_message, '', 'success');
+                   window.location.reload();
+                },
+              });
+
+            } else if (result.isDenied) {
+              Swal.fire(deny_message, '', 'info')
+            }
+      });
+  });
+
+  $(document).on('click','.approve',function(e){
+
+    e.preventDefault();
+      var approve_type     = $(this).data('type');
+      var delete_message  = 'Do you want to '+approve_type+' this Review ?';
+      var success_message = approve_type+' successfully';
+      var deny_message    = approve_type+' denied.';
+      var href            = $(this).attr('href');
+      Swal.fire({
+          title: delete_message,
+          showDenyButton: false,
+          showCancelButton: true,
+          confirmButtonText: `OK`,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $.ajax({
+                url: href,
+                type: 'GET',
                 success:function(data){
                 //  console.log(data);
                    Swal.fire(success_message, '', 'success');

@@ -41,15 +41,15 @@ class ReviewController extends Controller
                   ->addColumn('action', function($row){
                          $view_url    =  route('airport.show',[$row->id]);
                          $edit_url    =  route('airport.edit',[$row->id]);
-                         $delete_url  =  route('airport.destroy',[$row->id]);
+                         $delete_url  =  route('review_delete',[$row->id]);
                          $approve_url = route('review_approve',[$row->review->id]);
                          //$btn  = '<a href="'.$view_url.'" class="view btn btn-success btn-sm mr-2"><i class="fa fa-eye" aria-hidden="true"></i></a>';
                          $btn = '<a href="#" class="edit btn btn-warning btn-sm mr-2" title="Edit"><i class="fa fa-edit" aria-hidden="true"></i></a>';
-                         $btn .= '<a href="#" class="delete btn btn-danger btn-sm mr-2 delete_record" title="Delete" data-type ="'.$row->airport_name.' Airport"><i class="fa fa-trash" aria-hidden="true"></i></a>';
+                         $btn .= '<a href="'.$delete_url.'" class="delete btn btn-danger btn-sm mr-2 delete_record" title="Delete" data-type ="'.$row->airport_name.' Airport"><i class="fa fa-trash" aria-hidden="true"></i></a>';
                          if($row->review->is_approve == 0){
-                           $btn .= '<a href="'.$approve_url.'" class="approve btn btn-primary btn-sm mr-2" title="Approve" data-type ="'.$row->airport_name.' Airport"><i class="fa fa-check" aria-hidden="true"></i></a>';
+                           $btn .= '<a href="'.$approve_url.'" class="approve btn btn-primary btn-sm mr-2" title="Approve" data-type ="Approve"><i class="fa fa-check" aria-hidden="true"></i></a>';
                          } else {
-                           $btn .= '<a href="'.$approve_url.'" class="unapprove btn btn-primary btn-sm mr-2" title="Unapprove" data-type ="'.$row->airport_name.' Airport"><i class="fa fa-ban" aria-hidden="true"></i></a>';
+                           $btn .= '<a href="'.$approve_url.'" class="approve btn btn-primary btn-sm mr-2" title="Unapprove" data-type ="Unapprove"><i class="fa fa-ban" aria-hidden="true"></i></a>';
                          }
                          $btn .= '<a href="#" class="review-details btn btn-success btn-sm mr-2 delete_record" title="Review Details" data-type ="'.$row->airport_name.' Airport"><i class="fa fa-eye" aria-hidden="true"></i></a>';
                          return $btn;
@@ -181,19 +181,39 @@ class ReviewController extends Controller
       // ]);
     }
 
-    public function reviewapprove($review_id){
+    public function reviewapprove($review_id, Request $request){
       $review = Review::where('id',$review_id)->first();
-      if($review){
-        if($review->is_approve == '0'){
-          $review->is_approve = '1';
-          $review->update();
+      if($request->ajax()){
+        if($review){
+          if($review->is_approve == '0'){
+            $review->is_approve = '1';
+            $review->update();
+          } else {
+            $review->is_approve = '0';
+            $review->update();
+          }
+          //return redirect()->route('list.index');
         } else {
-          $review->is_approve = '0';
-          $review->update();
+          return redirect()->back();
         }
-        return redirect()->route('list.index');
-      } else {
-        return redirect()->back();
+      }
+    }
+
+    public function reviewdelete($review_id, Request $request){
+      $review = Review::where('id',$review_id)->first();
+      if($request->ajax()){
+        if($review){
+          $booking = Bookings::where('id',$review->booking_id)->first();
+           if($booking){
+              $booking->is_review_status = '0';
+              $booking->update();
+              $review->delete();
+           } else {
+             return redirect()->back();
+           }
+        } else {
+          return redirect()->back();
+        }
       }
     }
 
