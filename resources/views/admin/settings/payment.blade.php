@@ -93,7 +93,7 @@
                           <div class="form-group" style="text-align: left;">
                             {{ Form::hidden('form_type','payment_setting'); }}
                             {{ Form::hidden('row_id',isset($payment_setting->id) ? $payment_setting->id : 0); }}
-                            <button type="submit" name="submit" id="submitButton" class="btn btn-info">Submit</button>
+                            <button type="submit" name="submit" id="submitButton" class="btn btn-primary">Submit</button>
                           </div>
                           {!! Form::close() !!}
                       </div>
@@ -150,7 +150,7 @@
                         <div class="form-group" style="text-align: right;">
                           {{ Form::hidden('form_type','payment_setting1'); }}
                           {{ Form::hidden('row_id',isset($payment_setting1->id) ? $payment_setting1->id : 0); }}
-                          <button type="submit" name="submit" id="submitButton" class="btn btn-info">Submit</button>
+                          <button type="submit" name="submit" id="submitButton" class="btn btn-primary">Submit</button>
                         </div>
                       {!! Form::close() !!}
                     </div>
@@ -231,7 +231,7 @@
                       <div class="form-group" style="text-align: right;">
                         {{ Form::hidden('form_type','payment_setting2'); }}
                         {{ Form::hidden('row_id',isset($payment_setting2->id) ? $payment_setting2->id : 0); }}
-                        <button type="submit" name="submit" id="submitButton" class="btn btn-info">Submit</button>
+                        <button type="submit" name="submit" id="submitButton" class="btn btn-primary">Submit</button>
                       </div>
                      {!! Form::close() !!}
                     </div>
@@ -281,7 +281,7 @@
                       <div class="form-group" style="text-align: right;">
                         {{ Form::hidden('form_type','payment_setting3'); }}
                         {{ Form::hidden('row_id',isset($payment_setting3->id) ? $payment_setting3->id : 0); }}
-                        <button type="submit" name="submit" id="submitButton" class="btn btn-info">Submit</button>
+                        <button type="submit" name="submit" id="submitButton" class="btn btn-primary">Submit</button>
                       </div>
                       {!! Form::close() !!}
                     </div>

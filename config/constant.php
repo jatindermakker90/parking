@@ -93,6 +93,14 @@ return [
       'CANCEL' => 3
     ],
     'PAYMENT_METHODS' => ['Paypal', 'Stripe', 'Stripe 3DS', 'WorldPay', 'Online Payment', 'Cash', 'Phone'],
+    'DEFAULT_OPERATION_TIME' => [
+      'START' => '09:00',
+      'END' => '19:00'
+    ],
+    'COMPANY_OPERATION_TYPE'=>[
+      'twenty_four_into_seven' => 1,
+      'flexible' => 2
+    ],
 
 
 ];

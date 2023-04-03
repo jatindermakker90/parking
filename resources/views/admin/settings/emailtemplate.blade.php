@@ -63,7 +63,7 @@
                       <div class="form-group" style="text-align: right;">
                         {{ Form::hidden('form_type','client_email_template'); }}
                         {{ Form::hidden('row_id',isset($template_data->id) ? $template_data->id : 0); }}
-                        <button type="submit" name="submit" id="submitButton" class="btn btn-info">Update Email Template</button>
+                        <button type="submit" name="submit" id="submitButton" class="btn btn-primary">Update Email Template</button>
                       </div>
                      {!! Form::close() !!}
                     </div>

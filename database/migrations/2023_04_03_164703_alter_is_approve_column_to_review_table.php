@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterIsReviewStatusToBookingTable extends Migration
+class AlterIsApproveColumnToReviewTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AlterIsReviewStatusToBookingTable extends Migration
      */
     public function up()
     {
-        Schema::table('bookings', function (Blueprint $table) {
-            $table->tinyInteger('is_review_status')->default(0);
+        Schema::table('reviews', function (Blueprint $table) {
+            $table->tinyInteger('is_approve')->default(0);
         });
     }
 
@@ -25,8 +25,8 @@ class AlterIsReviewStatusToBookingTable extends Migration
      */
     public function down()
     {
-        Schema::table('bookings', function (Blueprint $table) {
-            $table->dropColumn('is_review_status');
+        Schema::table('reviews', function (Blueprint $table) {
+            $table->dropColumn('is_approve');
         });
     }
 }

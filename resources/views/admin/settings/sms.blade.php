@@ -37,7 +37,7 @@
                           <div class="form-group" style="text-align: left;">
                             {{ Form::hidden('form_type','message_details'); }}
                             {{ Form::hidden('row_id',isset($sms_setting->id) ? $sms_setting->id : 0); }}
-                            <button type="submit" name="submit" id="submitButton" class="btn btn-info">Update</button>
+                            <button type="submit" name="submit" id="submitButton" class="btn btn-primary">Update</button>
                           </div>
                         </div>
                       </div>
@@ -52,7 +52,7 @@
                            <div class="form-group" style="text-align: left;">
                              {{ Form::hidden('form_type','pre_message_details'); }}
                              {{ Form::hidden('row_id',isset($sms_setting->id) ? $sms_setting->id : 0); }}
-                             <button type="submit" name="submit" id="submitButton" class="btn btn-info">Update</button>
+                             <button type="submit" name="submit" id="submitButton" class="btn btn-primary">Update</button>
                            </div>
                          </div>
                        </div>
