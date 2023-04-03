@@ -42,13 +42,14 @@ class ReviewController extends Controller
                          $view_url    =  route('airport.show',[$row->id]);
                          $edit_url    =  route('airport.edit',[$row->id]);
                          $delete_url  =  route('airport.destroy',[$row->id]);
-                         $btn  = '<a href="'.$view_url.'" class="view btn btn-success btn-sm mr-2"><i class="fa fa-eye" aria-hidden="true"></i></a>';
+                         $approve_url = route('review_approve',[$row->review->id]);
+                         //$btn  = '<a href="'.$view_url.'" class="view btn btn-success btn-sm mr-2"><i class="fa fa-eye" aria-hidden="true"></i></a>';
                          $btn = '<a href="#" class="edit btn btn-warning btn-sm mr-2" title="Edit"><i class="fa fa-edit" aria-hidden="true"></i></a>';
                          $btn .= '<a href="#" class="delete btn btn-danger btn-sm mr-2 delete_record" title="Delete" data-type ="'.$row->airport_name.' Airport"><i class="fa fa-trash" aria-hidden="true"></i></a>';
                          if($row->review->is_approve == 0){
-                           $btn .= '<a href="#" class="unapprove btn btn-primary btn-sm mr-2 delete_record" title="Approve" data-type ="'.$row->airport_name.' Airport"><i class="fa fa-check" aria-hidden="true"></i></a>';
+                           $btn .= '<a href="'.$approve_url.'" class="approve btn btn-primary btn-sm mr-2" title="Approve" data-type ="'.$row->airport_name.' Airport"><i class="fa fa-check" aria-hidden="true"></i></a>';
                          } else {
-                           $btn .= '<a href="#" class="unapprove btn btn-primary btn-sm mr-2 delete_record" title="Unapprove" data-type ="'.$row->airport_name.' Airport"><i class="fa fa-ban" aria-hidden="true"></i></a>';
+                           $btn .= '<a href="'.$approve_url.'" class="unapprove btn btn-primary btn-sm mr-2" title="Unapprove" data-type ="'.$row->airport_name.' Airport"><i class="fa fa-ban" aria-hidden="true"></i></a>';
                          }
                          $btn .= '<a href="#" class="review-details btn btn-success btn-sm mr-2 delete_record" title="Review Details" data-type ="'.$row->airport_name.' Airport"><i class="fa fa-eye" aria-hidden="true"></i></a>';
                          return $btn;
@@ -178,6 +179,22 @@ class ReviewController extends Controller
       //     "header" => "Rating Insert",
       //     'data' => $data
       // ]);
+    }
+
+    public function reviewapprove($review_id){
+      $review = Review::where('id',$review_id)->first();
+      if($review){
+        if($review->is_approve == '0'){
+          $review->is_approve = '1';
+          $review->update();
+        } else {
+          $review->is_approve = '0';
+          $review->update();
+        }
+        return redirect()->route('list.index');
+      } else {
+        return redirect()->back();
+      }
     }
 
     /**
