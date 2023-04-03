@@ -26,6 +26,10 @@ class Company extends Model
     // {
     //     return explode(",", $value);
     // }
+    public function operation()
+    {
+        return $this->hasOne(CompaniesOperation::class, 'company_id', 'id');
+    }
 
     public static function addCompany($data){
 

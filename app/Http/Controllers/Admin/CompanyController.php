@@ -17,6 +17,7 @@ use App\Models\CompanyType;
 use App\Models\ServiceType;
 use App\Models\AssignAdminToCompany;
 use App\Models\CloseCompany;
+use App\Models\CompaniesOperation;
 use DataTables;
 use Validator;
 
@@ -32,12 +33,16 @@ class CompanyController extends WebController
      */
     public function index(Request $request){
 
-        $data_query = Company::query();
+        $data_query = Company::with(['operation'])
+                    ->where('company_status','!=',config('constant.STATUS.DELETED'))
+                    ->whereNotNull('company_status')
+                    ->get();
+        // dd($data_query->toArray());
         
-        $data_query->where(function($query){
-            $query->where('company_status','!=',config('constant.STATUS.DELETED'));
-            $query->whereNotNull('company_status');
-        });
+        // $data_query->where(function($query){
+        //     $query->where('company_status','!=',config('constant.STATUS.DELETED'));
+        //     $query->whereNotNull('company_status');
+        // });
         $user = Auth::user();
     
         if ($request->ajax()) {
@@ -51,22 +56,32 @@ class CompanyController extends WebController
                         $btn = '<input type="checkbox" name="change_status" data-bootstrap-switch data-off-color="danger" data-on-color="success"  data-on-text="ACTIVE" data-off-text="INACTIVE" data-href ="'.$modify_url.'">';
                         return $btn;
                     })
+                    ->addColumn('manage_price',function($row){
+                        $btn = '<button type="button" class="btn btn-xs btn-outline-secondary manage-plan-button" data-companyId="'.$row->id.'">Manage Price</button>';
+                        return $btn;
+                    })
                     ->addColumn('action', function($row) use ($user){
+                            $operation_id = ($row->operation != null) ? $row->operation->id : null; 
                             $view_url    =  route('companies.show',[$row->id]);
                             $edit_url    =  route('companies.edit',[$row->id]);
+                            $operation_url = ($row->operation != null) ? route('get-company-operations', [$row->operation->id]) : null;
                             if($user->hasRole('superadmin')){
                                $delete_url  =  route('companies.destroy',[$row->id]);
-                               $company_operation_url = route('company-operation-html', [$row->id]);
+                               $company_operation_url = "";//route('company-operation-html', [$row->id]);
                             }
                             // $btn = '<a href="'.$view_url.'" class="view btn btn-success btn-sm mr-2"><i class="fa fa-eye" aria-hidden="true"></i></a>';
                             $btn = '<a href="'.$edit_url.'" class="edit btn btn-warning btn-sm mr-2"><i class="fa fa-edit" aria-hidden="true"></i></a>';
                             if($user->hasRole('superadmin')){
-                            $btn .= '<a href="'.$company_operation_url.'" class="btn btn-info btn-sm mr-2 company-operation" data-type ="'.$row->company_title.' Company""><i class="fa fa-trash" aria-hidden="true"></i></a>';
-                            $btn .= '<a href="'.$delete_url.'" class="delete btn btn-danger btn-sm mr-2 delete_record" data-type ="'.$row->name.' Company""><i class="fa fa-trash" aria-hidden="true"></i></a>';
+                            $btn .= '<a href="'.$operation_url.'" data-id="'.$row->id.'" data-operation="'.$operation_id.'" class="btn btn-info btn-sm mr-2 company-operation" data-type ="'.$row->company_title.' Company""><i class="fa fa-compass" data-id="'.$row->id.'" data-operation="'.$operation_id.'"></i></a>';
+                            $btn .= '<a href="'.$delete_url.'" class="delete btn btn-danger btn-sm mr-2 delete_record" data-type ="'.$row->name.' Company""><i class="fa fa-trash"></i></a>';
                             }
                            return $btn;
                     })
-                    ->rawColumns(['action','company_status'])
+                    ->rawColumns([
+                        'action', 
+                        'manage_price', 
+                        'company_status'
+                        ])
                     ->make(true);
         }
         return view('admin.company.index')->with(['title' => 'Company', "header" => "Company Listing"]);
@@ -429,12 +444,6 @@ class CompanyController extends WebController
         }
     }
 
-
-    public function companyOperationHtml($id, Request $request)
-    {
-        dd($id);
-    }
-
     public function closeCompany(Request $request, CloseCompany $closeCompany)
     {
         $user = Auth::user();
@@ -513,7 +522,114 @@ class CompanyController extends WebController
     public function closeCompanyDelete($id,Request $request)
     {
         CloseCompany::where('id',$id)->delete();
-       $message         = "Company deleted successfully";
+        $message         = "Company deleted successfully";
         return $this->sendSuccess([],$message,200);    
+    }
+
+    public function getCompanyOperations($id, CompaniesOperation $companiesOperation)
+    {
+        $getCompanyOperation = $companiesOperation->find($id);
+        if($getCompanyOperation->count() > 0){
+            $operation_types = config('constant.COMPANY_OPERATION_TYPE');
+            foreach ($operation_types as $key => $value) {
+                if($value == $getCompanyOperation->operation_type){
+                    $getCompanyOperation->operation_type = $key;
+                }
+            }
+            $response = [];
+            $response['operation'] = $getCompanyOperation;
+            $message = 'Company operation details fetched !';
+            return $this->sendSuccess($response,$message,200);
+        }
+    }
+
+    public function saveCompanyOperations(Request $request, CompaniesOperation $companiesOperation)
+    {
+        // dd($request->all());
+
+        $defaultOperationTime = [
+            "monday" => [
+                "day" => "monday",
+                "start_time" => config('constant.DEFAULT_OPERATION_TIME.START'),
+                "end_time" => config('constant.DEFAULT_OPERATION_TIME.END'),
+                "service" => "both",
+                "status" => "open"
+            ],
+            "tuesday" => [
+                "day" => "tuesday",
+                "start_time" => config('constant.DEFAULT_OPERATION_TIME.START'),
+                "end_time" => config('constant.DEFAULT_OPERATION_TIME.END'),
+                "service" => "both",
+                "status" => "open"
+            ],
+            "wednesday" => [
+                "day" => "wednesday",
+                "start_time" => config('constant.DEFAULT_OPERATION_TIME.START'),
+                "end_time" => config('constant.DEFAULT_OPERATION_TIME.END'),
+                "service" => "both",
+                "status" => "open"
+            ],
+            "thursday" => [
+                "day" => "thursday",
+                "start_time" => config('constant.DEFAULT_OPERATION_TIME.START'),
+                "end_time" => config('constant.DEFAULT_OPERATION_TIME.END'),
+                "service" => "both",
+                "status" => "open"
+            ],
+            "friday" => [
+                "day" => "friday",
+                "start_time" => config('constant.DEFAULT_OPERATION_TIME.START'),
+                "end_time" => config('constant.DEFAULT_OPERATION_TIME.END'),
+                "service" => "both",
+                "status" => "open"
+            ],
+            "saturday" => [
+                "day" => "saturday",
+                "start_time" => config('constant.DEFAULT_OPERATION_TIME.START'),
+                "end_time" => config('constant.DEFAULT_OPERATION_TIME.END'),
+                "service" => "both",
+                "status" => "open"
+            ],
+            "sunday" => [
+                "day" => "sunday",
+                "start_time" => config('constant.DEFAULT_OPERATION_TIME.START'),
+                "end_time" => config('constant.DEFAULT_OPERATION_TIME.END'),
+                "service" => "both",
+                "status" => "open"
+            ]
+        ];
+        if($request->has('id') && $request->id){
+            $operation_id = $request->id;
+        }
+        else{
+            $operation_id = null;
+        }
+        $requestData = new \stdClass();
+        $requestData->company_id = $request->company_id;
+        $requestData->operation_type = config('constant.COMPANY_OPERATION_TYPE.'.$request->operating_type);
+        if($requestData->operation_type == 1){
+            $data = $request->{$request->operating_type};
+            foreach ($defaultOperationTime as $key => $value) { 
+                $defaultOperationTime[$key]['status'] = $data['status'];
+            }
+            $requestData->weekdays = json_encode($defaultOperationTime);
+        }
+        else{
+            $requestData->weekdays = json_encode($request->{$request->operating_type});
+        }
+        // dd($requestData);
+        $save_and_update_operation = $companiesOperation->saveAndUpdateOperation($operation_id, $requestData);
+        // dd($save_and_update_operation);
+        $response = [];
+        $response['path'] = route('companies.index');
+        if($save_and_update_operation->id){
+            $message = 'Company operation has been updated successfully !';
+            return $this->sendSuccess($response,$message,200);
+        }
+        else{
+            $message = 'Something went wrong !';
+            return $this->sendError($response,$message,200);
+        }
+
     }
 }
