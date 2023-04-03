@@ -219,7 +219,7 @@ class ReviewController extends Controller
         if($save_review->save()){
             $update_status = Bookings::where('id',$save_review->booking_id)->update(['is_review_status' => '1']);
         }
-        return redirect()->route('admin.review.insert')->with(['success' => 'Review added successfully']);
+        return redirect()->route('review_checklist')->with(['success' => 'Review added successfully']);
     }
 
     /**
