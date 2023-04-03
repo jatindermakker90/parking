@@ -147,7 +147,8 @@ Route::prefix('admin')->group(function () {
             Route::resource('list',                           ReviewController::class);
             Route::get('checklist',                       [ReviewController::class,'reviewchecklistpage'])->name('review_checklist');
             Route::get('insert/{ref}',                          [ReviewController::class,'reviewinsertpage'])->name('review_insert');
-            Route::get('approve/{ref}',                          [ReviewController::class,'reviewapprove'])->name('review_approve');
+            Route::get('approve/review/{ref}',                          [ReviewController::class,'reviewapprove'])->name('review_approve');
+            Route::delete('delete/review/{ref}',                          [ReviewController::class,'reviewdelete'])->name('review_delete');
         });
         // ========================== discount =====================================//
         Route::prefix('discount')->group(function () {
