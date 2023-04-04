@@ -18,6 +18,7 @@ use App\Models\ServiceType;
 use App\Models\AssignAdminToCompany;
 use App\Models\CloseCompany;
 use App\Models\CompaniesOperation;
+use App\Models\brandPrices as BrandPrices;
 use DataTables;
 use Validator;
 
@@ -37,12 +38,6 @@ class CompanyController extends WebController
                     ->where('company_status','!=',config('constant.STATUS.DELETED'))
                     ->whereNotNull('company_status')
                     ->get();
-        // dd($data_query->toArray());
-        
-        // $data_query->where(function($query){
-        //     $query->where('company_status','!=',config('constant.STATUS.DELETED'));
-        //     $query->whereNotNull('company_status');
-        // });
         $user = Auth::user();
     
         if ($request->ajax()) {
@@ -652,5 +647,51 @@ class CompanyController extends WebController
             "title" => 'Manage Price',
             "company_details" => $company_details
         ]);
+    }
+
+    public function brandPrice(Request $request, BrandPrices $brandPrices)
+    {
+        $data_query = $brandPrices
+                    ->get();
+
+        foreach ($data_query as $key => $value) {
+                $daysData = json_decode($value['days_price']);
+                foreach ($daysData as $k => $v) {
+                    $dayNo = $k+1;
+                    $value['day_'.$dayNo] = $v->{'day_'.$dayNo};
+                }
+        }
+        // dd($data_query->toArray());
+        $user = Auth::user();
+        if ($request->ajax()) {
+            // dd($data_query);
+            return Datatables::of($data_query)
+                    ->addIndexColumn()
+                    ->editColumn('status',function($row){
+                        if($row->status){
+                            $txt = 'Active';
+                        }
+                        else{
+                            $txt = 'Inactive';
+                        }
+                        return $txt;
+                    })
+                    ->addColumn('edit', function($row) use ($user){
+                        $edit_url    =  route('edit-brand-prices',[$row->id]);
+                        $btn = '<a href="'.$edit_url.'" title="Edit" class="edit btn btn-warning btn-sm mr-2"><i class="fa fa-edit" aria-hidden="true"></i></a>';
+                        
+                        return $btn;
+                    })
+                    ->rawColumns([
+                        'edit', 
+                        'status', 
+                        ])
+                    ->make(true);
+        }
+    }
+
+    public function editBrandPrice($id)
+    {
+        dd($id);
     }
 }

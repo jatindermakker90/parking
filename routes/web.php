@@ -121,6 +121,8 @@ Route::prefix('admin')->group(function () {
         Route::post('company/close-company-update',             [CompanyController::class, 'closeCompanyUpdate'])->name('close-company-update');
         Route::delete('company/close-company-delete/{id}',      [CompanyController::class, 'closeCompanyDelete'])->name('close-company-delete');
         Route::get('company/manage-company-price/{id}',         [CompanyController::class, 'manageCompanyPrice'])->name('manage-company-price');
+        Route::get('company/brand-prices',                      [CompanyController::class, 'brandPrice'])->name('brand-prices');
+        Route::get('company/edit-brand-prices/{id}',            [CompanyController::class, 'editBrandPrice'])->name('edit-brand-prices');
         
         //======================================================================//
        //============================ Country ===============================//

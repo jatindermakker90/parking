@@ -127,3 +127,77 @@
 
 </style>
 @stop
+@section('js')
+<script src="{{ asset('vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('vendor/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('vendor/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+<script src="{{ asset('vendor/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('vendor/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        let band_price_column = [
+                {
+                  data: 'edit',
+                  name: 'edit', 
+                  orderable: false,
+                
+                },
+                {
+                  data: 'brand',
+                  name: 'brand', 
+                  orderable: true,
+                  render: function ( data, type, row) {
+                    if(type === 'sort'){
+                        return data;
+                    }else{
+                        return  data??'NA';
+                    }
+                  }
+                },
+                {
+                  data: 'status',
+                  name: 'status', 
+                  orderable: true,
+                  render: function ( data, type, row) {
+                    if(type === 'sort'){
+                        return data;
+                    }else{
+                        return  data??'NA';
+                    }
+                  }
+                },
+        ]
+        for (let index = 1; index < 32; index++) {
+            band_price_column.push({
+                data: 'day_'+index,
+                name: 'day_'+index, 
+                orderable: true,
+                render: function ( data, type, row) {
+                    if(type === 'sort'){
+                        return data;
+                    }else{
+                        return  data??'NA';
+                    }
+                }
+            },)
+            
+        }
+        console.log(band_price_column);
+        $('#data_collection_2').DataTable({
+          "paging"      : false,
+          "pageLength"  : 100,
+          "lengthChange": false,
+          "searching"   : false,
+          "ordering"    : true,
+          "info"        : true,
+          "autoWidth"   : true,
+          "responsive"  : false,
+          "processing"  : true,
+          "serverSide"  : true,
+          "scrollX"     : true,
+          "ajax"        :"{{ route('brand-prices') }}",
+          "columns"     : band_price_column
+        });
+    });
+</script>
+@stop

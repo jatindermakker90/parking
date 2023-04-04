@@ -39,7 +39,7 @@
         <!-- CSS OF STAR RATING -->
         <link rel="stylesheet" href="{{ asset('vendor/barrating-css/fontawesome-stars.css') }}">
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
-        <link rel="stylesheet" href="fontawesome-stars.css">
+        <!-- <link rel="stylesheet" href="fontawesome-stars.css"> -->
 
 
     @else
