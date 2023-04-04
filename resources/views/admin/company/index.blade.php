@@ -864,7 +864,7 @@ $(document).ready(function(){
         success: function(response){
           console.log(`form submited`, response);
           if(response.status_code == 200){
-            operationsModel.modal('show');
+            
             let data = response.result.operation;
             let operationType = data.operation_type;
             let weekdays = JSON.parse(data.weekdays);
@@ -1015,6 +1015,7 @@ $(document).ready(function(){
                 }
               });
             }
+            operationsModel.modal('show');
           }
         },         
         error: function(XHR, textStatus, errorThrown) {
