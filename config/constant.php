@@ -101,7 +101,6 @@ return [
       'twenty_four_into_seven' => 1,
       'flexible' => 2
     ],
-    'GET_IMAGE' => url('/')."/storage/",
     'MONTHS' => [
       1 => 'January',
       2 => 'February',

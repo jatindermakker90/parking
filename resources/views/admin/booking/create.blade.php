@@ -123,7 +123,7 @@
           </div>
           <div class="card-body">
             <div>
-              <img class="booking-company-logo mb-3" src="{{ config('constant.GET_IMAGE').$searchedCompanies_value->logo_id }}" alt="" srcset="">
+              <img class="booking-company-logo mb-3" src="{{ env('IMAGE_URL').$searchedCompanies_value->logo_id }}" alt="" srcset="">
               @if(!empty($searchedCompanies_value->service_types) && $searchedCompanies_value->service_types->count() > 0 )
                 <ul>
                   @foreach($searchedCompanies_value->service_types as $serviceTypeKey => $serviceTypeValue)
@@ -469,7 +469,7 @@ $(document).ready(function(){
     }
     let start_date = `${departureDate} ${departureTime}:00`;
     let end_date = `${returnDate} ${returnTime}:00`;
-    if(start_date && end_date){
+    if(!start_date && !end_date){
       return;
     }
     let ajaxUrl = "{{ route('compare-two-date') }}"

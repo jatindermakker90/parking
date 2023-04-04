@@ -230,7 +230,7 @@
                       <label class="">Company Logo </label>
                       @if(!empty($company->logo_id))
                         <div class="mb-2">
-                          <img width="100" height="50" src="{{ config('constant.GET_IMAGE').$company->logo_id }}" alt="" srcset="">
+                          <img width="100" height="50" src="{{ env('IMAGE_URL').$company->logo_id }}" alt="" srcset="">
                         </div>
                       @endif
                       <div class="form-group file-input">
