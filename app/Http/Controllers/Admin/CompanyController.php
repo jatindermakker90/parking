@@ -68,7 +68,9 @@ class CompanyController extends WebController
                         }
                     })
                     ->addColumn('manage_price',function($row){
-                        $btn = '<button type="button" class="btn btn-xs btn-outline-secondary manage-plan-button" data-companyId="'.$row->id.'">Manage Price</button>';
+                        $manage_price_url    =  route('manage-company-price',[$row->id]);
+                        $btn = '<a href="'.$manage_price_url.'" class="manage-price btn btn-outline-secondary btn-sm">Manage Price</a>';
+                        // '<button type="button" class="btn btn-xs btn-outline-secondary manage-plan-button" data-companyId="'.$row->id.'">Manage Price</button>';
                         return $btn;
                     })
                     ->addColumn('action', function($row) use ($user){
@@ -639,5 +641,16 @@ class CompanyController extends WebController
             return $this->sendError($response,$message,200);
         }
 
+    }
+
+    public function manageCompanyPrice($id, Company $company)
+    {
+        $company_details = $company->where('id', $id)->first();
+        // dd($company_details->toArray());
+
+        return view('admin.company.manage-price')->with([
+            "title" => 'Manage Price',
+            "company_details" => $company_details
+        ]);
     }
 }

@@ -112,7 +112,7 @@ Route::prefix('admin')->group(function () {
         Route::post('company/assign-user-to-companies',         [CompanyController::class, 'assignUserToCompanies'])->name('assign-user-to-companies');
         Route::post('company/remove-user-to-companies',         [CompanyController::class, 'removeUserToCompanies'])->name('remove-user-to-companies');
         // company operation routes
-        Route::get('company/get-company-operations/{id}',      [CompanyController::class, 'getCompanyOperations'])->name('get-company-operations');
+        Route::get('company/get-company-operations/{id}',       [CompanyController::class, 'getCompanyOperations'])->name('get-company-operations');
         Route::post('company/save-company-operations',          [CompanyController::class, 'saveCompanyOperations'])->name('save-company-operations');
         // close company routes
         Route::get('company/close-company',                     [CompanyController::class, 'closeCompany'])->name('close-company');
@@ -120,7 +120,9 @@ Route::prefix('admin')->group(function () {
         Route::get('company/get-edit-close-company-html',       [CompanyController::class, 'getcloseCompanyEditHtml'])->name('get-edit-close-company-html');
         Route::post('company/close-company-update',             [CompanyController::class, 'closeCompanyUpdate'])->name('close-company-update');
         Route::delete('company/close-company-delete/{id}',      [CompanyController::class, 'closeCompanyDelete'])->name('close-company-delete');
-       //======================================================================//
+        Route::get('company/manage-company-price/{id}',         [CompanyController::class, 'manageCompanyPrice'])->name('manage-company-price');
+        
+        //======================================================================//
        //============================ Country ===============================//
         Route::resource('countries',                            CountriesController::class)/*->middleware(['allow_admin'])*/;
         Route::get('change/countries/status/{table_id}',        [CountriesController::class, 'changeCountriesStatus'])->name('change_countries_status');
