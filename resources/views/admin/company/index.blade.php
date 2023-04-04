@@ -36,7 +36,7 @@
                     <th>Airport ID</th>
                     <th>Terminal ID</th>
                     <th>Logo</th>
-                    <!-- <th>Manage Price</th> -->
+                    <th>Manage Price</th>
                     <th>Company Status</th>
                     <th>Action</th>
                   </tr>
@@ -643,20 +643,20 @@ $(document).ready(function(){
                 }
               }
             },
-            // {
-            //   data: 'manage_price',
-            //   name: 'manage_price',
-            //   orderable: true,
-            //   render: function ( data, type, row) {
-            //     if(type == 'display'){
-            //         return data;
-            //     }else if(type === 'sort'){
-            //         return data;
-            //     }else{
-            //         return data;
-            //     }
-            //   }
-            // },
+            {
+              data: 'manage_price',
+              name: 'manage_price',
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type == 'display'){
+                    return data;
+                }else if(type === 'sort'){
+                    return data;
+                }else{
+                    return data;
+                }
+              }
+            },
             {
               data: 'company_status',
               name: 'company_status',
@@ -864,7 +864,7 @@ $(document).ready(function(){
         success: function(response){
           console.log(`form submited`, response);
           if(response.status_code == 200){
-            operationsModel.modal('show');
+            
             let data = response.result.operation;
             let operationType = data.operation_type;
             let weekdays = JSON.parse(data.weekdays);
@@ -1015,6 +1015,7 @@ $(document).ready(function(){
                 }
               });
             }
+            operationsModel.modal('show');
           }
         },         
         error: function(XHR, textStatus, errorThrown) {

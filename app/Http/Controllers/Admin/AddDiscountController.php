@@ -20,6 +20,7 @@ use App\Models\DiscountOfferType;
 use App\Models\AddDiscount;
 use DataTables;
 use Validator;
+use Carbon\Carbon;
 
 class AddDiscountController extends WebController
 {
@@ -270,45 +271,60 @@ class AddDiscountController extends WebController
     }
 
     public function validateCouponCode(Request $request, AddDiscount $addDiscount)
-    {
-        
+    {   
+        // dd($request->all());
         if(!$request->coupon){
             return response()->json([
                 'code' => 203,
                 'success' => 'Coupon is required !'
             ]);
         }
-        $isValid = false;
-        $couponData = $addDiscount->where('name', trim($request->coupon))->first();
-        if($couponData == null){
+        if(!$request->airport_id){
             return response()->json([
                 'code' => 203,
-                'messsage' => 'Coupon is invalid !',
-                'data' => ["isValid" => $isValid, "amount"=> 0]
+                'success' => 'Airport id is required !'
             ]);
         }
-        $todayDate = date('d-m-Y', strtotime(now()));
-        $startDate = date('d-m-Y', strtotime($couponData->start_date)); 
-        $lastDate = date('d-m-Y', strtotime($couponData->end_date));
-        
-        if($startDate > $todayDate){
-            $isValid = false;
+        $isValid = false;
+        $couponName = "'" . trim($request->coupon) . "'";
+        $couponData = \DB::select('select ad.*, `assign_discounts`.airport_id, `assign_discounts`.company_id, fd.amount from `add_discounts` ad inner join `assign_discounts` ON ad.`offer_type_id` = `assign_discounts`.`offer_type_id` join `flat_discounts` fd on ad.id = fd.flat_code_id where ad.name ='.$couponName);
+        if(count($couponData) > 0){
+            
+            $couponData = (Object)$couponData[0];
+            $startDate = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $couponData->start_date);
+            $lastDate = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $couponData->end_date);
+            $todayDate = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', now());
+            
+            if($todayDate->gte($startDate) && $todayDate->lte($lastDate)){
+                $isValid = true;
+            }
+
+            if($isValid == true){
+                if($couponData->airport_id == $request->airport_id){
+                    return response()->json([
+                        'code' => 200,
+                        'messsage' => 'Coupon is valid !, Amount is '.$couponData->amount,
+                        'data' => ["isValid" => $isValid, "amount"=> $couponData->amount]
+                    ]);
+                }
+                else{
+                    return response()->json([
+                        'code' => 203,
+                        'messsage' => 'Coupon is not valid for this airport !',
+                        'data' => ["isValid" => $isValid, "amount"=> 0]
+                    ]);
+                }
+                
+            }
+            else{
+                return response()->json([
+                    'code' => 203,
+                    'messsage' => 'Coupon is invalid !',
+                    'data' => ["isValid" => $isValid, "amount"=> 0]
+                ]);
+            }
         }
-        else if($startDate <= $todayDate && $todayDate < $lastDate){
-            $isValid = true;
-        }
-        else{
-            $isValid = false;
-        }
-        
-        if($isValid == true){
-            return response()->json([
-                'code' => 200,
-                'messsage' => 'Coupon is valid !',
-                'data' => ["isValid" => $isValid, "amount"=> 0]
-            ]);
-        }
-        else{
+        else{  
             return response()->json([
                 'code' => 203,
                 'messsage' => 'Coupon is invalid !',

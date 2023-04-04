@@ -290,6 +290,11 @@ return [
     */
      'menu' => [
         [
+            'text'        => 'Dashboard',
+            'url'         => 'admin/bookings',
+            'icon'        => 'fas fa-tv',
+        ],
+        [
             'text'        => 'Admin Management',
             'icon'        => 'fas fa-bars',
             'role'        => 'superadmin',
@@ -310,11 +315,6 @@ return [
                     'role'        => 'superadmin'
                ],
             ]
-        ],
-        [
-            'text'        => 'Dashboard',
-            'url'         => 'admin/bookings',
-            'icon'        => 'fas fa-tv',
         ],
         [
             'text'        => 'Customer Management',

@@ -123,7 +123,7 @@
           </div>
           <div class="card-body">
             <div>
-              <img class="booking-company-logo" src="{{ asset('assets/images/abstract-logo-company-made-with-color_341269-925.jpg') }}" alt="" srcset="">
+              <img class="booking-company-logo mb-3" src="{{ env('IMAGE_URL').$searchedCompanies_value->logo_id }}" alt="" srcset="">
               @if(!empty($searchedCompanies_value->service_types) && $searchedCompanies_value->service_types->count() > 0 )
                 <ul>
                   @foreach($searchedCompanies_value->service_types as $serviceTypeKey => $serviceTypeValue)
@@ -405,6 +405,15 @@ $(document).ready(function(){
     console.log(`dep date:: `, returnDate)
     $("#filter-form #return_date").val(`${returnDate}`);
   })
+  $(document).keypress(function(e){
+    var keycode = (event.keyCode ? event.keyCode : event.which);
+    if(keycode == '13'){
+      e.preventDefault();
+      $("#filter_form_submit").trigger('click');
+      return;
+      // alert('You pressed a "enter" key in somewhere');	
+    }
+  });
 
   $(document).on('click', '#filter_form_submit', (e)=>{
     e.preventDefault();
@@ -460,6 +469,9 @@ $(document).ready(function(){
     }
     let start_date = `${departureDate} ${departureTime}:00`;
     let end_date = `${returnDate} ${returnTime}:00`;
+    if(!start_date && !end_date){
+      return;
+    }
     let ajaxUrl = "{{ route('compare-two-date') }}"
     $.ajax({
       type:"POST",
@@ -631,42 +643,42 @@ $(document).ready(function(){
         }
       });
     }
-
-
-
-
   })
 
   $(document).on('change', '#discount_code', (e) => {
     e.preventDefault();
     let couponCode = $(e.target).val().trim();
+    let airport_id = $("#select_airport").val().trim();
+    if(!airport_id){
+      $("#select_airport").siblings(".validationFail").show();
+      $(e.target).val(null);
+      return;
+    }
+    else{
+      $("#select_airport").siblings(".validationFail").hide();
+    }
     if(!couponCode){
       $(e.target).siblings(".isValid").text(null).hide();
       return;
     }
     let formData = {
-      "coupon" : couponCode
+      "coupon" : couponCode,
+      "airport_id": airport_id
     }
-
-    console.log('couponCode:: ', couponCode);
     let ajaxUrl = "{{ route('validate-coupon-code') }}";
     $.ajax({
       type:"POST",
       url: ajaxUrl,
       data: formData,
       success: function(response){
-        console.log(`form submited`, response);
         if(response.code == 200){
           $(e.target).siblings(".isValid").text(response.messsage).css('color', 'green').show();
-          // toastr["success"](response.message);
         }
         if(response.code == 203){
           $(e.target).siblings(".isValid").text(response.messsage).css('color', 'red').show();
-          // toastr["success"](response.message);
         }
       },
       error: function(XHR, textStatus, errorThrown) {
-        // console.log(XHR.responseJSON.message);
         if(XHR.responseJSON.message != undefined){
             toastr["error"](XHR.responseJSON.message);  
         }else{

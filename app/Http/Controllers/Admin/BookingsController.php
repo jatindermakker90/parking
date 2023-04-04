@@ -116,32 +116,32 @@ class BookingsController extends WebController
                     })
                     ->editColumn('cancellation_cover', function($row){
                         if($row->cancellation_cover){
-                            return '<button type="button" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;"><i class="fa fa-check"></i></button>';
+                            return '<button type="button" title="Cancellation Cover" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;"><i class="fa fa-check"></i></button>';
                         }else{
-                            return '<button type="button" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;"><i class="fa fa-times"></i></button>';
+                            return '<button type="button" title="Cancellation Cover" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;"><i class="fa fa-times"></i></button>';
                         }
                     })
                     ->editColumn('sms_confirmation', function($row){
                         if($row->sms_confirmation){
-                            return '<button type="button" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;"><i class="fa fa-check"></i></button>';
+                            return '<button type="button" title="SMS Confirmation" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;"><i class="fa fa-check"></i></button>';
                         }else{
-                            return '<button type="button" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;"><i class="fa fa-times"></i></button>';
+                            return '<button type="button" title="SMS Confirmation" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;"><i class="fa fa-times"></i></button>';
                         }
                     })
                     ->editColumn('discount_code', function($row){
                         if($row->discount_code != null){
-                            return '<button type="button" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;">Yes</button>';
+                            return '<button type="button" title="Discount Code" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;">Yes</button>';
                         }else{
-                            return '<button type="button" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;">No</button>';
+                            return '<button type="button" title="Discount Code" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;">No</button>';
                         }
                     })
                     ->editColumn('status', function($row){
                         $payment_status = false;
                         if($payment_status){
-                            return '<button type="button" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;"><i class="fa fa-check"></i></button>';
+                            return '<button type="button" title="Payment Status" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;"><i class="fa fa-check"></i></button>';
                         }
                         else{
-                            return '<button type="button" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;"><i class="fa fa-times"></i></button>';
+                            return '<button type="button" title="Payment Status" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;"><i class="fa fa-times"></i></button>';
                         }
                     })
                     ->addColumn('action', function($row){
@@ -401,32 +401,32 @@ class BookingsController extends WebController
                     })
                     ->editColumn('cancellation_cover', function($row){
                         if($row->cancellation_cover){
-                            return '<button type="button" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;"><i class="fa fa-check"></i></button>';
+                            return '<button type="button" title="Cancellation Cover" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;"><i class="fa fa-check"></i></button>';
                         }else{
-                            return '<button type="button" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;"><i class="fa fa-times"></i></button>';
+                            return '<button type="button" title="Cancellation Cover" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;"><i class="fa fa-times"></i></button>';
                         }
                     })
                     ->editColumn('sms_confirmation', function($row){
                         if($row->sms_confirmation){
-                            return '<button type="button" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;"><i class="fa fa-check"></i></button>';
+                            return '<button type="button" title="SMS Confirmation" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;"><i class="fa fa-check"></i></button>';
                         }else{
-                            return '<button type="button" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;"><i class="fa fa-times"></i></button>';
+                            return '<button type="button" title="SMS Confirmation" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;"><i class="fa fa-times"></i></button>';
                         }
                     })
                     ->editColumn('discount_code', function($row){
                         if($row->discount_code != null){
-                            return '<button type="button" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;">Yes</button>';
+                            return '<button type="button" title="Discount code" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;">Yes</button>';
                         }else{
-                            return '<button type="button" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;">No</button>';
+                            return '<button type="button" title="Discount code" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;">No</button>';
                         }
                     })
                     ->editColumn('status', function($row){
                         $payment_status = false;
                         if($payment_status){
-                            return '<button type="button" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;"><i class="fa fa-check"></i></button>';
+                            return '<button type="button" title="Payment Status" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;"><i class="fa fa-check"></i></button>';
                         }
                         else{
-                            return '<button type="button" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;"><i class="fa fa-times"></i></button>';
+                            return '<button type="button" title="Payment Status" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;"><i class="fa fa-times"></i></button>';
                         }
                     })
                     ->addColumn('action', function($row){
@@ -513,32 +513,32 @@ class BookingsController extends WebController
                     })
                     ->editColumn('cancellation_cover', function($row){
                         if($row->cancellation_cover){
-                            return '<button type="button" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;"><i class="fa fa-check"></i></button>';
+                            return '<button type="button" title="Cancellation Cover" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;"><i class="fa fa-check"></i></button>';
                         }else{
-                            return '<button type="button" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;"><i class="fa fa-times"></i></button>';
+                            return '<button type="button" title="Cancellation Cover" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;"><i class="fa fa-times"></i></button>';
                         }
                     })
                     ->editColumn('sms_confirmation', function($row){
                         if($row->sms_confirmation){
-                            return '<button type="button" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;"><i class="fa fa-check"></i></button>';
+                            return '<button type="button" title="SMS Confirmation" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;"><i class="fa fa-check"></i></button>';
                         }else{
-                            return '<button type="button" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;"><i class="fa fa-times"></i></button>';
+                            return '<button type="button" title="SMS Confirmation" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;"><i class="fa fa-times"></i></button>';
                         }
                     })
                     ->editColumn('discount_code', function($row){
                         if($row->discount_code != null){
-                            return '<button type="button" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;">Yes</button>';
+                            return '<button type="button" title="Discount code" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;">Yes</button>';
                         }else{
-                            return '<button type="button" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;">No</button>';
+                            return '<button type="button" title="Discount code" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;">No</button>';
                         }
                     })
                     ->editColumn('status', function($row){
                         $payment_status = false;
                         if($payment_status){
-                            return '<button type="button" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;"><i class="fa fa-check"></i></button>';
+                            return '<button type="button" title="Payment Status" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;"><i class="fa fa-check"></i></button>';
                         }
                         else{
-                            return '<button type="button" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;"><i class="fa fa-times"></i></button>';
+                            return '<button type="button" title="Payment Status" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;"><i class="fa fa-times"></i></button>';
                         }
                     })
                     ->addColumn('action', function($row){
@@ -619,7 +619,7 @@ class BookingsController extends WebController
         // $company_types = OfferType::whereIn('id', $companies->company_types)->get();
         // $companies->merge(["company_types" => OfferType::whereIn('id', $companies->company_types)]);                     
 
-        
+        // dd($companies);
         return view('admin.booking.create')->with([
             'title' =>"Booking Management", 
             "header" => "Add Booking",

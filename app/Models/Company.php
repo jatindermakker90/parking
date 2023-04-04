@@ -107,7 +107,7 @@ class Company extends Model
             $company->added_by = $data->added_by;
         }
         if($data->has('company_logo') && $data->company_logo){
-            $company->logo_id = 1;//$data->company_logo;
+            $company->logo_id = $data->company_logo;
         }
         if($data->has('protection_status') && $data->protection_status){
             $company->protection_status = $data->protection_status;
@@ -214,7 +214,7 @@ class Company extends Model
             $company->added_by = $data->added_by;
         }
         if($data->has('company_logo') && $data->company_logo){
-            $company->logo_id = 1;//$data->company_logo;
+            $company->logo_id = $data->company_logo;
         }
         if($data->has('protection_status') && $data->protection_status){
             $company->protection_status = $data->protection_status;

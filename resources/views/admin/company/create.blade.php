@@ -95,11 +95,17 @@
                 </div>
                 <div class="form-group {{ $errors->has('comission') ? 'has-error' : '' }}">
                     <label for="comission">Comission</label>
-                    <input type="number" class="form-control" placeholder="Enter Comission" 
+                    <div class="input-group mb-3">
+                      <input type="number" class="form-control" placeholder="Enter Comission" 
                         name="comission" id="comission" value="{{ old('comission') ?? '' }}">
+                      <div class="input-group-append">
+                        <span class="input-group-text"><b>%</b></span>
+                      </div>
+                    </div>
                     @if ($errors->first('comission'))
                         <span class="form-error">{{ $errors->first('comission') }}</span>
                     @endif
+                   
                 </div>
                 <div class="form-group {{ $errors->has('short_notes') ? 'has-error' : '' }}">
                     <label for="short_notes">Short Notes</label>
@@ -129,7 +135,7 @@
                   </div>
                   <div class="form-group {{ $errors->has('monthly_bookings') ? 'has-error' : '' }}">
                       <label for="monthly_bookings">Monthly Bookings</label>
-                      <input type="number" class="form-control" placeholder="Enter Monthly Bookings"
+                      <input type="number" class="form-control" readonly placeholder="Monthly Bookings"
                            name="monthly_bookings" id="monthly_bookings"
                           value="{{ old('monthly_bookings') ?? '' }}">
                       @if ($errors->first('monthly_bookings'))
@@ -388,6 +394,7 @@
   </style>
 @stop
 @section('js')
+<script src="{{ asset('vendor/moment/moment.min.js') }}"></script> 
 <!-- DataTables  & Plugins -->
 <script type="text/javascript">
 $(document).ready(function(){
@@ -406,6 +413,12 @@ $(document).ready(function(){
           });
       });
   });
+  $(document).on('change', '#daily_bookings', (e) => {
+    let targetValue = $(e.target).val();
+    let numberOfDaysInMonth = 30;
+    let monthlyBooking = parseInt(targetValue) * parseInt(numberOfDaysInMonth);
+    $("#monthly_bookings").val(monthlyBooking);
+  })
 
   var myDropzone2 = new Dropzone("div#fileUploadphoto", {
       url: "{{ url('upload-image') }}",
