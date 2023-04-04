@@ -42,4 +42,21 @@ class HomeController extends WebController
             return $this->sendError($message);
         }
     }
+
+    public function getImage($filename)
+    {
+        $path = storage_path('app/profile-image/' . $filename);
+
+        if (!\File::exists($path)) {
+            abort(404);
+        }
+
+        $file = \File::get($path);
+        $type = \File::mimeType($path);
+
+        $response = \Response::make($file, 200);
+        $response->header("Content-Type", $type);
+
+        return $response;
+    }
 }

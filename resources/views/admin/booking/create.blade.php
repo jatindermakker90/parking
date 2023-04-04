@@ -123,7 +123,7 @@
           </div>
           <div class="card-body">
             <div>
-              <img class="booking-company-logo" src="{{ asset('assets/images/abstract-logo-company-made-with-color_341269-925.jpg') }}" alt="" srcset="">
+              <img class="booking-company-logo mb-3" src="{{ config('constant.GET_IMAGE').$searchedCompanies_value->logo_id }}" alt="" srcset="">
               @if(!empty($searchedCompanies_value->service_types) && $searchedCompanies_value->service_types->count() > 0 )
                 <ul>
                   @foreach($searchedCompanies_value->service_types as $serviceTypeKey => $serviceTypeValue)

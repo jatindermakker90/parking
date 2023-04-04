@@ -619,7 +619,7 @@ class BookingsController extends WebController
         // $company_types = OfferType::whereIn('id', $companies->company_types)->get();
         // $companies->merge(["company_types" => OfferType::whereIn('id', $companies->company_types)]);                     
 
-        
+        // dd($companies);
         return view('admin.booking.create')->with([
             'title' =>"Booking Management", 
             "header" => "Add Booking",

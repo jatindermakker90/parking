@@ -50,7 +50,8 @@ Route::get('/', function () {
 });
 //==  Default views =========//
 Route::middleware('auth')->group(function () {
-     Route::post('/upload-image',  [HomeController::class, 'uploadImage'])->name('upload-image');
+    Route::post('/upload-image',  [HomeController::class, 'uploadImage'])->name('upload-image');
+    Route::get('/storage/{filename}',  [HomeController::class, 'getImage'])->name('get-image');
 });
 //=== End Views ====//
 //    Admin Views //

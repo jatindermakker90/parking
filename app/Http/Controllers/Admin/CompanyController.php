@@ -56,6 +56,17 @@ class CompanyController extends WebController
                         $btn = '<input type="checkbox" name="change_status" data-bootstrap-switch data-off-color="danger" data-on-color="success"  data-on-text="ACTIVE" data-off-text="INACTIVE" data-href ="'.$modify_url.'">';
                         return $btn;
                     })
+                    ->editColumn('logo_id', function($row){
+                        if($row->logo_id != 1){
+                            $path = config('constant.GET_IMAGE').$row->logo_id;
+                            
+                            return '<img height="50" width="100" src="'.$path.'" />';
+                            // return '<div>'.$path.'</div>';
+                        }
+                        else{
+                            return 1;
+                        }
+                    })
                     ->addColumn('manage_price',function($row){
                         $btn = '<button type="button" class="btn btn-xs btn-outline-secondary manage-plan-button" data-companyId="'.$row->id.'">Manage Price</button>';
                         return $btn;
@@ -70,17 +81,18 @@ class CompanyController extends WebController
                                $company_operation_url = "";//route('company-operation-html', [$row->id]);
                             }
                             // $btn = '<a href="'.$view_url.'" class="view btn btn-success btn-sm mr-2"><i class="fa fa-eye" aria-hidden="true"></i></a>';
-                            $btn = '<a href="'.$edit_url.'" class="edit btn btn-warning btn-sm mr-2"><i class="fa fa-edit" aria-hidden="true"></i></a>';
+                            $btn = '<a href="'.$edit_url.'" title="Edit" class="edit btn btn-warning btn-sm mr-2"><i class="fa fa-edit" aria-hidden="true"></i></a>';
                             if($user->hasRole('superadmin')){
-                            $btn .= '<a href="'.$operation_url.'" data-id="'.$row->id.'" data-operation="'.$operation_id.'" class="btn btn-info btn-sm mr-2 company-operation" data-type ="'.$row->company_title.' Company""><i class="fa fa-compass" data-id="'.$row->id.'" data-operation="'.$operation_id.'"></i></a>';
-                            $btn .= '<a href="'.$delete_url.'" class="delete btn btn-danger btn-sm mr-2 delete_record" data-type ="'.$row->name.' Company""><i class="fa fa-trash"></i></a>';
+                            $btn .= '<a href="'.$operation_url.'" data-id="'.$row->id.'" title="Operations" data-operation="'.$operation_id.'" class="btn btn-info btn-sm mr-2 company-operation" data-type ="'.$row->company_title.' Company""><i class="fa fa-compass" data-id="'.$row->id.'" data-operation="'.$operation_id.'"></i></a>';
+                            $btn .= '<a href="'.$delete_url.'" class="delete btn btn-danger btn-sm mr-2 delete_record" title="Delete" data-type ="'.$row->name.' Company""><i class="fa fa-trash"></i></a>';
                             }
                            return $btn;
                     })
                     ->rawColumns([
                         'action', 
                         'manage_price', 
-                        'company_status'
+                        'company_status',
+                        'logo_id'
                         ])
                     ->make(true);
         }
@@ -545,8 +557,6 @@ class CompanyController extends WebController
 
     public function saveCompanyOperations(Request $request, CompaniesOperation $companiesOperation)
     {
-        // dd($request->all());
-
         $defaultOperationTime = [
             "monday" => [
                 "day" => "monday",
@@ -617,9 +627,7 @@ class CompanyController extends WebController
         else{
             $requestData->weekdays = json_encode($request->{$request->operating_type});
         }
-        // dd($requestData);
         $save_and_update_operation = $companiesOperation->saveAndUpdateOperation($operation_id, $requestData);
-        // dd($save_and_update_operation);
         $response = [];
         $response['path'] = route('companies.index');
         if($save_and_update_operation->id){

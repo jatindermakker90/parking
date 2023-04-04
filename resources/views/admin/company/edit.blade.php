@@ -132,7 +132,7 @@
                   </div>
                   <div class="form-group {{ $errors->has('monthly_bookings') ? 'has-error' : '' }}">
                       <label for="monthly_bookings">Monthly Bookings</label>
-                      <input type="number" class="form-control" placeholder="Enter Monthly Bookings"
+                      <input type="number" readonly class="form-control" placeholder="Monthly Bookings"
                            name="monthly_bookings" id="monthly_bookings"
                           value="{{ $company->monthly_bookings }}">
                       @if ($errors->first('monthly_bookings'))
@@ -228,6 +228,11 @@
                   </div>
                   <div class="col-md-6">
                       <label class="">Company Logo </label>
+                      @if(!empty($company->logo_id))
+                        <div class="mb-2">
+                          <img width="100" height="50" src="{{ config('constant.GET_IMAGE').$company->logo_id }}" alt="" srcset="">
+                        </div>
+                      @endif
                       <div class="form-group file-input">
                           <div id="fileUploadphoto" class="wpforms-uploader dropzone-single" data-field-id="32"
                               data-form-id="444" data-input-name="wpforms_444_32" data-extensions="png,jpeg,jpg"
@@ -405,6 +410,13 @@ $(document).ready(function(){
             $('#terminal_id').append(`<option ${(value.id == terminalId)? "selected" : ""} value ="${value.id}">${value.terminal_name}</option>`);
           });
       });
+  });
+
+  $(document).on('change', '#daily_bookings', (e) => {
+    let targetValue = $(e.target).val();
+    let numberOfDaysInMonth = 30;
+    let monthlyBooking = parseInt(targetValue) * parseInt(numberOfDaysInMonth);
+    $("#monthly_bookings").val(monthlyBooking);
   });
 
   var myDropzone2 = new Dropzone("div#fileUploadphoto", {

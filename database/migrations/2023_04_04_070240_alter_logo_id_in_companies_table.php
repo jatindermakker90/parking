@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterIsApproveColumnToReviewTable extends Migration
+class AlterLogoIdInCompaniesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AlterIsApproveColumnToReviewTable extends Migration
      */
     public function up()
     {
-        Schema::table('reviews', function (Blueprint $table) {
-            $table->tinyInteger('is_approve')->default(0);
+        Schema::table('companies', function (Blueprint $table) {
+            $table->string('logo_id')->nullable(true)->change();
         });
     }
 
@@ -25,8 +25,8 @@ class AlterIsApproveColumnToReviewTable extends Migration
      */
     public function down()
     {
-        Schema::table('reviews', function (Blueprint $table) {
-            $table->dropColumn('is_approve');
+        Schema::table('companies', function (Blueprint $table) {
+            //
         });
     }
 }
