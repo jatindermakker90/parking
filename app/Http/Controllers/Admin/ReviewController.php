@@ -309,7 +309,7 @@ class ReviewController extends Controller
             $review_exist->customer_service = $request->customer_service;
             $review_exist->collection_vehicle = $request->collection_vehicle;
             $review_exist->overall = $request->overall;
-            $review_exist->is_approve = $request->approve_status;
+            $review_exist->is_approve = ($request->approve_status) ? 1 : 0;
           $review_exist->update();
           return redirect()->route('list.index')->with(['success' => 'Review added successfully']);
         } else {
