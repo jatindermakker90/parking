@@ -117,12 +117,36 @@
       </div>
     </div>
   </div>
+
+  <div class="modal fade" id="edit_brand_price_modal">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <form id="brand_price_modal_form" enctype="multipart/form-data">
+          <div class="modal-header">
+            <h4 class="modal-title">Edit Brand Price</h4>
+            <button type="button" class="close close-brand-price-button" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <!-- body content here -->
+          </div>
+          <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-primary w-100" id="brand_price_update_submit_button">Update</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 @stop
 @section('css')
 <style>
     .dys {
-        width: 26px;
-        margin-top: 5px;
+      width: 26px;
+      margin-top: 5px;
+    }
+    input[type=checkbox] {
+      transform: scale(1.5);
     }
 
 </style>
@@ -135,69 +159,99 @@
 <script src="{{ asset('vendor/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
 <script type="text/javascript">
     $(document).ready(function(){
-        let band_price_column = [
-                {
-                  data: 'edit',
-                  name: 'edit', 
-                  orderable: false,
-                
-                },
-                {
-                  data: 'brand',
-                  name: 'brand', 
-                  orderable: true,
-                  render: function ( data, type, row) {
-                    if(type === 'sort'){
-                        return data;
-                    }else{
-                        return  data??'NA';
-                    }
-                  }
-                },
-                {
-                  data: 'status',
-                  name: 'status', 
-                  orderable: true,
-                  render: function ( data, type, row) {
-                    if(type === 'sort'){
-                        return data;
-                    }else{
-                        return  data??'NA';
-                    }
-                  }
-                },
-        ]
-        for (let index = 1; index < 32; index++) {
-            band_price_column.push({
-                data: 'day_'+index,
-                name: 'day_'+index, 
+      // $('.select2').select2();
+      let editBrandPriceModel = $('#edit_brand_price_modal').modal({
+        keyboard: false
+      })
+      let band_price_column = [
+              {
+                data: 'edit',
+                name: 'edit', 
+                orderable: false,
+              
+              },
+              {
+                data: 'brand',
+                name: 'brand', 
                 orderable: true,
                 render: function ( data, type, row) {
-                    if(type === 'sort'){
-                        return data;
-                    }else{
-                        return  data??'NA';
-                    }
+                  if(type === 'sort'){
+                      return data;
+                  }else{
+                      return  data??'NA';
+                  }
                 }
-            },)
-            
-        }
-        console.log(band_price_column);
-        $('#data_collection_2').DataTable({
-          "paging"      : false,
-          "pageLength"  : 100,
-          "lengthChange": false,
-          "searching"   : false,
-          "ordering"    : true,
-          "info"        : true,
-          "autoWidth"   : true,
-          "responsive"  : false,
-          "processing"  : true,
-          "serverSide"  : true,
-          "scrollX"     : true,
-          "ajax"        :"{{ route('brand-prices') }}",
-          "columns"     : band_price_column
+              },
+              {
+                data: 'status',
+                name: 'status', 
+                orderable: true,
+                render: function ( data, type, row) {
+                  if(type === 'sort'){
+                      return data;
+                  }else{
+                      return  data??'NA';
+                  }
+                }
+              },
+      ]
+      for (let index = 1; index < 32; index++) {
+          band_price_column.push({
+              data: 'day_'+index,
+              name: 'day_'+index, 
+              orderable: true,
+              render: function ( data, type, row) {
+                  if(type === 'sort'){
+                      return data;
+                  }else{
+                      return  data??'NA';
+                  }
+              }
+          },)
+          
+      }
+      console.log(band_price_column);
+      $('#data_collection_2').DataTable({
+        "paging"      : false,
+        "pageLength"  : 100,
+        "lengthChange": false,
+        "searching"   : false,
+        "ordering"    : true,
+        "info"        : true,
+        "autoWidth"   : true,
+        "responsive"  : false,
+        "processing"  : true,
+        "serverSide"  : true,
+        "scrollX"     : true,
+        "ajax"        :"{{ route('brand-prices') }}",
+        "columns"     : band_price_column
+      });
+
+      $(document).on('click', '.close-brand-price-button', (e)=>{
+        editBrandPriceModel.modal('hide');
+      })
+      $(document).on('click', '.edit-brand-price', (e)=>{
+        let url = $(e.target).data('url');
+        let name = $(e.target).data('name');
+        $("#edit_brand_price_modal").find(".modal-header .modal-title").text(`Edit Brand - ${name}`);
+        console.log('url:: ', url);
+        
+        $.ajax({
+          url: url,
+          type: 'GET',
+          success:function(data){
+            console.log(data);
+            $("#edit_brand_price_modal").find(".modal-body").html(data);
+              // Swal.fire(success_message, '', 'success');
+              // window.location.reload();
+            editBrandPriceModel.modal('show');
+            $('.select2').select2();
+          },
         });
+        
+      })
+
+
     });
 </script>
 @stop
