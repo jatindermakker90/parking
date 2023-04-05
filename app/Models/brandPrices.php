@@ -15,4 +15,26 @@ class brandPrices extends Model
         'status',
         'days_price',    
     ];
+
+    public static function updateBrandPrice($data){
+
+        $brand_prices = brandPrices::where('id',$data->id)->first() ?? new brandPrices();
+        
+        if($data->has('days_price') && $data->days_price){
+            $brand_prices->days_price = $data->days_price;
+        }
+        if($data->has('status') && $data->status){
+            $brand_prices->status = $data->status;
+        }
+        else{
+            $brand_prices->status = 0;
+        }
+        if($data->has('after_30_days') && $data->after_30_days){
+            $brand_prices->after_30_days = $data->after_30_days;
+        }
+        
+        $brand_prices->save();
+        
+        return $brand_prices;
+    }
 }

@@ -34,7 +34,7 @@ class CompanyController extends WebController
      */
     public function index(Request $request){
 
-        $data_query = Company::with(['operation'])
+        $data_query = Company::with(['operation', 'airport', 'terminal'])
                     ->where('company_status','!=',config('constant.STATUS.DELETED'))
                     ->whereNotNull('company_status')
                     ->get();
@@ -653,7 +653,7 @@ class CompanyController extends WebController
     {
         $data_query = $brandPrices
                     ->get();
-
+        // dd($data_query->toArray());
         foreach ($data_query as $key => $value) {
                 $daysData = json_decode($value['days_price']);
                 foreach ($daysData as $k => $v) {
@@ -678,7 +678,7 @@ class CompanyController extends WebController
                     })
                     ->addColumn('edit', function($row) use ($user){
                         $edit_url    =  route('edit-brand-prices',[$row->id]);
-                        $btn = '<a href="'.$edit_url.'" title="Edit" class="edit btn btn-warning btn-sm mr-2"><i class="fa fa-edit" aria-hidden="true"></i></a>';
+                        $btn = '<button title="Edit" data-name="'.$row->brand.'" data-url="'.$edit_url.'" class="edit-brand-price btn btn-warning btn-sm mr-2"><i data-name="'.$row->brand.'" data-url="'.$edit_url.'" class="fa fa-edit" aria-hidden="true"></i></button>';
                         
                         return $btn;
                     })
@@ -690,8 +690,64 @@ class CompanyController extends WebController
         }
     }
 
-    public function editBrandPrice($id)
+    public function editBrandPrice($id, BrandPrices $brandPrices)
     {
-        dd($id);
+        $getBrandPrice = $brandPrices->find($id);
+        $getBrandPrice->days_price = $this->convertJsonToArray($getBrandPrice->days_price);
+        return response()->view('admin.company.edit-brand-price', $getBrandPrice, 200);
+    }
+
+    protected function convertJsonToArray($data){
+        $arr = json_decode($data, true);
+        $newArr = [];
+        foreach ($arr as $k => $v) {
+            $dayNo = $k+1;
+            $newArr['day_'.$dayNo] = $v['day_'.$dayNo];
+        }
+        return $newArr;
+    }
+
+    public function updateBrandPrice(Request $request, BrandPrices $brandPrices)
+    {
+        // dd($request->id);
+        if(empty($request->id)){
+            return response()->json([
+                'code' => 401,
+                'success' => 'Brand price id is required !',
+                'data' => $request->all()
+            ]);
+        }
+        // dd($this->convertArrayToJson($request->days_price));
+        // dd();
+        $request->days_price = $this->convertArrayToJson($request->days_price);
+        $brand_prices = $brandPrices->updateBrandPrice($request);
+
+        if(!empty($brand_prices->id)){
+            return response()->json([
+                'code' => 200,
+                'success' => 'Brand price is updated !',
+                'data' => $brand_prices
+            ]);
+        }
+        else{
+            return response()->json([
+                'code' => 401,
+                'success' => 'Something went wrong',
+                'data' => []
+            ]);
+        }
+
+    }
+    protected function convertArrayToJson($data){
+        $newArr = [];
+        $dayNo = 1;
+        foreach ($data as $k => $v) {
+            $myObj = new \stdClass();
+            $myObj->{$k} = $v;
+
+            array_push($newArr, $myObj);
+            $dayNo++;
+        }
+        return json_encode($newArr);
     }
 }
