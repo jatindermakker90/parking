@@ -23,7 +23,7 @@
 <div class="col-md-12">
 <div class="panel panel-white">
       <div class="panel-body">
-          {{ Form::open(['route' => 'list.store','method' => 'post']) }}
+          {{ Form::open(['route' => 'review-update','method' => 'post']) }}
           <div class="form-group row">
             <label class="col-md-6"><b>Would you recommend to a friend</b></label>
             @if($data->is_recommend == 1)
@@ -66,7 +66,7 @@
             <label for="review_title" class="col-md-6"><b>Please Write Review Title</b></label>
               <div class="col-md-6">
                 <input type="text" name="review_title" value="{{ $data['review_title'] }}" class="form-control form-control-sm">
-                <input type="hidden" name="booking_id" class="form-control form-control-sm" id="" value="{{ $data->id }}">
+                <input type="hidden" name="review_id" class="form-control form-control-sm" id="" value="{{ $data->id }}">
               </div>
           </div>
           <div class="form-group row">
@@ -84,7 +84,7 @@
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
-              <option value="4" selected="selected">4</option>
+              <option value="4">4</option>
               <option value="5">5</option>
               </select>
             </div>
@@ -139,6 +139,14 @@
             <option value="5">5</option>
             </select></div>
             </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-5"><b>Approve</b></label>
+            @if(isset($data->is_approve) && $data->is_approve == 1)
+            <div class="checker"><span>{{ Form::checkbox('approve_status', '1', true) }}</span></div>
+            @else
+            <div class="checker"><span>{{ Form::checkbox('approve_status', '1', false) }}</span></div>
+            @endif
           </div>
           <div class="form-group row">
             <div class="col-md-12">

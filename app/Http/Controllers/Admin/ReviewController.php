@@ -173,12 +173,6 @@ class ReviewController extends Controller
 
     public function postreview($ref_id,Request $request){
       print_r($request->all());
-      // $data = Bookings::where('ref_id',$ref_id)->first();
-      // return view('admin.review.insert')->with([
-      //     'title' => 'Inse1rt Reviews',
-      //     "header" => "Rating Insert",
-      //     'data' => $data
-      // ]);
     }
 
     public function reviewapprove($review_id, Request $request){
@@ -300,9 +294,27 @@ class ReviewController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $review_id = $request->review_id;
+        $review_exist =  Review::where('id',$review_id)->first();
+        if($review_exist){
+            $review_exist->is_recommend = ($request->recommend == 'yes') ? '1' : '0';
+            $review_exist->review_date = $request->review_date;
+            $review_exist->publish_date = $request->publish_date;
+            $review_exist->review_title = $request->review_title;
+            $review_exist->comments = $request->comments;
+            $review_exist->convenience = $request->convenience;
+            $review_exist->punctuality = $request->punctuality;
+            $review_exist->customer_service = $request->customer_service;
+            $review_exist->collection_vehicle = $request->collection_vehicle;
+            $review_exist->overall = $request->overall;
+            $review_exist->is_approve = $request->approve_status;
+          $review_exist->update();
+          return redirect()->route('list.index')->with(['success' => 'Review added successfully']);
+        } else {
+          return redirect()->back();
+        }
     }
 
     /**

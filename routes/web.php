@@ -154,6 +154,7 @@ Route::prefix('admin')->group(function () {
             Route::get('insert/{ref}',                          [ReviewController::class,'reviewinsertpage'])->name('review_insert');
             Route::get('approve/review/{ref}',                          [ReviewController::class,'reviewapprove'])->name('review_approve');
             Route::get('delete/review/{ref}',                          [ReviewController::class,'reviewdelete'])->name('review_delete');
+            Route::post('update',                            [ReviewController::class, 'update'])->name('review-update');
         });
         // ========================== discount =====================================//
         Route::prefix('discount')->group(function () {
