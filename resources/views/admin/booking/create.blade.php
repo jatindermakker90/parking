@@ -118,7 +118,7 @@
             <div>
               <p class="m-0 text-success"><i class="fas fa-window-close mr-1"></i>Cancellation Cover Available</p>
               <h6 class="company-title font-weight-bold">{{ $searchedCompanies_value->company_title }}</h6>
-              <p>{{$searchedCompanies_value->company_types[0]->name}}</p>
+              <p>{{$searchedCompanies_value->company_types[0]->name ?? ''}}</p>
             </div>
           </div>
           <div class="card-body">
