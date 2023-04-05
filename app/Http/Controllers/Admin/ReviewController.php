@@ -40,11 +40,11 @@ class ReviewController extends Controller
                  })
                   ->addColumn('action', function($row){
                          $view_url    =  route('airport.show',[$row->id]);
-                         $edit_url    =  route('airport.edit',[$row->id]);
-                         $delete_url  =  route('review_delete',[$row->id]);
+                         $edit_url    =  route('list.edit',[$row->review->id]);
+                         $delete_url  =  route('review_delete',[$row->review->id]);
                          $approve_url = route('review_approve',[$row->review->id]);
                          //$btn  = '<a href="'.$view_url.'" class="view btn btn-success btn-sm mr-2"><i class="fa fa-eye" aria-hidden="true"></i></a>';
-                         $btn = '<a href="#" class="edit btn btn-warning btn-sm mr-2" title="Edit"><i class="fa fa-edit" aria-hidden="true"></i></a>';
+                         $btn = '<a href="'.$edit_url.'" class="edit btn btn-warning btn-sm mr-2" title="Edit"><i class="fa fa-edit" aria-hidden="true"></i></a>';
                          $btn .= '<a href="'.$delete_url.'" class="delete btn btn-danger btn-sm mr-2 delete_record" title="Delete" data-type ="'.$row->airport_name.' Airport"><i class="fa fa-trash" aria-hidden="true"></i></a>';
                          if($row->review->is_approve == 0){
                            $btn .= '<a href="'.$approve_url.'" class="approve btn btn-primary btn-sm mr-2" title="Approve" data-type ="Approve"><i class="fa fa-check" aria-hidden="true"></i></a>';
@@ -173,12 +173,6 @@ class ReviewController extends Controller
 
     public function postreview($ref_id,Request $request){
       print_r($request->all());
-      // $data = Bookings::where('ref_id',$ref_id)->first();
-      // return view('admin.review.insert')->with([
-      //     'title' => 'Inse1rt Reviews',
-      //     "header" => "Rating Insert",
-      //     'data' => $data
-      // ]);
     }
 
     public function reviewapprove($review_id, Request $request){
@@ -248,6 +242,7 @@ class ReviewController extends Controller
         $save_review = new Review();
         $save_review->booking_id = $request->booking_id;
         $save_review->review_date = $request->review_date;
+        $save_review->review_title = $request->review_title;
         $save_review->publish_date = $request->publish_date;
         $save_review->is_recommend = ($request->recommend == 'yes') ? 1 : 0;
         $save_review->comments = $request->comments;
@@ -282,7 +277,14 @@ class ReviewController extends Controller
      */
     public function edit($id)
     {
-        //
+      $data = Review::where('id',$id)->first();
+      $data->review_date = date('Y-m-d',strtotime($data->review_date));
+      $data->publish_date = date('Y-m-d',strtotime($data->publish_date));
+      return view('admin.review.update')->with([
+          'title' => 'Edit Rating Details',
+          "header" => "Edit Rating Details",
+          'data' => $data
+      ]);
     }
 
     /**
@@ -292,9 +294,27 @@ class ReviewController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $review_id = $request->review_id;
+        $review_exist =  Review::where('id',$review_id)->first();
+        if($review_exist){
+            $review_exist->is_recommend = ($request->recommend == 'yes') ? '1' : '0';
+            $review_exist->review_date = $request->review_date;
+            $review_exist->publish_date = $request->publish_date;
+            $review_exist->review_title = $request->review_title;
+            $review_exist->comments = $request->comments;
+            $review_exist->convenience = $request->convenience;
+            $review_exist->punctuality = $request->punctuality;
+            $review_exist->customer_service = $request->customer_service;
+            $review_exist->collection_vehicle = $request->collection_vehicle;
+            $review_exist->overall = $request->overall;
+            $review_exist->is_approve = $request->approve_status;
+          $review_exist->update();
+          return redirect()->route('list.index')->with(['success' => 'Review added successfully']);
+        } else {
+          return redirect()->back();
+        }
     }
 
     /**

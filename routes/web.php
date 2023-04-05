@@ -123,7 +123,7 @@ Route::prefix('admin')->group(function () {
         Route::get('company/manage-company-price/{id}',         [CompanyController::class, 'manageCompanyPrice'])->name('manage-company-price');
         Route::get('company/brand-prices',                      [CompanyController::class, 'brandPrice'])->name('brand-prices');
         Route::get('company/edit-brand-prices/{id}',            [CompanyController::class, 'editBrandPrice'])->name('edit-brand-prices');
-        
+
         //======================================================================//
        //============================ Country ===============================//
         Route::resource('countries',                            CountriesController::class)/*->middleware(['allow_admin'])*/;
@@ -153,7 +153,8 @@ Route::prefix('admin')->group(function () {
             Route::get('checklist',                       [ReviewController::class,'reviewchecklistpage'])->name('review_checklist');
             Route::get('insert/{ref}',                          [ReviewController::class,'reviewinsertpage'])->name('review_insert');
             Route::get('approve/review/{ref}',                          [ReviewController::class,'reviewapprove'])->name('review_approve');
-            Route::delete('delete/review/{ref}',                          [ReviewController::class,'reviewdelete'])->name('review_delete');
+            Route::get('delete/review/{ref}',                          [ReviewController::class,'reviewdelete'])->name('review_delete');
+            Route::post('update',                            [ReviewController::class, 'update'])->name('review-update');
         });
         // ========================== discount =====================================//
         Route::prefix('discount')->group(function () {

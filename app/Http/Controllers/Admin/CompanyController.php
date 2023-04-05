@@ -679,7 +679,7 @@ class CompanyController extends WebController
                     })
                     ->addColumn('edit', function($row) use ($user){
                         $edit_url    =  route('edit-brand-prices',[$row->id]);
-                        $btn = '<a href="'.$edit_url.'" title="Edit" class="edit btn btn-warning btn-sm mr-2"><i class="fa fa-edit" aria-hidden="true"></i></a>';
+                        $btn = '<button title="Edit" data-name="'.$row->brand.'" data-url="'.$edit_url.'" class="edit-brand-price btn btn-warning btn-sm mr-2"><i data-name="'.$row->brand.'" data-url="'.$edit_url.'" class="fa fa-edit" aria-hidden="true"></i></button>';
                         
                         return $btn;
                     })
@@ -691,8 +691,23 @@ class CompanyController extends WebController
         }
     }
 
-    public function editBrandPrice($id)
+    public function editBrandPrice($id, BrandPrices $brandPrices)
     {
-        dd($id);
+        // dd($id);
+        $getBrandPrice = $brandPrices->find($id);
+        $getBrandPrice->days_price = $this->convertJsonToArray($getBrandPrice->days_price);
+        
+        // dd($getBrandPrice->toArray());
+        return response()->view('admin.company.edit-brand-price', $getBrandPrice, 200);
+    }
+
+    protected function convertJsonToArray($data){
+        $arr = json_decode($data, true);
+        $newArr = [];
+        foreach ($arr as $k => $v) {
+            $dayNo = $k+1;
+            $newArr['day_'.$dayNo] = $v['day_'.$dayNo];
+        }
+        return $newArr;
     }
 }
