@@ -19,4 +19,8 @@ class Review extends Model
       $overall_rating = ($rating_total)/5;
       return round($overall_rating);
     }
+
+    public function booking(){
+      return $this->hasOne('App\Models\Bookings','id','booking_id');
+    }
 }

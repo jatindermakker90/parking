@@ -39,7 +39,7 @@ class ReviewController extends Controller
                      return $name = $row->first_name.' '.$row->last_name;
                  })
                   ->addColumn('action', function($row){
-                         $view_url    =  route('airport.show',[$row->id]);
+                         $view_url    =  route('list.show',[$row->review->id]);
                          $edit_url    =  route('list.edit',[$row->review->id]);
                          $delete_url  =  route('review_delete',[$row->review->id]);
                          $approve_url = route('review_approve',[$row->review->id]);
@@ -51,7 +51,7 @@ class ReviewController extends Controller
                          } else {
                            $btn .= '<a href="'.$approve_url.'" class="approve btn btn-primary btn-sm mr-2" title="Unapprove" data-type ="Unapprove"><i class="fa fa-ban" aria-hidden="true"></i></a>';
                          }
-                         $btn .= '<a href="#" class="review-details btn btn-success btn-sm mr-2 delete_record" title="Review Details" data-type ="'.$row->airport_name.' Airport"><i class="fa fa-eye" aria-hidden="true"></i></a>';
+                         $btn .= '<a href="'.$view_url.'" class="review-details btn btn-success btn-sm mr-2" title="Review Details" data-type ="'.$row->airport_name.' Airport"><i class="fa fa-eye" aria-hidden="true"></i></a>';
                          return $btn;
                   })
                   ->addColumn('stars', function($row){
@@ -266,7 +266,16 @@ class ReviewController extends Controller
      */
     public function show($id)
     {
-        //
+        $review_detail = Review::with('booking')->where('id',$id)->first();
+        if($review_detail){
+          return view('admin.review.show')->with([
+              'title' => 'Review Details',
+              "header" => "Client Ratings",
+              'detail' => $review_detail
+          ]);
+        } else {
+          return redirect()->back();
+        }
     }
 
     /**
