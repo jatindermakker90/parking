@@ -215,6 +215,7 @@ $(document).ready(function(){
       var success_message = 'Review deleted successfully';
       var deny_message    = 'Review not deleted.';
       var href            = $(this).attr('href');
+      console.log('href',href);
       Swal.fire({
           title: delete_message,
           showDenyButton: false,
@@ -224,7 +225,7 @@ $(document).ready(function(){
             if (result.isConfirmed) {
               $.ajax({
                 url: href,
-                type: 'DELETE',
+                type: 'get',
                 success:function(data){
                 //  console.log(data);
                    Swal.fire(success_message, '', 'success');
