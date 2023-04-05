@@ -33,8 +33,8 @@
                     <th>Company Phone</th>
                     <th>Company Email</th>
                     <th>Company URL</th>
-                    <th>Airport ID</th>
-                    <th>Terminal ID</th>
+                    <th>Airport</th>
+                    <th>Terminal</th>
                     <th>Logo</th>
                     <th>Manage Price</th>
                     <th>Company Status</th>

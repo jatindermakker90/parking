@@ -8,5 +8,5 @@
             @endforeach
         </select>
         <span class="validationFail">Please select status</span>
-    </div>`
+    </div>
 </div>
