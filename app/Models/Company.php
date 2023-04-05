@@ -30,6 +30,14 @@ class Company extends Model
     {
         return $this->hasOne(CompaniesOperation::class, 'company_id', 'id');
     }
+    public function airport()
+    {
+        return $this->belongsTo(Airport::class, 'airport_id', 'id');
+    }
+    public function terminal()
+    {
+        return $this->belongsTo(AirportTerminal::class, 'terminal_id', 'id');
+    }
 
     public static function addCompany($data){
 

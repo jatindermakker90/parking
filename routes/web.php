@@ -123,6 +123,7 @@ Route::prefix('admin')->group(function () {
         Route::get('company/manage-company-price/{id}',         [CompanyController::class, 'manageCompanyPrice'])->name('manage-company-price');
         Route::get('company/brand-prices',                      [CompanyController::class, 'brandPrice'])->name('brand-prices');
         Route::get('company/edit-brand-prices/{id}',            [CompanyController::class, 'editBrandPrice'])->name('edit-brand-prices');
+        Route::post('company/update-brand-prices',         [CompanyController::class, 'updateBrandPrice'])->name('update-brand-prices');
 
         //======================================================================//
        //============================ Country ===============================//

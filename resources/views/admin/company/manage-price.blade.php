@@ -159,7 +159,6 @@
 <script src="{{ asset('vendor/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
 <script type="text/javascript">
     $(document).ready(function(){
-      // $('.select2').select2();
       let editBrandPriceModel = $('#edit_brand_price_modal').modal({
         keyboard: false
       })
@@ -210,7 +209,6 @@
           },)
           
       }
-      console.log(band_price_column);
       $('#data_collection_2').DataTable({
         "paging"      : false,
         "pageLength"  : 100,
@@ -234,21 +232,38 @@
         let url = $(e.target).data('url');
         let name = $(e.target).data('name');
         $("#edit_brand_price_modal").find(".modal-header .modal-title").text(`Edit Brand - ${name}`);
-        console.log('url:: ', url);
         
         $.ajax({
           url: url,
           type: 'GET',
           success:function(data){
-            console.log(data);
             $("#edit_brand_price_modal").find(".modal-body").html(data);
-              // Swal.fire(success_message, '', 'success');
-              // window.location.reload();
             editBrandPriceModel.modal('show');
             $('.select2').select2();
           },
         });
-        
+      })
+      $(document).on('click', '#brand_price_update_submit_button', (e)=>{
+        e.preventDefault();
+        let form = $("#brand_price_modal_form");
+        let formData = $(form).serialize();
+        let ajaxUrl = "{{ route('update-brand-prices') }}";
+        console.log('formData:: ', formData, 'ajaxUrl:: ', ajaxUrl);
+
+        $.ajax({
+          url: ajaxUrl,
+          type: 'POST',
+          data: formData,
+          success:function(data){
+            console.log('data: ', data);
+            editBrandPriceModel.modal('hide');
+            toastr["success"](data.success);
+            setTimeout(() => {
+              location.reload();
+            }, 1000);
+          },
+        });
+
       })
 
 

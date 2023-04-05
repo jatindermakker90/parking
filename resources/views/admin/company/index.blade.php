@@ -608,8 +608,8 @@ $(document).ready(function(){
               }
             },
             {
-              data: 'airport_id',
-              name: 'airport_id', 
+              data: 'airport.airport_name',
+              name: 'airport.airport_name', 
               orderable: true,
               render: function ( data, type, row) {
                 if(type === 'sort'){
@@ -620,8 +620,8 @@ $(document).ready(function(){
               }
             },
             {
-              data: 'terminal_id',
-              name: 'terminal_id', 
+              data: 'terminal.terminal_name',
+              name: 'terminal.terminal_name', 
               orderable: true,
               render: function ( data, type, row) {
                 if(type === 'sort'){
