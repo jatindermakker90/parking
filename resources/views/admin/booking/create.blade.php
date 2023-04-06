@@ -285,7 +285,9 @@
                     <label for="drop_off_terminal">Drop-off Terminal</label>
                     <select class="form-control select2" style="width: 100%;" name="drop_off_terminal" id="drop_off_terminal">
                       <option value="tbc">TBC</option>
-                      <option value="main_terminal">Main Terminal</option>
+                    @foreach ($terminal as $terminal_value)
+                      <option value="{{ $terminal_value->terminal_name }}">{{ $terminal_value->terminal_name }}</option>
+                    @endforeach
                     </select>
                   </div>
                 </div>
@@ -294,15 +296,17 @@
                     <label for="return_terminal">Return Terminal</label>
                     <select class="form-control select2" style="width: 100%;" name="return_terminal" id="return_terminal">
                       <option value="tbc">TBC</option>
-                      <option value="main_terminal">Main Terminal</option>
+                    @foreach ($terminal as $terminal_value)
+                      <option value="{{ $terminal_value->id }}">{{ $terminal_value->terminal_name }}</option>
+                    @endforeach
                     </select>
                   </div>
                 </div>
                 <div class="col-4">
                   <div class="form-group">
                     <label for="flight_number">Return Flight Number</label>
-                    <input type="text" class="form-control" placeholder="Enter flight number" name="flight_number" id="flight_number">
-                    <span class="validationFail">Please select flight number</span>
+                    <input type="text" class="form-control" placeholder="We need only flight number" name="flight_number" id="flight_number">
+                    <span class="validationFail">Please select flight number, If you have.</span>
                   </div>
                 </div>
               </div>

@@ -5,7 +5,7 @@ use App\Http\Controllers\WebController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Routing\ResponseFactory;
-
+use App\Models\AirportTerminal;
 use DataTables;
 use Validator;
 use App\Models\User;
@@ -192,7 +192,7 @@ class BookingsController extends WebController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Bookings $bookings, VehicleDetails $vehicle_details){
+    public function store(Request $request, Bookings $bookings, VehicleDetails $vehicle_details){        
         $validator = Validator::make($request->all(), [
             'select_airport'            => 'required'
         ]);
@@ -581,15 +581,10 @@ class BookingsController extends WebController
 
     public function searchCompanyList(Request $request)
     {   
-        // dd($request->all());
         $validator = Validator::make($request->all(), [
             'select_airport'            => 'required',
-            // 'dep_date'                  => 'required',
-            // 'dep_time'                  => 'required',
-            // 'return_date'               => 'required',
         ]);
-        
-        // dd($validator);
+
         if($validator->fails()){
            return redirect()->back()->withErrors($validator);      
         }
@@ -597,9 +592,6 @@ class BookingsController extends WebController
         $companies  = Company::where('company_status','!=',config('constant.STATUS.DELETED'))
                             ->where('airport_id', $request->select_airport)
                             ->get();
-
-                            // echo "<pre>";
-        // dd($companies);
         if($companies->count() > 0){
             foreach ($companies as $key => $value) {
                 if(!empty($value->company_types)){
@@ -613,17 +605,13 @@ class BookingsController extends WebController
                 }
 
             }
+            $terminal = AirportTerminal::where('airport_id', $request->select_airport)->get();
         }
-        // print_r($companies->toArray());
-        // die;
-        // $company_types = OfferType::whereIn('id', $companies->company_types)->get();
-        // $companies->merge(["company_types" => OfferType::whereIn('id', $companies->company_types)]);                     
-
-        // dd($companies);
         return view('admin.booking.create')->with([
             'title' =>"Booking Management", 
             "header" => "Add Booking",
             'airports' => $airports,
+            'terminal' => $terminal,
             'searchedCompanies' => $companies,
             'request' => $request->all()
         ]);
