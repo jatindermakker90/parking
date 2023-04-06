@@ -44,14 +44,14 @@ class ReviewController extends Controller
                          $delete_url  =  route('review_delete',[$row->review->id]);
                          $approve_url = route('review_approve',[$row->review->id]);
                          //$btn  = '<a href="'.$view_url.'" class="view btn btn-success btn-sm mr-2"><i class="fa fa-eye" aria-hidden="true"></i></a>';
-                         $btn = '<a href="'.$edit_url.'" class="edit btn btn-warning btn-sm mr-2" title="Edit"><i class="fa fa-edit" aria-hidden="true"></i></a>';
-                         $btn .= '<a href="'.$delete_url.'" class="delete btn btn-danger btn-sm mr-2 delete_record" title="Delete" data-type ="'.$row->airport_name.' Airport"><i class="fa fa-trash" aria-hidden="true"></i></a>';
+                         $btn = '<a href="'.$edit_url.'" class="edit btn btn-warning btn-sm mr-2" title="Edit">Edit</a>';
+                         $btn .= '<a href="'.$delete_url.'" class="delete btn btn-danger btn-sm mr-2 delete_record" title="Delete" data-type ="'.$row->airport_name.' Airport">Delete</a>';
                          if($row->review->is_approve == 0){
-                           $btn .= '<a href="'.$approve_url.'" class="approve btn btn-primary btn-sm mr-2" title="Approve" data-type ="Approve"><i class="fa fa-check" aria-hidden="true"></i></a>';
+                           $btn .= '<a href="'.$approve_url.'" class="approve btn btn-primary btn-sm mr-2" title="Approve" data-type ="Approve">Approve</a>';
                          } else {
-                           $btn .= '<a href="'.$approve_url.'" class="approve btn btn-primary btn-sm mr-2" title="Unapprove" data-type ="Unapprove"><i class="fa fa-ban" aria-hidden="true"></i></a>';
+                           $btn .= '<a href="'.$approve_url.'" class="approve btn btn-primary btn-sm mr-2" title="Unapprove" data-type ="Unapprove">Unapprove</a>';
                          }
-                         $btn .= '<a href="'.$view_url.'" class="review-details btn btn-success btn-sm mr-2" title="Review Details" data-type ="'.$row->airport_name.' Airport"><i class="fa fa-eye" aria-hidden="true"></i></a>';
+                         $btn .= '<a href="'.$view_url.'" class="review-details btn btn-success btn-sm mr-2" title="Review Details" data-type ="'.$row->airport_name.' Airport">Review Details</a>';
                          return $btn;
                   })
                   ->addColumn('stars', function($row){
@@ -139,9 +139,9 @@ class ReviewController extends Controller
                   ->addColumn('action', function($row){
                     $view_url    =  route('review_insert',[$row->ref_id]);
                     if($row->is_review_status == 1){
-                      $btn = '<button type="button" class="edit-booking btn btn-success btn-sm mr-2" title="Review Done"><i class="fa fa-check" aria-hidden="true"></i></button>';
+                      $btn = '<button type="button" class="edit-booking btn btn-success btn-sm mr-2" title="Review Done">Inserted</button>';
                     } else {
-                      $btn = '<a href="'.$view_url.'" class="edit-booking btn btn-danger btn-sm mr-2" title="Insert Review" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"><i class="fa fa-plus" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'" aria-hidden="true"></i></a>';
+                      $btn = '<a href="'.$view_url.'" class="edit-booking btn btn-danger btn-sm mr-2" title="Insert Review" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'">Insert Review</a>';
                     }
                       return $btn;
                   })
