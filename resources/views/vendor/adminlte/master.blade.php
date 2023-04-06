@@ -39,7 +39,8 @@
         <!-- CSS OF STAR RATING -->
         <link rel="stylesheet" href="{{ asset('vendor/barrating-css/fontawesome-stars.css') }}">
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
-        <!-- <link rel="stylesheet" href="fontawesome-stars.css"> -->
+        <!-- include summernote css/js -->
+        <link rel="stylesheet" href="{{ asset('vendor/summernote/summernote-bs5.css') }}">
 
 
     @else
@@ -157,6 +158,9 @@
             .loader > div:nth-child(15){
               animation-delay: 1.4s;
             }
+            .ck-editor__editable_inline{
+              height: 200px !important;
+            }
     </style>
 
 </head>
@@ -182,6 +186,9 @@
         <script src="{{ asset('assets/js/custom-editor.js') }}"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
         <script src="{{ asset('assets/js/jquery.barrating.min.js') }}"></script>
+        <script src="{{ asset('vendor/summernote/summernote-bs5.min.js') }}"></script>
+        <script src="{{ asset('vendor/custom-editor/ckeditor-v5.js') }}"></script>
+        <script src="{{ asset('vendor/custom-editor/custom-script.js') }}"></script>
         <script type="text/javascript">
             var base_url = "{{ env('WEB_URL') }}";
             toastr.options = {

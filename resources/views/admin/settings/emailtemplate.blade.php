@@ -32,31 +32,31 @@
                         <div class="col-sm-12">
                           <div class="form-group">
                             {{ Form::label('Client Email Template'); }}
-                            {{ Form::textarea('client_email',isset($template_data->client_email_template) ? $template_data->client_email_template : '',['class'=>'form-control m-t-xxs','rows' => 5]); }}
+                              <textarea class="client_email" name="client_email" id="client_email" style="display: none;">{{$template_data->client_email_template}}</textarea>
                           </div>
                         </div>
                         <div class="col-sm-12">
                           <div class="form-group">
                             {{ Form::label('Client Cancel Email Template'); }}
-                            {{ Form::textarea('client_cancel_email',isset($template_data->client_cancel_email_template) ? $template_data->client_cancel_email_template : '',['class'=>'form-control m-t-xxs','rows' => 5]); }}
+                              <textarea class="client_cancel_email" name="client_cancel_email" id="client_cancel_email" style="display: none;">{{$template_data->client_cancel_email_template}}</textarea>
                           </div>
                         </div>
                         <div class="col-sm-12">
                           <div class="form-group">
                             {{ Form::label('Company Confirmation Email Template'); }}
-                            {{ Form::textarea('company_confirm_email',isset($template_data->company_confirm_email_template) ? $template_data->company_confirm_email_template : '',['class'=>'form-control m-t-xxs','rows' => 5]); }}
+                              <textarea class="company_confirm_email_template" name="company_confirm_email" id="company_confirm_email_template" style="display: none;">{{$template_data->company_confirm_email_template}}</textarea>
                           </div>
                         </div>
                         <div class="col-sm-12">
                           <div class="form-group">
                             {{ Form::label('Company Cancel Email Template'); }}
-                            {{ Form::textarea('company_cancel_email',isset($template_data->company_cancel_email_template) ? $template_data->company_cancel_email_template : '',['class'=>'form-control m-t-xxs','rows' => 5]); }}
+                              <textarea class="company_cancel_email" name="company_cancel_email" id="company_cancel_email" style="display: none;">{{$template_data->company_cancel_email_template}}</textarea>
                           </div>
                         </div>
                         <div class="col-sm-12">
                           <div class="form-group">
                             {{ Form::label('Review Email Template'); }}
-                            {{ Form::textarea('review_email',isset($template_data->review_email_template) ? $template_data->review_email_template : '',['class'=>'form-control m-t-xxs','rows' => 5]); }}
+                              <textarea class="review_email" name="review_email" id="review_email" style="display: none;">{{$template_data->review_email_template}}</textarea>
                           </div>
                         </div>
                       </div>

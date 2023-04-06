@@ -316,33 +316,11 @@
                     <div class="tab-pane fade" id="term" role="tabpanel" aria-labelledby="term-tab">
                       {{ Form::open(['route' => 'settings.store', 'method' => 'post']) }}
                       <div class="row">
-                        <div class="col-sm-12">
+                        <div class="col-md-12">
                           <div class="form-group">
-                            <section class="">
-                                <div class="flex-box">
-                                    <div class="row">
-                                        <div class="col">
-                                            <button type="button" onclick="f1()" class="shadow-sm btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Bold Text">Bold</button>
-                                            <button type="button" onclick="f2()" class="shadow-sm btn btn-outline-success" data-toggle="tooltip" data-placement="top" title="Italic Text">Italic</button>
-                                            <button type="button" onclick="f3()" class="shadow-sm btn btn-outline-primary" data-toggle="tooltip" data-placement="top" title="Left Align"><i class="fas fa-align-left"></i></button>
-                                            <button type="button" onclick="f4()" class="btn shadow-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Center Align"><i class="fas fa-align-center"></i></button>
-                                            <button type="button" onclick="f5()" class="btn shadow-sm btn-outline-primary" data-toggle="tooltip" data-placement="top" title="Right Align"><i class="fas fa-align-right"></i></button>
-                                            <button type="button" onclick="f6()" class="btn shadow-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Uppercase Text">Upper Case</button>
-                                            <button type="button" onclick="f7()" class="btn shadow-sm btn-outline-primary" data-toggle="tooltip" data-placement="top" title="Lowercase Text"> Lower Case</button>
-                                            <button type="button" onclick="f8()" class="btn shadow-sm btn-outline-primary" data-toggle="tooltip" data-placement="top" title="Capitalize Text"> Capitalize</button>
-                                            <button type="button" onclick="f9()" class="btn shadow-sm btn-outline-primary side" data-toggle="tooltip" data-placement="top" title="Tooltip on top"> Clear Text</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <br>
-                                <div class="row">
-                                    <div class="col-md-12 col-sm-12">
-                                        <div class="flex-box">
-                                            {{ Form::textarea('term_condition_box',isset($term_condition_setting->term_condition_box) ? $term_condition_setting->term_condition_box : '',['class'=>'form-control input shadow','rows' => 10, 'cols' => 120,'id'=> 'textarea1']); }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </section>
+                             <textarea class="summernote" name="term_condition_box" id="term_condition_box" style="display: none;">{{$term_condition_setting->term_condition_box}}</textarea>
+                                <!-- <div id="term_condition_box">{{ $term_condition_setting->term_condition_box }}</div> -->
+                                <!-- {{ Form::textarea('term_condition_box',isset($term_condition_setting->term_condition_box) ? $term_condition_setting->term_condition_box : '',['class'=>'form-control input shadow','rows' => 10, 'cols' => 120,'id'=> 'textarea1']); }} -->
                           </div>
                         </div>
                       </div>
@@ -364,7 +342,14 @@
         </div>
 @stop
 @section('css')
-
 @stop
 @section('js')
+<script>
+  $(document).ready(function() {
+    $('#term_condition_box').summernote({
+      tabsize: 2,
+      height: 200,
+    });
+  });
+</script>
 @stop
