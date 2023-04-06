@@ -318,7 +318,7 @@
                       <div class="row">
                         <div class="col-md-12">
                           <div class="form-group">
-                             <textarea class="summernote" name="term_condition_box" id="term_condition_box" style="display: none;">{{$term_condition_setting->term_condition_box}}</textarea>
+                             <textarea class="summernote" name="term_condition_box" id="term_condition_box" style="display: none;">@if(isset($term_condition_setting->term_condition_box)) {{$term_condition_setting->term_condition_box}} @else '' @endif </textarea>
                                 <!-- <div id="term_condition_box">{{ $term_condition_setting->term_condition_box }}</div> -->
                                 <!-- {{ Form::textarea('term_condition_box',isset($term_condition_setting->term_condition_box) ? $term_condition_setting->term_condition_box : '',['class'=>'form-control input shadow','rows' => 10, 'cols' => 120,'id'=> 'textarea1']); }} -->
                           </div>
