@@ -32,31 +32,31 @@
                         <div class="col-sm-12">
                           <div class="form-group">
                             {{ Form::label('Client Email Template'); }}
-                              <textarea class="client_email" name="client_email" id="client_email" style="display: none;">{{$template_data->client_email_template}}</textarea>
+                              <textarea class="client_email" name="client_email" id="client_email" style="display: none;">@if(isset($template_data->client_email_template)) {{$template_data->client_email_template}} @else '' @endif</textarea>
                           </div>
                         </div>
                         <div class="col-sm-12">
                           <div class="form-group">
                             {{ Form::label('Client Cancel Email Template'); }}
-                              <textarea class="client_cancel_email" name="client_cancel_email" id="client_cancel_email" style="display: none;">{{$template_data->client_cancel_email_template}}</textarea>
+                              <textarea class="client_cancel_email" name="client_cancel_email" id="client_cancel_email" style="display: none;">@if(isset($template_data->client_cancel_email_template)) {{$template_data->client_cancel_email_template}} @else '' @endif</textarea>
                           </div>
                         </div>
                         <div class="col-sm-12">
                           <div class="form-group">
                             {{ Form::label('Company Confirmation Email Template'); }}
-                              <textarea class="company_confirm_email_template" name="company_confirm_email" id="company_confirm_email_template" style="display: none;">{{$template_data->company_confirm_email_template}}</textarea>
+                              <textarea class="company_confirm_email_template" name="company_confirm_email" id="company_confirm_email_template" style="display: none;">@if(isset($template_data->company_confirm_email_template)) {{$template_data->company_confirm_email_template}} @else '' @endif</textarea>
                           </div>
                         </div>
                         <div class="col-sm-12">
                           <div class="form-group">
                             {{ Form::label('Company Cancel Email Template'); }}
-                              <textarea class="company_cancel_email" name="company_cancel_email" id="company_cancel_email" style="display: none;">{{$template_data->company_cancel_email_template}}</textarea>
+                              <textarea class="company_cancel_email" name="company_cancel_email" id="company_cancel_email" style="display: none;">@if(isset($template_data->company_cancel_email_template)) {{$template_data->company_cancel_email_template}} @else '' @endif </textarea>
                           </div>
                         </div>
                         <div class="col-sm-12">
                           <div class="form-group">
                             {{ Form::label('Review Email Template'); }}
-                              <textarea class="review_email" name="review_email" id="review_email" style="display: none;">{{$template_data->review_email_template}}</textarea>
+                              <textarea class="review_email" name="review_email" id="review_email" style="display: none;">@if(isset($template_data->review_email_template)) {{$template_data->review_email_template}} @else '' @endif</textarea>
                           </div>
                         </div>
                       </div>
