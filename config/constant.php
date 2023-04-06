@@ -92,7 +92,7 @@ return [
       'TRASHED' => 2,
       'CANCEL' => 3
     ],
-    'PAYMENT_METHODS' => ['Paypal', 'Stripe', 'Stripe 3DS', 'WorldPay', 'Online Payment', 'Cash', 'Phone'],
+    'PAYMENT_METHODS' => ['Paypal', 'Card Payment'], //['Paypal', 'Stripe', 'Stripe 3DS', 'WorldPay', 'Online Payment', 'Cash', 'Phone'],
     'DEFAULT_OPERATION_TIME' => [
       'START' => '09:00',
       'END' => '19:00'
