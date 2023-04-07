@@ -19,6 +19,7 @@ use App\Models\AssignAdminToCompany;
 use App\Models\CloseCompany;
 use App\Models\CompaniesOperation;
 use App\Models\brandPrices as BrandPrices;
+use App\Models\CompanyBrandPrice;
 use DataTables;
 use Validator;
 
@@ -639,14 +640,41 @@ class CompanyController extends WebController
 
     }
 
-    public function manageCompanyPrice($id, Company $company)
+    public function manageCompanyPrice($id, Request $request, Company $company, CompanyBrandPrice $companyBrandPrice)
     {
+        
         $company_details = $company->where('id', $id)->first();
-        // dd($company_details->toArray());
+        if ($request->ajax()) {
+            $data_query = $companyBrandPrice->where('company_id', $id)->get();
+            return Datatables::of($data_query)
+                ->editColumn('month',function($row){
+                    return  config('constant.MONTHS')[$row->month];
+                })
+                ->addColumn('action', function($row){
+                    $edit_url    =  route('edit-company-brand-price',[$row->id]);
+                    if(!empty($row->brand_id)){
+                        $btn = '<button title="Edit" data-id="'.$row->id.'" data-url="'.$edit_url.'" class="edit-company-brand btn btn-warning btn-sm mr-2">Edit Brands</button>';
+                    }
+                    else{
+                        $btn = '<button title="Edit" data-id="'.$row->id.'" data-url="'.$edit_url.'" class="edit-company-brand btn btn-warning btn-sm mr-2">Apply Brands</button>';
+                    }
+                    return $btn;
+                })
+                ->addColumn('company_name', function($row) use ($company_details){
+                    return $company_details->company_title;
+                })
+                ->rawColumns([
+                    'month',
+                    'company_name', 
+                    'action', 
+                    ])
+                ->make(true);
+        }
 
         return view('admin.company.manage-price')->with([
             "title" => 'Manage Price',
-            "company_details" => $company_details
+            "company_details" => $company_details,
+            // "getCompanyBrands" => $getCompanyBrands
         ]);
     }
 
@@ -750,5 +778,35 @@ class CompanyController extends WebController
             $dayNo++;
         }
         return json_encode($newArr);
+    }
+
+    public function saveCompanyBrandPrice(Request $request, CompanyBrandPrice $companyBrandPrice)
+    {
+        $isExist = $companyBrandPrice->where([
+            'company_id'=>$request->id, 
+            'year'=> $request->year, 
+            'month'=>$request->month
+            ])->first();
+        if(!$isExist){
+            $savePrice = $companyBrandPrice->saveBrandPrice($request);
+            if($savePrice->id){
+                return redirect()->route('manage-company-price', [$request->id])->withSuccess('Price saved successfully');
+            }
+        }
+        else{
+            return redirect()->route('manage-company-price', [$request->id])->withwarning('Price alerady added for this month.');
+        }
+    }
+
+    public function editCompanyBrandPrice($id, CompanyBrandPrice $companyBrandPrice)
+    {
+        $getCompanyBrand = $companyBrandPrice->find($id);
+        // dd($getCompanyBrand->toArray());
+        return response()->view('admin.company.edit-company-brand', $getCompanyBrand, 200);
+    }
+
+    public function updateCompanyBrandPrice($id)
+    {
+        dd($id);
     }
 }
