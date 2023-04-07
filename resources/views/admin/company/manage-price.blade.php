@@ -29,10 +29,26 @@
 
   <div class="row">
     <div class="col-12">
+      @if( Session::has( 'success' ))
+        
+        <div class="alert alert-success alert-dismissible">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          <!-- <h5><i class="icon fas fa-check"></i> Alert!</h5> -->
+          {{ Session::get( 'success' ) }}
+        </div>
+      @elseif( Session::has( 'warning' ))
+        <div class="alert alert-warning alert-dismissible">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          <!-- <h5><i class="icon fas fa-exclamation-triangle"></i> Alert!</h5> -->
+          {{ Session::get( 'warning' ) }}
+        </div>
+      @endif
       <div class="card">
         <div class="card-body">
           <div class="mb-3">Add New Standard Price Plan</div>
-          <form action="#" method="post">
+          <form action="{{ route('save-company-brand-price') }}" method="post">
+            @csrf
+            <input type="hidden" name="id" value="{{ $company_details->id }}">
             <div class="row col-12" >
               <div class="col-5">
                 <div class="form-group">
@@ -46,7 +62,7 @@
               <div class="col-5">
                 <div class="form-group">
                   <label for="year">Select month</label>
-                  <select class="form-control select2" style="width: 100%;" name="year" id="year">  
+                  <select class="form-control select2" style="width: 100%;" name="month" id="month">  
                     @foreach (config('constant.MONTHS') as $key => $value)
                       <option value="{{ $key }}">{{ $value }}</option>
                     @endforeach
@@ -138,6 +154,26 @@
       </div>
     </div>
   </div>
+  <div class="modal fade" id="edit_company_brand_modal">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <form id="company_brand_modal_form" enctype="multipart/form-data">
+          <div class="modal-header">
+            <h4 class="modal-title">Edit Brand Price</h4>
+            <button type="button" class="close close-company-brand-button" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <!-- body content here -->
+          </div>
+          <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-primary w-100" id="company_brand_update_submit_button">Update</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 @stop
 @section('css')
 <style>
@@ -162,6 +198,66 @@
       let editBrandPriceModel = $('#edit_brand_price_modal').modal({
         keyboard: false
       })
+      let editCompanyBrandModel = $('#edit_company_brand_modal').modal({
+        keyboard: false
+      })
+      
+      let company_brand_price_column = [
+        {
+          data: 'year',
+          name: 'year', 
+          orderable: true,
+          render: function ( data, type, row) {
+            if(type === 'sort'){
+                return data;
+            }else{
+                return  data??'NA';
+            }
+          }
+        },
+        {
+          data: 'month',
+          name: 'month', 
+          orderable: true,
+          render: function ( data, type, row) {
+            if(type === 'sort'){
+                return data;
+            }else{
+                return  data??'NA';
+            }
+          }
+        },
+        {
+          data: 'company_name',
+          name: 'company_name', 
+          orderable: true,
+          render: function ( data, type, row) {
+            if(type === 'sort'){
+                return data;
+            }else{
+                return  data??'NA';
+            }
+          }
+        },
+        {
+          data: 'brand_id',
+          name: 'brand_id', 
+          orderable: true,
+          render: function ( data, type, row) {
+            if(type === 'sort'){
+                return data;
+            }else{
+                return  data??'NA';
+            }
+          }
+        },
+        {
+          data: 'action',
+          name: 'action', 
+          orderable: false,
+        
+        },
+      ]
       let band_price_column = [
               {
                 data: 'edit',
@@ -209,6 +305,21 @@
           },)
           
       }
+      $('#data_collection').DataTable({
+        "paging"      : false,
+        "pageLength"  : 100,
+        "lengthChange": false,
+        "searching"   : false,
+        "ordering"    : true,
+        "info"        : true,
+        "autoWidth"   : true,
+        "responsive"  : true,
+        "processing"  : true,
+        "serverSide"  : true,
+        "scrollX"     : false,
+        "ajax"        :"{{ route('manage-company-price',[$company_details->id]) }}",
+        "columns"     : company_brand_price_column
+      });
       $('#data_collection_2').DataTable({
         "paging"      : false,
         "pageLength"  : 100,
@@ -227,6 +338,9 @@
 
       $(document).on('click', '.close-brand-price-button', (e)=>{
         editBrandPriceModel.modal('hide');
+      })
+      $(document).on('click', '.close-company-brand-button', (e)=>{
+        editCompanyBrandModel.modal('hide');
       })
       $(document).on('click', '.edit-brand-price', (e)=>{
         let url = $(e.target).data('url');
@@ -265,7 +379,22 @@
         });
 
       })
+      $(document).on('click', '.edit-company-brand', (e)=>{
+        let companyBrandId = $(e.target).data('id');
+        let ajaxUrl = $(e.target).data('url');
 
+        console.log('companyBrandId:: ', companyBrandId, 'ajaxUrl:: ', ajaxUrl);
+        $.ajax({
+          url: ajaxUrl,
+          type: 'POST',
+          // data: formData,
+          success:function(data){
+            console.log('data: ', data);
+            $('#edit_company_brand_modal').find('.modal-body').html(data)
+            editCompanyBrandModel.modal('show');
+          },
+        });
+      })
 
     });
 </script>
