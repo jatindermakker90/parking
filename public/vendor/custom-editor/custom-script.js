@@ -50,7 +50,7 @@ CKEDITOR.ClassicEditor.create(document.getElementById("client_email"), {
                { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
            ]
        },
-       placeholder: 'Welcome to GK Editor',
+       placeholder: 'Welcome',
        fontFamily: {
            options: [
                'default',
@@ -183,7 +183,7 @@ CKEDITOR.ClassicEditor.create(document.getElementById("client_cancel_email"), {
                 { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
             ]
         },
-        placeholder: 'Welcome to GK Editor',
+        placeholder: 'Welcome',
         fontFamily: {
             options: [
                 'default',
@@ -316,7 +316,7 @@ CKEDITOR.ClassicEditor.create(document.getElementById("company_confirm_email_tem
                 { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
             ]
         },
-        placeholder: 'Welcome to GK Editor',
+        placeholder: 'Welcome',
         fontFamily: {
             options: [
                 'default',
@@ -448,7 +448,7 @@ CKEDITOR.ClassicEditor.create(document.getElementById("company_confirm_email_tem
                     { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
                 ]
             },
-            placeholder: 'Welcome to GK Editor',
+            placeholder: 'Welcome',
             fontFamily: {
                 options: [
                     'default',
@@ -580,7 +580,7 @@ CKEDITOR.ClassicEditor.create(document.getElementById("company_confirm_email_tem
                         { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
                     ]
                 },
-                placeholder: 'Welcome to GK Editor',
+                placeholder: 'Welcome',
                 fontFamily: {
                     options: [
                         'default',

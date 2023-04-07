@@ -74,7 +74,7 @@
                 </div>
                 <div class="form-group {{ $errors->has('company_email') ? 'has-error' : '' }}">
                     <label for="company_email">Company Email</label>
-                    <input type="email" class="form-control" placeholder="Enter Email" 
+                    <input type="email" class="form-control" placeholder="Enter Email"
                         name="company_email" id="company_email" value="{{ $company->company_email }}">
                     @if ($errors->first('company_email'))
                         <span class="form-error">{{ $errors->first('company_email') }}</span>
@@ -82,7 +82,7 @@
                 </div>
                 <div class="form-group {{ $errors->has('company_phone') ? 'has-error' : '' }}">
                     <label for="company_phone">Contact No</label>
-                    <input type="number" class="form-control" placeholder="Enter Contact Number" 
+                    <input type="number" class="form-control" placeholder="Enter Contact Number"
                         name="company_phone" id="company_phone" value="{{ $company->company_phone }}">
                     @if ($errors->first('company_phone'))
                         <span class="form-error">{{ $errors->first('company_phone') }}</span>
@@ -90,7 +90,7 @@
                 </div>
                 <div class="form-group {{ $errors->has('sequence') ? 'has-error' : '' }}">
                     <label for="sequence">Sequence</label>
-                    <input type="number" class="form-control" placeholder="Enter Sequence" 
+                    <input type="number" class="form-control" placeholder="Enter Sequence"
                         name="sequence" id="sequence" value="{{ $company->company_sequence }}">
                     @if ($errors->first('sequence'))
                         <span class="form-error">{{ $errors->first('sequence') }}</span>
@@ -98,7 +98,7 @@
                 </div>
                 <div class="form-group {{ $errors->has('comission') ? 'has-error' : '' }}">
                     <label for="comission">Comission</label>
-                    <input type="number" class="form-control" placeholder="Enter Comission" 
+                    <input type="number" class="form-control" placeholder="Enter Comission"
                         name="comission" id="comission" value="{{ $company->company_commission }}">
                     @if ($errors->first('comission'))
                         <span class="form-error">{{ $errors->first('comission') }}</span>
@@ -114,7 +114,7 @@
                 </div>
                 <div class="form-group {{ $errors->has('mins_sms') ? 'has-error' : '' }}">
                     <label for="mins_sms">Mins Sms</label>
-                    <input type="number" class="form-control" placeholder="Enter Mins Sms" 
+                    <input type="number" class="form-control" placeholder="Enter Mins Sms"
                         name="mins_sms" id="mins_sms" value="{{ $company->min_sms }}">
                     @if ($errors->first('mins_sms'))
                         <span class="form-error">{{ $errors->first('mins_sms') }}</span>
@@ -124,7 +124,7 @@
               <div class="col-sm-6">
                   <div class="form-group {{ $errors->has('daily_bookings') ? 'has-error' : '' }}">
                       <label for="daily_bookings">Daily Bookings</label>
-                      <input type="number" class="form-control" placeholder="Enter Daily Bookings" 
+                      <input type="number" class="form-control" placeholder="Enter Daily Bookings"
                           name="daily_bookings" id="daily_bookings" value="{{ $company->daily_bookings }}">
                       @if ($errors->first('daily_bookings'))
                           <span class="form-error">{{ $errors->first('daily_bookings') }}</span>
@@ -150,7 +150,7 @@
                   </div>
                   <div class="form-group {{ $errors->has('sku_id') ? 'has-error' : '' }}">
                       <label for="sku_id">SKU ID</label>
-                      <input type="text" class="form-control" placeholder="Enter SKU ID" 
+                      <input type="text" class="form-control" placeholder="Enter SKU ID"
                           name="sku_id" id="sku_id" value="{{ $company->company_sku_id }}">
                       @if ($errors->first('sku_id'))
                           <span class="form-error">{{ $errors->first('sku_id') }}</span>
@@ -193,7 +193,7 @@
                       @if ($errors->first('price_plan'))
                           <span class="form-error">{{ $errors->first('price_plan') }}</span>
                       @endif
-                  </div>  
+                  </div>
 
                   <div id="dropzoneItemTemplate" style="display: none;">
                       <div class="col h-100 mb-5">
@@ -345,31 +345,31 @@
             <div class="row col-12 mb-3">
               <div class="col-12">
                 <label class="control-label">Parking Procedure - Email</label><br>
-                <textarea rows="5" style="width:100%;" name="parking_procedure_email" id="parking_procedure_email">{{ $company->parking_procedure_email }}</textarea>
+                <textarea class="summernote" name="parking_procedure_email" id="parking_procedure_email" style="display: none;">{{ $company->parking_procedure_email }}</textarea>
               </div>
             </div>
             <div class="row col-12 mb-3">
               <div class="col-12">
                 <label class="control-label">Drop Off Procedure</label><br>
-                <textarea rows="5" style="width:100%;" name="drop_off_procedure" id="drop_off_procedure">{{ $company->drop_off_procedure }}</textarea>
+                <textarea class="summernote" name="drop_off_procedure" id="drop_off_procedure" style="display: none;">{{ $company->drop_off_procedure }}</textarea>
               </div>
             </div>
             <div class="row col-12 mb-3">
               <div class="col-12">
                 <label class="control-label">Return Procedure</label><br>
-                <textarea rows="5" style="width:100%;" name="return_procedure" id="return_procedure">{{ $company->return_procedure }}</textarea>
+                <textarea class="summernote" name="return_procedure" id="return_procedure" style="display: none;">{{ $company->return_procedure }}</textarea>
               </div>
             </div>
             <div class="row col-12 mb-3">
               <div class="col-12">
                 <label class="control-label">Company Overview</label><br>
-                <textarea rows="5" style="width:100%;" name="company_overview" id="company_overview">{{ $company->company_overview }}</textarea>
+                <textarea class="summernote" name="company_overview" id="company_overview" style="display: none;">{{ $company->company_overview }}</textarea>
               </div>
             </div>
             <div class="row col-12 mb-3">
               <div class="col-12">
                 <label class="control-label">Short Description - Choices Page</label><br>
-                <textarea rows="5" style="width:100%;" name="short_description" id="short_description">{{ $company->short_description }}</textarea>
+                  <textarea class="summernote" name="short_description" id="short_description" style="display: none;">{{ $company->short_description }}</textarea>
               </div>
             </div>
           <div class="card-footer">
@@ -456,7 +456,12 @@ $(document).ready(function(){
         $("#submitButton").val('Submit application');
       },
     });
-
+    $("#parking_procedure_email,#drop_off_procedure,#return_procedure,#short_description,#company_overview").each(function(){
+      $(this).summernote({
+          tabsize: 2,
+          height: 200,
+        });
+    });
 });
 </script>
 @stop
