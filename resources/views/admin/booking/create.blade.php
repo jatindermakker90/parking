@@ -283,23 +283,27 @@
                 <div class="col-4">
                   <div class="form-group">
                     <label for="drop_off_terminal">Drop-off Terminal</label>
+                    @if(isset($terminal))  
                     <select class="form-control select2" style="width: 100%;" name="drop_off_terminal" id="drop_off_terminal">
                       <option value="tbc">TBC</option>
                     @foreach ($terminal as $terminal_value)
                       <option value="{{ $terminal_value->terminal_name }}">{{ $terminal_value->terminal_name }}</option>
                     @endforeach
                     </select>
+                    @endif
                   </div>
                 </div>
                 <div class="col-4">
                   <div class="form-group">
                     <label for="return_terminal">Return Terminal</label>
+                    @if(isset($terminal))  
                     <select class="form-control select2" style="width: 100%;" name="return_terminal" id="return_terminal">
                       <option value="tbc">TBC</option>
                     @foreach ($terminal as $terminal_value)
                       <option value="{{ $terminal_value->id }}">{{ $terminal_value->terminal_name }}</option>
                     @endforeach
                     </select>
+                    @endif
                   </div>
                 </div>
                 <div class="col-4">
