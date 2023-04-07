@@ -159,7 +159,7 @@
       <div class="modal-content">
         <form id="company_brand_modal_form" enctype="multipart/form-data">
           <div class="modal-header">
-            <h4 class="modal-title">Edit Brand Price</h4>
+            <h4 class="modal-title">Price Brands</h4>
             <button type="button" class="close close-company-brand-button" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -387,11 +387,29 @@
         $.ajax({
           url: ajaxUrl,
           type: 'POST',
-          // data: formData,
           success:function(data){
-            console.log('data: ', data);
             $('#edit_company_brand_modal').find('.modal-body').html(data)
             editCompanyBrandModel.modal('show');
+            $('.select2').select2();
+          },
+        });
+      })
+      $(document).on('click', '#company_brand_update_submit_button', (e)=>{
+        e.preventDefault();
+        let ajaxUrl = "{{ route('update-company-brand-price') }}";
+        let form = $("#company_brand_modal_form");
+        let formData = $(form).serialize();
+
+        console.log('ajaxUrl:: ', ajaxUrl, 'formData: ', formData);
+        $.ajax({
+          url: ajaxUrl,
+          type: 'POST',
+          data: formData,
+          success:function(data){
+            console.log('data: ', data);
+            // $('#edit_company_brand_modal').find('.modal-body').html(data)
+            // editCompanyBrandModel.modal('show');
+            // $('.select2').select2();
           },
         });
       })

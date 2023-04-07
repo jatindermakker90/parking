@@ -126,7 +126,7 @@ Route::prefix('admin')->group(function () {
         Route::post('company/update-brand-prices',              [CompanyController::class, 'updateBrandPrice'])->name('update-brand-prices');
         Route::post('company/save-company-brand-price',         [CompanyController::class, 'saveCompanyBrandPrice'])->name('save-company-brand-price');
         Route::post('company/edit-company-brand-price/{id}',    [CompanyController::class, 'editCompanyBrandPrice'])->name('edit-company-brand-price');
-        Route::post('company/update-company-brand-price/{id}',  [CompanyController::class, 'updateCompanyBrandPrice'])->name('update-company-brand-price');
+        Route::post('company/update-company-brand-price',  [CompanyController::class, 'updateCompanyBrandPrice'])->name('update-company-brand-price');
 
         //======================================================================//
        //============================ Country ===============================//

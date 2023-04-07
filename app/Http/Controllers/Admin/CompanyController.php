@@ -798,15 +798,24 @@ class CompanyController extends WebController
         }
     }
 
-    public function editCompanyBrandPrice($id, CompanyBrandPrice $companyBrandPrice)
+    public function editCompanyBrandPrice($id, CompanyBrandPrice $companyBrandPrice, BrandPrices $brandPrices)
     {
+        $gettAllBands = $brandPrices->select('id', 'brand')->where('status', config('constant.STATUS.ACTIVE'))->get();
         $getCompanyBrand = $companyBrandPrice->find($id);
+        if(!empty($getCompanyBrand->brand_id)){
+            $getCompanyBrand->is_exist = true;
+        }
+        else{
+            $getCompanyBrand->is_exist = false;
+        }
+        // dd($getCompanyBrand->toArray());
+        $getCompanyBrand->gettAllBands = $gettAllBands;
         // dd($getCompanyBrand->toArray());
         return response()->view('admin.company.edit-company-brand', $getCompanyBrand, 200);
     }
 
-    public function updateCompanyBrandPrice($id)
+    public function updateCompanyBrandPrice(Request $request)
     {
-        dd($id);
+        dd($request->all());
     }
 }
