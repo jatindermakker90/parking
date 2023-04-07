@@ -166,6 +166,7 @@ class CompanyController extends WebController
      */
     public function show($user_id,Request $request)
     {
+
         $user_id = 1;
         $user            = Company::where('id',$user_id)->first();
         $countries       = Countries::where('status','!=',config('constant.STATUS.DELETED'))->get();
