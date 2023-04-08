@@ -25,7 +25,7 @@
                       <input type="text" class="form-control float-right" placeholder="Type your keywords here" id ="search">
                     </div>
                 </div>
-            </div>            
+            </div>
             <div class="col-sm-2">
                 <div class="form-group">
                     <label for="search_select_airport">Airport:</label>
@@ -33,7 +33,7 @@
                     <option value="">All</option>
                     @foreach ($airports as $airport_key => $airport_value)
                       <option value="{{ $airport_value->id }}">{{ $airport_value->airport_name }}</option>
-                    @endforeach               
+                    @endforeach
                 </select>
                 </div>
             </div>
@@ -44,7 +44,7 @@
                     <option value="">All</option>
                     @foreach ($companies ?? '' as $company_key => $company_value)
                       <option value="{{ $company_value->id }}">{{ $company_value->company_title }}</option>
-                    @endforeach               
+                    @endforeach
                 </select>
                 </div>
             </div>
@@ -55,7 +55,7 @@
                     <option value="">All</option>
                     <option value="">Booking Date</option>
                     <option value="">Departure Date</option>
-                    <option value="">Arrival Date</option>                               
+                    <option value="">Arrival Date</option>
                 </select>
                 </div>
             </div>
@@ -66,7 +66,7 @@
                       <option value="">Status</option>
                       @foreach(config('constant.BOOKING_STATUS') as $status_key => $status_value)
                         <option value="{{$status_value}}">{{$status_key}}</option>
-                      @endforeach                           
+                      @endforeach
                     </select>
                 </div>
             </div>
@@ -90,8 +90,8 @@
   <div class="col-12">
     <div class="card">
       <div class="card-header">
-        <h3 class="card-title">{{ $header }}</h3>                 
-      </div>            
+        <h3 class="card-title">{{ $header }}</h3>
+      </div>
       <!-- /.card-header -->
       <div class="card-body">
         <table id="data_collection" class="table table-bordered table-striped">
@@ -110,8 +110,8 @@
             <th>CNC</th>
             <th>SMS</th>
             <th>DIS</th>
-            <th>Status</th>                    
-            <th>Action</th>                    
+            <th>Status</th>
+            <th>Action</th>
           </tr>
           </thead>
           <tbody>
@@ -151,6 +151,28 @@
   </div>
 </div>
 
+<div class="modal fade" id="modal-default1">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Edit Booking</h4>
+        <button type="button" class="close close-view-booking-button" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div>
+                <div id="booking-view-modal">
+
+                </div>
+                <!-- insert html from ajax -->
+                <button type="button" class="btn btn-primary w-100" id="close-view-booking-button">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="modal fade" id="change_status_modal">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -162,7 +184,7 @@
           </button>
         </div>
         <div class="modal-body">
-          
+
         </div>
         <div class="modal-footer justify-content-between">
             <button type="button" class="btn btn-primary w-100" id="change_booking_status_button">Update</button>
@@ -207,8 +229,8 @@
 <script src="{{ asset('vendor/pdfmake/vfs_fonts.js') }}"></script>
 <script src="{{ asset('vendor/datatables-buttons/js/buttons.html5.min.js') }}"></script>
 <script src="{{ asset('vendor/datatables-buttons/js/buttons.print.min.js') }}"></script>
-<script src="{{ asset('vendor/datatables-buttons/js/buttons.colVis.min.js') }}"></script> 
-<script src="{{ asset('vendor/bootstrap-switch/js/bootstrap-switch.min.js') }}"></script> 
+<script src="{{ asset('vendor/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+<script src="{{ asset('vendor/bootstrap-switch/js/bootstrap-switch.min.js') }}"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script type="text/javascript">
 function closeStatusModel(){
@@ -251,7 +273,7 @@ $(document).ready(function(){
       //  searchData(start.format('Y-M-D'),end.format('Y-M-D'),$('#search').val());
        searchData();
   });
-  
+
   $(document).on('click','.cancelBtn',function(){
        $("#reservationtime").val("");
        start_time = "";
@@ -305,14 +327,14 @@ $(document).ready(function(){
       "ajax"        :"{{ url('admin/bookings') }}?start_date="+start_date+"&end_date="+end_date+"&search_text="+search_text+"&selected_airport="+selectedAirport+"&selected_company="+selectedCompany+"&booking_status="+bookingStatus,
       "columns"     : [
             // {
-            //   data: 'DT_RowIndex',         
-            //   name: 'DT_RowIndex',   
+            //   data: 'DT_RowIndex',
+            //   name: 'DT_RowIndex',
             //   searchable: false,
             //   orderable: false
             // },
             {
               data: 'ref_id',
-              name: 'ref_id', 
+              name: 'ref_id',
               orderable: true,
               render: function ( data, type, row) {
                 if(type === 'sort'){
@@ -324,7 +346,7 @@ $(document).ready(function(){
             },
             {
               data: 'customer',
-              name: 'customer', 
+              name: 'customer',
               orderable: true,
               render: function ( data, type, row) {
                 if(type === 'sort'){
@@ -336,7 +358,7 @@ $(document).ready(function(){
             },
             {
               data: 'company.company_title',
-              name: 'company.company_title', 
+              name: 'company.company_title',
               orderable: true,
               render: function ( data, type, row) {
                 if(type === 'sort'){
@@ -348,7 +370,7 @@ $(document).ready(function(){
             },
             {
               data: 'mobile',
-              name: 'mobile', 
+              name: 'mobile',
               orderable: true,
               render: function ( data, type, row) {
                 if(type === 'sort'){
@@ -360,7 +382,7 @@ $(document).ready(function(){
             },
             {
               data: 'created_at',
-              name: 'created_at', 
+              name: 'created_at',
               orderable: true,
               render: function ( data, type, row) {
                 if(type === 'sort'){
@@ -372,7 +394,7 @@ $(document).ready(function(){
             },
             {
               data: 'dep_date_time',
-              name: 'dep_date_time', 
+              name: 'dep_date_time',
               orderable: true,
               render: function ( data, type, row) {
                 if(type === 'sort'){
@@ -384,7 +406,7 @@ $(document).ready(function(){
             },
             {
               data: 'return_date_time',
-              name: 'return_date_time', 
+              name: 'return_date_time',
               orderable: true,
               render: function ( data, type, row) {
                 if(type === 'sort'){
@@ -396,7 +418,7 @@ $(document).ready(function(){
             },
             {
               data: 'total_days',
-              name: 'total_days', 
+              name: 'total_days',
               orderable: true,
               render: function ( data, type, row) {
                 if(type === 'sort'){
@@ -408,7 +430,7 @@ $(document).ready(function(){
             },
             {
               data: 'vehicle.vehicle_reg',
-              name: 'vehicle.vehicle_reg', 
+              name: 'vehicle.vehicle_reg',
               orderable: true,
               render: function ( data, type, row) {
                 if(type === 'sort'){
@@ -420,7 +442,7 @@ $(document).ready(function(){
             },
             {
               data: 'price',
-              name: 'price', 
+              name: 'price',
               orderable: true,
               render: function ( data, type, row) {
                 if(type === 'sort'){
@@ -432,7 +454,7 @@ $(document).ready(function(){
             },
             {
               data: 'cancellation_cover',
-              name: 'cancellation_cover', 
+              name: 'cancellation_cover',
               orderable: true,
               render: function ( data, type, row) {
                 if(type === 'sort'){
@@ -444,7 +466,7 @@ $(document).ready(function(){
             },
             {
               data: 'sms_confirmation',
-              name: 'sms_confirmation', 
+              name: 'sms_confirmation',
               orderable: true,
               render: function ( data, type, row) {
                 if(type === 'sort'){
@@ -456,7 +478,7 @@ $(document).ready(function(){
             },
             {
               data: 'discount_code',
-              name: 'discount_code', 
+              name: 'discount_code',
               orderable: true,
               render: function ( data, type, row) {
                 if(type === 'sort'){
@@ -468,7 +490,7 @@ $(document).ready(function(){
             },
             {
               data: 'status',
-              name: 'status', 
+              name: 'status',
               orderable: true,
               render: function ( data, type, row) {
                 if(type === 'sort'){
@@ -480,7 +502,7 @@ $(document).ready(function(){
             },
             {
               data: 'action',
-              name: 'action', 
+              name: 'action',
               orderable: false,
               searchable: false
             },
@@ -508,9 +530,9 @@ $(document).ready(function(){
             error: function(XHR, textStatus, errorThrown) {
                 // console.log(XHR.responseJSON.message);
                 if(XHR.responseJSON.message != undefined){
-                    toastr["error"](XHR.responseJSON.message);  
+                    toastr["error"](XHR.responseJSON.message);
                 }else{
-                    toastr["error"](errorThrown);  
+                    toastr["error"](errorThrown);
                 }
             }
             });
@@ -518,7 +540,7 @@ $(document).ready(function(){
 
         $(document).on('click', '#edit_booking_button', (e)=>{
             e.preventDefault();
-            let validationPass = true; 
+            let validationPass = true;
             let excludeElementValidation = [
                 'discount_code', 'cancellation_cover', 'sms_confirmation', 'city_town',
                 'address', 'country', 'postcode', 'flight_number', 'special_notes', 'admin_charge',
@@ -529,7 +551,7 @@ $(document).ready(function(){
 
             let formDataArray = editBookingForm.serializeArray();
             let formDataSerialize = editBookingForm.serialize();
-            
+
             console.log('formDataArray:: ', formDataArray, 'ajaxUrl:: ', ajaxUrl);
 
             formDataArray.forEach(element => {
@@ -592,20 +614,20 @@ $(document).ready(function(){
                                 window.location.href = response.path;
                               }, 1000);
                             }
-                          },         
+                          },
                           error: function(XHR, textStatus, errorThrown) {
                           // console.log(XHR.responseJSON.message);
                           if(XHR.responseJSON.message != undefined){
-                              toastr["error"](XHR.responseJSON.message);  
+                              toastr["error"](XHR.responseJSON.message);
                           }else{
-                              toastr["error"](errorThrown);  
+                              toastr["error"](errorThrown);
                           }
                           }
                       });
                     }
                   }
                 });
-                
+
             }
         });
 
@@ -627,9 +649,9 @@ $(document).ready(function(){
               error: function(XHR, textStatus, errorThrown) {
                   // console.log(XHR.responseJSON.message);
                   if(XHR.responseJSON.message != undefined){
-                      toastr["error"](XHR.responseJSON.message);  
+                      toastr["error"](XHR.responseJSON.message);
                   }else{
-                      toastr["error"](errorThrown);  
+                      toastr["error"](errorThrown);
                   }
               }
             });
@@ -643,17 +665,25 @@ $(document).ready(function(){
           $("#modal-default").modal('hide');
         })
 
+        $(document).on('click', '.close-view-booking-button', (e)=>{
+          $("#modal-default1").modal('hide');
+        })
+
+        $(document).on('click', '#close-view-booking-button', (e)=>{
+          $("#modal-default1").modal('hide');
+        })
+
         $(document).on('click', '#change_booking_status_button', (e)=>{
           e.preventDefault();
           console.log(`update status`)
-  
+
           let ajaxUrl = "{{ route('change-booking-status') }}";
           let formDataSerialize = $("#change_booking_status_form").serialize();
           ajaxUrl = ajaxUrl +'?'+formDataSerialize
           console.log('formDataSerialize:: ', formDataSerialize, 'ajaxUrl:: ', ajaxUrl);
-        
 
-          
+
+
           $("#change_booking_status_form").find("#change_booking_status_button").attr('disabled', true)
           $.ajax({
             type:"POST",
@@ -668,17 +698,43 @@ $(document).ready(function(){
                   window.location.href = response.path;
                 }, 1000);
               }
-            },         
+            },
             error: function(XHR, textStatus, errorThrown) {
               // console.log(XHR.responseJSON.message);
               if(XHR.responseJSON.message != undefined){
-                  toastr["error"](XHR.responseJSON.message);  
+                  toastr["error"](XHR.responseJSON.message);
               }else{
-                  toastr["error"](errorThrown);  
+                  toastr["error"](errorThrown);
               }
             }
           });
         })
+        $(document).on('click','.view-booking',function(e){
+            e.preventDefault();
+            let model = $("#modal-default1");
+            let booking_id = $(e.target).attr('data-id');
+            let booking_ref_id = $(e.target).attr('data-ref-id');
+            $("#modal-default1").find('.modal-title').text(`Booking Details - ${booking_ref_id}`);
+            let ajaxUrl = "{{ route('get-booking-view') }}";
+            ajaxUrl = `${ajaxUrl}?id=${booking_id}`;
+            // return;
+            $.ajax({
+            type:"GET",
+            url: ajaxUrl,
+            success: function(response){
+                $("#booking-view-modal").html(response)
+                model.modal('show');
+            },
+            error: function(XHR, textStatus, errorThrown) {
+                // console.log(XHR.responseJSON.message);
+                if(XHR.responseJSON.message != undefined){
+                    toastr["error"](XHR.responseJSON.message);
+                }else{
+                    toastr["error"](errorThrown);
+                }
+            }
+            });
+        });
     });
 </script>
 @stop
