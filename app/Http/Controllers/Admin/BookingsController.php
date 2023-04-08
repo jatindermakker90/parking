@@ -97,10 +97,10 @@ class BookingsController extends WebController
                         return date("d-m-Y", strtotime($row->created_at));;
                     })
                     ->editColumn('dep_date_time', function($row){
-                        return date("d-m-Y H:i", strtotime($row->dep_date_time));;
+                        return date("d-m-Y H:i", strtotime($row->updated_dep_date_time));;
                     })
                     ->editColumn('return_date_time', function($row){
-                        return date("d-m-Y H:i", strtotime($row->return_date_time));;
+                        return date("d-m-Y H:i", strtotime($row->updated_return_date_time));;
                     })
                     ->addColumn('customer', function($row){
                         return $full_name = $row->first_name.' '.$row->last_name;
