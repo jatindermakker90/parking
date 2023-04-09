@@ -173,6 +173,26 @@
   </div>
 </div>
 
+<div class="modal fade" id="modal-default2">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Edit Booking</h4>
+        <button type="button" class="close close-cancel-booking-button" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div>
+                <div id="booking-cancel-modal">
+
+                </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="modal fade" id="change_status_modal">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -673,6 +693,10 @@ $(document).ready(function(){
           $("#modal-default1").modal('hide');
         })
 
+        $(document).on('click', '.close-cancel-booking-button', (e)=>{
+          $("#modal-default2").modal('hide');
+        })
+
         $(document).on('click', '#change_booking_status_button', (e)=>{
           e.preventDefault();
           console.log(`update status`)
@@ -723,6 +747,32 @@ $(document).ready(function(){
             url: ajaxUrl,
             success: function(response){
                 $("#booking-view-modal").html(response)
+                model.modal('show');
+            },
+            error: function(XHR, textStatus, errorThrown) {
+                // console.log(XHR.responseJSON.message);
+                if(XHR.responseJSON.message != undefined){
+                    toastr["error"](XHR.responseJSON.message);
+                }else{
+                    toastr["error"](errorThrown);
+                }
+            }
+            });
+        });
+        $(document).on('click','.cancel-booking',function(e){
+            e.preventDefault();
+            let model = $("#modal-default2");
+            let booking_id = $(e.target).attr('data-id');
+            let booking_ref_id = $(e.target).attr('data-ref-id');
+            $("#modal-default2").find('.modal-title').text(`Booking Details - ${booking_ref_id}`);
+            let ajaxUrl = "{{ route('get-booking-cancel') }}";
+            ajaxUrl = `${ajaxUrl}?id=${booking_id}`;
+            // return;
+            $.ajax({
+            type:"GET",
+            url: ajaxUrl,
+            success: function(response){
+                $("#booking-cancel-modal").html(response)
                 model.modal('show');
             },
             error: function(XHR, textStatus, errorThrown) {

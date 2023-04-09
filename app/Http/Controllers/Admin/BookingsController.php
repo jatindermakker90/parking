@@ -145,8 +145,15 @@ class BookingsController extends WebController
                         }
                     })
                     ->addColumn('action', function($row){
-                            $btn = '<button type="button" class="view-booking btn btn-primary btn-sm mr-2" title="View Booking" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'">View</button>';
-                            $btn .= '<button type="button" class="edit-booking btn btn-warning btn-sm mr-2" title="Edit Booking" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'">Edit</button>';
+                            $btn = '<button type="button" class="view-booking btn btn-primary btn-sm mr-2" title="View Booking" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"><i class="fa fa-eye" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'" aria-hidden="true"></i></button>';
+                            $btn .= '<button type="button" class="edit-booking btn btn-warning btn-sm mr-2" title="Edit Booking" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"><i class="fa fa-edit" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'" aria-hidden="true"></i></button>';
+                            if($row->booking_status == 1) {
+                              $btn .= '<button type="button" class="cancel-booking btn btn-danger btn-sm mr-2" title="Cancel Booking" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"><i class="fa fa-times" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'" aria-hidden="true"></i></button>';
+                            } else {
+                              $btn .= '<button type="button" class="cancel-booking btn btn-success btn-sm mr-2" title="Approve Booking" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"><i class="fa fa-times" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'" aria-hidden="true"></i></button>';
+                            }
+                            $btn .= '<button type="button" class="delete-booking btn btn-danger btn-sm mr-2" title="Delete Booking" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"><i class="fa fa-trash" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'" aria-hidden="true"></i></button>';
+                            $btn .= '<button type="button" class="sms-send btn btn-danger btn-sm mr-2" title="SMS Not Sent" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"><i class="fas fa-sms" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'" aria-hidden="true"></i></button>';
                             // $btn = '<button type="button" class="edit-booking btn btn-warning btn-sm mr-2" title="Edit Booking" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"><i class="fa fa-edit" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'" aria-hidden="true"></i></button>';
                             // $btn .= '<button class="delete btn btn-danger btn-sm mr-2 delete_record" title="Delete Booking" data-type =""><i class="fa fa-trash" aria-hidden="true"></i></button>';
                             // $btn .= '<button type="button" class="btn btn-danger btn-sm mr-2 change-status" title="Change Status" data-id="'.$row->id.'"><i class="fas fa-stream" data-id="'.$row->id.'"></i></button>';
@@ -681,6 +688,62 @@ class BookingsController extends WebController
 
         // dd($get_booking->toArray());
         return response()->view('admin.booking.view', $get_booking, 200);
+    }
+
+    public function getBookingCancel(Request $request, Bookings $booking, Company $company)
+    {
+        if(!$request->id){
+            return response()->json([
+                'code' => 203,
+                'success' => 'Booking id is required !'
+            ]);
+        }
+
+        $get_booking = $booking->with(['vehicle', 'company', 'airport'])->find($request->id);
+        $get_booking->booking_id = $request->id;
+        $all_companies = $company->where('airport_id', $get_booking->airport_id)->where('company_status','!=',config('constant.STATUS.DELETED'))->get();
+        $get_booking->all_companies = $all_companies;
+        // dd($all_companies->toArray());
+
+        $get_booking->dep_date = date("Y-m-d", strtotime($get_booking->dep_date_time));
+        $get_booking->dep_time = date("H:i", strtotime($get_booking->dep_date_time));
+        $get_booking->updated_dep_date = date("Y-m-d", strtotime($get_booking->updated_dep_date_time));
+        $get_booking->updated_dep_time = date("H:i", strtotime($get_booking->updated_dep_date_time));
+
+        $get_booking->return_date = date("Y-m-d", strtotime($get_booking->return_date_time));
+        $get_booking->return_time = date("H:i", strtotime($get_booking->return_date_time));
+        $get_booking->updated_return_date = date("Y-m-d", strtotime($get_booking->updated_return_date_time));
+        $get_booking->updated_return_time = date("H:i", strtotime($get_booking->updated_return_date_time));
+
+        // dd($get_booking->toArray());
+        return response()->view('admin.booking.cancel', $get_booking, 200);
+    }
+
+    public function postBookingCancel(Request $request){
+      $formtype = $request->formtype;
+      if(!$request->booking_id){
+          return response()->json([
+              'code' => 203,
+              'success' => 'Booking id is required !'
+          ]);
+      }
+      if($formtype == 'cancel'){
+        $booking = Bookings::where('id',$request->booking_id)->first();
+        $booking->booking_status = '3';
+        $booking->special_notes = $request->notes;
+        if($booking->save()){
+          return redirect()->route('bookings.index');
+        }
+      }
+
+      if($formtype == 'approve'){
+        $booking = Bookings::where('id',$request->booking_id)->first();
+        $booking->booking_status = '1';
+        $booking->special_notes = $request->notes;
+        if($booking->save()){
+          return redirect()->route('bookings.index');
+        }
+      }
     }
 
     public function getChangeStatusHtml(Request $request, Bookings $booking)

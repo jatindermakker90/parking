@@ -95,6 +95,8 @@ Route::prefix('admin')->group(function () {
         Route::get('booking/get-change-status-html',            [BookingsController::class, 'getChangeStatusHtml'])->name('get-change-status-html');
         Route::post('booking/change-booking-status',            [BookingsController::class, 'getChangeBookingStatus'])->name('change-booking-status');
         Route::get('booking/get-booking-view',                [BookingsController::class, 'getBookingView'])->name('get-booking-view');
+        Route::get('booking/get-cancel-view',                [BookingsController::class, 'getBookingCancel'])->name('get-booking-cancel');
+        Route::post('booking/booking-cancel',                [BookingsController::class, 'postBookingCancel'])->name('post-booking-cancel');
 
         Route::resource('invoices',                            InvoiceController::class);
         Route::get('change/invoice/status/{table_id}',           [InvoiceController::class, 'changeInvoiceStatus'])->name('change_invoice_status');
