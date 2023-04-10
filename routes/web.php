@@ -98,6 +98,8 @@ Route::prefix('admin')->group(function () {
         Route::get('booking/get-cancel-view',                [BookingsController::class, 'getBookingCancel'])->name('get-booking-cancel');
         Route::post('booking/booking-cancel',                [BookingsController::class, 'postBookingCancel'])->name('post-booking-cancel');
         Route::get('delete/booking/{ref}',                    [BookingsController::class,'bookingdelete'])->name('booking_delete');
+        Route::get('booking/get-sms-view',                [BookingsController::class, 'getBookingSMS'])->name('get-booking-sms');
+        Route::post('booking/send-sms',                [BookingsController::class, 'postBookingSMS'])->name('post-booking-sms');
 
         Route::resource('invoices',                            InvoiceController::class);
         Route::get('change/invoice/status/{table_id}',           [InvoiceController::class, 'changeInvoiceStatus'])->name('change_invoice_status');

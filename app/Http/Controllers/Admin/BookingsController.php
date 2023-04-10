@@ -154,7 +154,11 @@ class BookingsController extends WebController
                               $btn .= '<button type="button" class="cancel-booking btn btn-success btn-sm mr-2" title="Approve Booking" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"><i class="fa fa-times" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'" aria-hidden="true"></i></button>';
                             }
                             $btn .= '<a href="'.$delete_url.'" class="delete btn btn-danger btn-sm mr-2 delete-booking" title="Delete Booking" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"><i class="fa fa-trash" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'" aria-hidden="true"></i></a>';
-                            $btn .= '<button type="button" class="sms-send btn btn-danger btn-sm mr-2" title="SMS Not Sent" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"><i class="fas fa-sms" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'" aria-hidden="true"></i></button>';
+                            if($row->sms_status == 1){
+                              $btn .= '<button type="button" class="sms-send btn btn-success btn-sm mr-2" title="SMS Sent" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"><i class="fas fa-sms" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'" aria-hidden="true"></i></button>';
+                            } else {
+                                $btn .= '<button type="button" class="sms-send btn btn-danger btn-sm mr-2" title="SMS Not Sent" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"><i class="fas fa-sms" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'" aria-hidden="true"></i></button>';
+                            }
                             //$btn .= '<button type="button" class="btn btn-danger btn-sm mr-2 change-status" title="Change Status" data-id="'.$row->id.'">Status</button>';
                             return $btn;
                     })
@@ -756,6 +760,38 @@ class BookingsController extends WebController
           return redirect()->back();
         }
       }
+    }
+
+    public function getBookingSMS(Request $request, Bookings $booking, Company $company)
+    {
+        if(!$request->id){
+            return response()->json([
+                'code' => 203,
+                'success' => 'Booking id is required !'
+            ]);
+        }
+
+        $get_booking = $booking->with(['vehicle', 'company', 'airport'])->find($request->id);
+        $get_booking->booking_id = $request->id;
+        $all_companies = $company->where('airport_id', $get_booking->airport_id)->where('company_status','!=',config('constant.STATUS.DELETED'))->get();
+        $get_booking->all_companies = $all_companies;
+
+        // dd($get_booking->toArray());
+        return response()->view('admin.booking.smsview', $get_booking, 200);
+    }
+
+    public function postBookingSMS(Request $request){
+      if(!$request->booking_id){
+          return response()->json([
+              'code' => 203,
+              'success' => 'Booking id is required !'
+          ]);
+      }
+        $booking = Bookings::where('id',$request->booking_id)->first();
+        $booking->sms_status = '1';
+        if($booking->save()){
+          return redirect()->route('bookings.index');
+        }
     }
 
     public function getChangeStatusHtml(Request $request, Bookings $booking)
