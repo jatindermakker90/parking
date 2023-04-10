@@ -145,6 +145,7 @@ class BookingsController extends WebController
                         }
                     })
                     ->addColumn('action', function($row){
+                            $delete_url  =  route('booking_delete',[$row->id]);
                             $btn = '<button type="button" class="view-booking btn btn-primary btn-sm mr-2" title="View Booking" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"><i class="fa fa-eye" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'" aria-hidden="true"></i></button>';
                             $btn .= '<button type="button" class="edit-booking btn btn-warning btn-sm mr-2" title="Edit Booking" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"><i class="fa fa-edit" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'" aria-hidden="true"></i></button>';
                             if($row->booking_status == 1) {
@@ -152,12 +153,9 @@ class BookingsController extends WebController
                             } else {
                               $btn .= '<button type="button" class="cancel-booking btn btn-success btn-sm mr-2" title="Approve Booking" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"><i class="fa fa-times" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'" aria-hidden="true"></i></button>';
                             }
-                            $btn .= '<button type="button" class="delete-booking btn btn-danger btn-sm mr-2" title="Delete Booking" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"><i class="fa fa-trash" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'" aria-hidden="true"></i></button>';
+                            $btn .= '<a href="'.$delete_url.'" class="delete btn btn-danger btn-sm mr-2 delete-booking" title="Delete Booking" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"><i class="fa fa-trash" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'" aria-hidden="true"></i></a>';
                             $btn .= '<button type="button" class="sms-send btn btn-danger btn-sm mr-2" title="SMS Not Sent" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"><i class="fas fa-sms" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'" aria-hidden="true"></i></button>';
-                            // $btn = '<button type="button" class="edit-booking btn btn-warning btn-sm mr-2" title="Edit Booking" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"><i class="fa fa-edit" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'" aria-hidden="true"></i></button>';
-                            // $btn .= '<button class="delete btn btn-danger btn-sm mr-2 delete_record" title="Delete Booking" data-type =""><i class="fa fa-trash" aria-hidden="true"></i></button>';
-                            // $btn .= '<button type="button" class="btn btn-danger btn-sm mr-2 change-status" title="Change Status" data-id="'.$row->id.'"><i class="fas fa-stream" data-id="'.$row->id.'"></i></button>';
-                            $btn .= '<button type="button" class="btn btn-danger btn-sm mr-2 change-status" title="Change Status" data-id="'.$row->id.'">Status</button>';
+                            //$btn .= '<button type="button" class="btn btn-danger btn-sm mr-2 change-status" title="Change Status" data-id="'.$row->id.'">Status</button>';
                             return $btn;
                     })
                     ->rawColumns([
@@ -742,6 +740,20 @@ class BookingsController extends WebController
         $booking->special_notes = $request->notes;
         if($booking->save()){
           return redirect()->route('bookings.index');
+        }
+      }
+    }
+
+    public function bookingdelete($booking_id, Request $request){
+      $booking = Bookings::where('id',$booking_id)->first();
+      if($request->ajax()){
+        if($booking){
+          $booking->booking_status = '2';
+          if($booking->save()){
+            //return redirect()->route('bookings.index');
+          }
+        } else {
+          return redirect()->back();
         }
       }
     }
