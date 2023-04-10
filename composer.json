@@ -35,7 +35,8 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
-            "app/Http/DeveloperScript.php"
+            "app/Http/DeveloperScript.php",
+            "app/Http/helpers.php"
         ] 
     },
     "autoload-dev": {

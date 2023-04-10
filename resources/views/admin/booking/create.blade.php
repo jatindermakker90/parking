@@ -28,6 +28,7 @@
           <div class="col-12">
             <div class="form-row">          
               <input type="hidden" name="_token" value="{{ csrf_token() }}">
+              <input type="hidden" name="no_of_days_booking" id="no_of_days_booking">
               <div class="form-group {{ $errors->has('select_airport') ? 'has-error' : '' }} col-4">
                 <label for="name">Select Airport</label>
                 <select class="form-control select2" name ="select_airport" id ="select_airport">
@@ -131,6 +132,8 @@
                   @endforeach
                 </ul>
               @endif
+              <div class="company-price">&pound; <span>{{ $searchedCompanies_value->final_booking_price ?? 0 }}</span></div>
+              <input type="hidden" id="price_with_admin_charge" value="{{ $searchedCompanies_value->price_with_admin_charge ?? '' }}">
             </div>
           </div>
           <div class="card-footer">
@@ -383,6 +386,12 @@
   .isValid{
     display: none;
   }
+  .company-price{
+    color: #fecd08;
+    font-size: 32px;
+    font-weight: 500;
+    text-align: center;
+  }
 </style>
 @stop
 @section('js')
@@ -501,6 +510,7 @@ $(document).ready(function(){
             return;
           }
           else{
+            $("#filter-form").find('#no_of_days_booking').val(response.diffInDays);
             console.log(`form submit`)
             $("#filter-form").submit();
           }
@@ -510,8 +520,9 @@ $(document).ready(function(){
   })
 
 
-  $(document).on('click','.book-now',function(){
+  $(document).on('click','.book-now',function(e){
     var company_id    = $(this).data('id');
+    
     let filterEle = $("#filter-form");
     filterEle.find(`input, select, button`).attr('disabled', true);
     let airport = filterEle.find("#select_airport option:selected").text();
@@ -523,7 +534,13 @@ $(document).ready(function(){
     let returnfTime = filterEle.find("#return_time").val();
 
     let companyTab = $(this).parents('.card');
-
+    
+    let companyPrice = $(companyTab).find(".company-price span").text().trim('');
+    let companyPriceWithAdminChareg = $(companyTab).find("#price_with_admin_charge").val().trim('');
+    let bookingCharge = "{{ config('constant.BOOKING.BOOKING_CHARGE') }}";
+    
+    console.log('companyPrice:: ', companyPrice);
+    
     let imageUrl = companyTab.find('img').attr('src');
     let companyTitle = companyTab.find('.card-header .company-title').text();
     
@@ -535,8 +552,8 @@ $(document).ready(function(){
     bookingSummaryEle.find(".drop-off").text(`DROP OFF : ${dropOffDate} at ${dropOffTime}`);
     bookingSummaryEle.find(".pick-up").text(`PICK UP : ${returnDate} at ${returnfTime}`);
     bookingSummaryEle.find(".airport").text(`AIRPORT : ${airport}`);
-    bookingSummaryEle.find(".booking-charge").text('BOOKING CHARGE : 1.95');
-    bookingSummaryEle.find(".total-charge").text('TOTAL : 94.49');
+    bookingSummaryEle.find(".booking-charge").text(`BOOKING CHARGE : ${bookingCharge}`);
+    bookingSummaryEle.find(".total-charge").text(`TOTAL : ${companyPriceWithAdminChareg}`);
 
     bookingForm.find(`input[name='company_id']`).val(company_id);
     bookingForm.find(`input[name='select_airport']`).val(filterEle.find('#select_airport').val());

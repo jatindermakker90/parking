@@ -48,13 +48,16 @@ class BookingsController extends WebController
 
         $to = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $request->start_date);
         $from = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $request->end_date);
+        $diffInDays = $from->diffInDays($to);
+        $plusOne = 1;
+        // $diffInDays = $from->diff($to);
 
         $data = $from->greaterThanOrEqualTo($to);
-        $message = 'Booking has been saved successfully !';
         return response()->json([
                 'code' => 200,
-                'messsage' => 'Data getsuccesfully !',
-                'data' => $data
+                'messsage' => 'Data get succesfully !',
+                'data' => $data,
+                'diffInDays' => $diffInDays + $plusOne
             ]);
     }
     /**
@@ -591,19 +594,42 @@ class BookingsController extends WebController
 
     public function searchCompanyList(Request $request)
     {
+        // dd($request->all());
         $validator = Validator::make($request->all(), [
-            'select_airport'            => 'required',
+            'select_airport'   => 'required',
         ]);
 
         if($validator->fails()){
            return redirect()->back()->withErrors($validator);
         }
+        
+        $dep_date = $request->dep_date.' '.$request->dep_time.':00';
+        $return_date = $request->return_date.' '.$request->return_time.':00';
+
+        $to = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $dep_date);
+        $from = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $return_date);
+
+        $month = $to->month;
+        $year = $to->year; 
+
         $airports = Airport::where('airport_status',config('constant.STATUS.ACTIVE'))->get();
+
         $companies  = Company::where('company_status','!=',config('constant.STATUS.DELETED'))
                             ->where('airport_id', $request->select_airport)
                             ->get();
+
         if($companies->count() > 0){
             foreach ($companies as $key => $value) {
+
+                $value->final_booking_price = getCompanyPriceByDays([
+                                                'company' => $value, 
+                                                'no_of_days_booking' => $request->no_of_days_booking,
+                                                'month' => $month,
+                                                'year' => $year
+                ]);
+                // $booking_price = $booking_price + config('constant.BOOKING.BOOKING_CHARGE');
+                // $value->booking_admin_charge = config('constant.BOOKING.BOOKING_CHARGE');
+                $value->price_with_admin_charge = $value->final_booking_price + config('constant.BOOKING.BOOKING_CHARGE');
                 if(!empty($value->company_types)){
                     $value->company_types =  CompanyType::wherein('id', explode(",", $value->company_types))->get();
                 }
@@ -617,6 +643,7 @@ class BookingsController extends WebController
             }
             $terminal = AirportTerminal::where('airport_id', $request->select_airport)->get();
         }
+        // dd($companies->toArray());
         return view('admin.booking.create')->with([
             'title' =>"Booking Management",
             "header" => "Add Booking",

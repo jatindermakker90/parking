@@ -86,6 +86,7 @@ return [
     'BOOKING' => [
       'CANCELLATION_CHARGE' => '2.00',
       'SMS_CONFIRMATION' => '.99',
+      'BOOKING_CHARGE' => 1.95,
     ],
     'BOOKING_STATUS' => [
       'ACTIVE' => 1,
