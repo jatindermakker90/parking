@@ -650,6 +650,26 @@ class CompanyController extends WebController
                 ->editColumn('month',function($row){
                     return  config('constant.MONTHS')[$row->month];
                 })
+                ->editColumn('brand_id',function($row){
+                    if($row->brand_id){
+                        $arr = [];
+                        array_push($arr, json_decode($row->brand_id, true) );
+                        $string = '';
+                        for ($i = 1; $i <= 31; $i++){
+                            $ele = $arr[0]['day_'.$i];
+                            $string .= '<a href="javascript:void(0)" class="btn btn-info btn-xs dys company-brands">'.$ele['name'].'</a>';
+                        }
+                        $string .= '';
+                        
+                        
+
+                        return $string;
+                    }
+                    else{
+                        return null;
+                    }
+                    // return  config('constant.MONTHS')[$row->month];
+                })
                 ->addColumn('action', function($row){
                     $edit_url    =  route('edit-company-brand-price',[$row->id]);
                     if(!empty($row->brand_id)){
@@ -666,6 +686,7 @@ class CompanyController extends WebController
                 ->rawColumns([
                     'month',
                     'company_name', 
+                    'brand_id',
                     'action', 
                     ])
                 ->make(true);
@@ -804,18 +825,51 @@ class CompanyController extends WebController
         $getCompanyBrand = $companyBrandPrice->find($id);
         if(!empty($getCompanyBrand->brand_id)){
             $getCompanyBrand->is_exist = true;
+            $getCompanyBrand->brand_id = json_decode($getCompanyBrand->brand_id, true);
         }
         else{
             $getCompanyBrand->is_exist = false;
         }
-        // dd($getCompanyBrand->toArray());
         $getCompanyBrand->gettAllBands = $gettAllBands;
-        // dd($getCompanyBrand->toArray());
         return response()->view('admin.company.edit-company-brand', $getCompanyBrand, 200);
     }
 
-    public function updateCompanyBrandPrice(Request $request)
+    public function updateCompanyBrandPrice(Request $request, CompanyBrandPrice $companyBrandPrice, BrandPrices $brandPrices)
     {
-        dd($request->all());
+        if(empty($request->id)){
+            return response()->json([
+                'code' => 203,
+                'success' => 'Id is required !',
+                'data' => []
+            ]);
+        }
+        
+        $new_price_brands = [];
+        foreach ($request->days_price as $key => $value) {
+            $getBrandName = $brandPrices->find($value['id'])->brand;
+            $new_price_brands[$key] = [
+                'id' => $value['id'],
+                'name' => $getBrandName
+            ];
+        }
+        $request->merge(['days_price' => $new_price_brands]);
+        $update_company_brands = $companyBrandPrice->updateCompanyBrands($request);
+
+        if(!empty($update_company_brands->id)){
+            return response()->json([
+                'code' => 200,
+                'success' => 'Brand price is updated !',
+                'data' => $update_company_brands
+            ]);
+        }
+        else{
+            return response()->json([
+                'code' => 400,
+                'success' => 'Brand price is not updated !',
+                'data' => []
+            ]);
+        }
+
+        
     }
 }

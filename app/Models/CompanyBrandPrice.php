@@ -27,4 +27,16 @@ class CompanyBrandPrice extends Model
 
         return $model;
     }
+
+
+    public function updateCompanyBrands($data)
+    {
+        $model = CompanyBrandPrice::where('id',$data->id)->first() ?? new CompanyBrandPrice();
+        if($data->has('days_price') && $data->days_price){
+            $model->brand_id = json_encode($data->days_price);
+        }
+        $model->save();
+
+        return $model;
+    }
 }

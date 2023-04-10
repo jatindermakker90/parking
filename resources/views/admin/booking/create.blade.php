@@ -584,7 +584,7 @@ $(document).ready(function(){
     e.preventDefault();
 
     let validationPass = true; 
-    let excludeElementValidation = ['discount_code', 'cancellation_cover', 'sms_confirmation']
+    let excludeElementValidation = ['discount_code', 'cancellation_cover', 'sms_confirmation', 'flight_number']
     let form = $(this);
 
     let getFinalPrice = $("#booking-summary .total-charge").text().slice(8);

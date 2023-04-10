@@ -97,7 +97,7 @@
               <th>Company</th>
               <th>
                 @for ($i = 1; $i <= 31; $i++)
-                  <a href="#" class="btn btn-info btn-xs dys">{{ $i }}</a>
+                  <a href="javascript:void(0)" class="btn btn-info btn-xs dys">{{ $i }}</a>
                 @endfor
               </th>
               <th>Action</th>
@@ -184,6 +184,9 @@
     input[type=checkbox] {
       transform: scale(1.5);
     }
+    a.btn.btn-info.btn-xs.dys.company-brands {
+      margin-right: 3.3px;
+    }
 
 </style>
 @stop
@@ -242,7 +245,7 @@
         {
           data: 'brand_id',
           name: 'brand_id', 
-          orderable: true,
+          orderable: false,
           render: function ( data, type, row) {
             if(type === 'sort'){
                 return data;
@@ -407,9 +410,11 @@
           data: formData,
           success:function(data){
             console.log('data: ', data);
-            // $('#edit_company_brand_modal').find('.modal-body').html(data)
-            // editCompanyBrandModel.modal('show');
-            // $('.select2').select2();
+            toastr["success"](data.success);
+            editCompanyBrandModel.modal('hide');
+            setTimeout(() => {
+              location.reload();
+            }, 1000);
           },
         });
       })
