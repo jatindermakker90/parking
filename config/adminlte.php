@@ -291,7 +291,7 @@ return [
      'menu' => [
         [
             'text'        => 'Dashboard',
-            'url'         => 'admin/bookings',
+            'url'         => 'admin',
             'icon'        => 'fas fa-tv',
         ],
         [
