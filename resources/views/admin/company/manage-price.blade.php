@@ -184,7 +184,7 @@
     input[type=checkbox] {
       transform: scale(1.5);
     }
-    a.btn.btn-info.btn-xs.dys.company-brands {
+    a.company-brands {
       margin-right: 3.3px;
     }
 

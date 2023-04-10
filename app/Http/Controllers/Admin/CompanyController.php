@@ -657,7 +657,7 @@ class CompanyController extends WebController
                         $string = '';
                         for ($i = 1; $i <= 31; $i++){
                             $ele = $arr[0]['day_'.$i];
-                            $string .= '<a href="javascript:void(0)" class="btn btn-info btn-xs dys company-brands">'.$ele['name'].'</a>';
+                            $string .= '<a href="javascript:void(0)" class="btn btn-danger btn-xs dys company-brands">'.$ele['name'].'</a>';
                         }
                         $string .= '';
                         
