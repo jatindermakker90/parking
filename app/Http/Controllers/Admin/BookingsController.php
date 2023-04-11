@@ -147,6 +147,13 @@ class BookingsController extends WebController
                             return '<button type="button" title="Payment Status" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;"><i class="fa fa-times"></i></button>';
                         }
                     })
+                    ->editColumn('email', function($row){
+                        if($row->email_status){
+                            return '<button type="button" title="Email" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;"><i class="fa fa-check"></i></button>';
+                        }else{
+                            return '<button type="button" title="Email" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;"><i class="fa fa-times"></i></button>';
+                        }
+                    })
                     ->addColumn('action', function($row){
                             $delete_url  =  route('booking_delete',[$row->id]);
                             $btn = '<button type="button" class="view-booking btn btn-primary btn-sm mr-2" title="View Booking" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"><i class="fa fa-eye" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'" aria-hidden="true"></i></button>';
@@ -172,6 +179,7 @@ class BookingsController extends WebController
                         'cancellation_cover',
                         'sms_confirmation',
                         'discount_code',
+                        'email',
                         'status'
                     ])
                     ->make(true);
@@ -604,7 +612,7 @@ class BookingsController extends WebController
         if($validator->fails()){
            return redirect()->back()->withErrors($validator);
         }
-        
+
         $dep_date = $request->dep_date.' '.$request->dep_time.':00';
         $return_date = $request->return_date.' '.$request->return_time.':00';
 
@@ -612,7 +620,7 @@ class BookingsController extends WebController
         $from = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $return_date);
 
         $month = $to->month;
-        $year = $to->year; 
+        $year = $to->year;
 
         $airports = Airport::where('airport_status',config('constant.STATUS.ACTIVE'))->get();
 
@@ -624,7 +632,7 @@ class BookingsController extends WebController
             foreach ($companies as $key => $value) {
 
                 $value->final_booking_price = getCompanyPriceByDays([
-                                                'company' => $value, 
+                                                'company' => $value,
                                                 'no_of_days_booking' => $request->no_of_days_booking,
                                                 'month' => $month,
                                                 'year' => $year
