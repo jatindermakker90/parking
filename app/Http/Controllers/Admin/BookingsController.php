@@ -847,4 +847,62 @@ class BookingsController extends WebController
 
     }
 
+    public function getUpdatedPrice(Request $request, Company $company, Bookings $booking)
+    {
+        // dd($request->all());
+        $response = [];
+        $booking_details = $booking->find($request->booking_id);
+        $company_details = $company->find($request->company);
+
+        $dep_date = $request->dep_date.' '.$request->dep_time.':00';
+        $return_date = $request->return_date.' '.$request->return_time_new.':00';
+
+        $dep_date_updated = $request->updated_dep_date.' '.$request->updated_dep_time.':00';
+        $return_date_updated = $request->updated_return_date.' '.$request->updated_return_time.':00';
+
+        // dd($dep_date, $return_date);
+
+        $to = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $dep_date);
+        $from = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $return_date);
+
+        $to_updated = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $dep_date_updated);
+        $from_updated = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $return_date_updated);
+
+        $diffInDays = $from->diffInDays($to);
+        $diffInDaysUpdated = $from_updated->diffInDays($to_updated);
+        $plusOne = 1;
+        $diffInDaysUpdated = $diffInDaysUpdated + $plusOne;
+        $month = $to_updated->month;
+        $year = $to_updated->year; 
+
+        $get_price = getCompanyPriceByDays([
+                    'company' => $company_details, 
+                    'no_of_days_booking' => $diffInDaysUpdated,
+                    'month' => $month,
+                    'year' => $year
+                ]);
+        if($booking_details->cancellation_cover){
+            $get_price = $get_price + config('constant.BOOKING.CANCELLATION_CHARGE');
+        }
+        if($booking_details->sms_confirmation){
+            $get_price = $get_price + config('constant.BOOKING.SMS_CONFIRMATION');
+        }
+        $get_price = $get_price + config('constant.BOOKING.BOOKING_CHARGE');
+
+        $diff_in_price = $get_price - $booking_details->price;
+
+        $response['old_price'] = $booking_details->price;
+        $response['new_price'] = $get_price;
+        $response['diff_price'] = $diff_in_price;
+        $response['no_of_days'] = $diffInDaysUpdated;
+        $response['admin_charge'] = config('constant.BOOKING.BOOKING_CHARGE');
+        // dd($response);
+        // dd($get_price, $diff_in_price, $company_details->toArray(), $booking_details->toArray());
+        return response()->json([
+                'code' => 200,
+                'success' => true,
+                'data' => $response
+            ]);
+    }
+
 }

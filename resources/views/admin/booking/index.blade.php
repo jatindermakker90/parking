@@ -252,6 +252,7 @@
 <script src="{{ asset('vendor/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 <script src="{{ asset('vendor/bootstrap-switch/js/bootstrap-switch.min.js') }}"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
 <script type="text/javascript">
 function closeStatusModel(){
   $("#change_status_modal").modal('show');
@@ -327,13 +328,13 @@ $(document).ready(function(){
   })
 
   function searchData(){
-     let start_date      = start_time ?? '';
-     let end_date        = end_time ?? '';
-     let search_text     = search ?? '';
-     let selectedAirport = selected_airport ?? '';
-     let selectedCompany = selected_company ?? '';
-     let bookingStatus   = booking_status ?? '';
-     $('#data_collection').DataTable({
+    let start_date      = start_time ?? '';
+    let end_date        = end_time ?? '';
+    let search_text     = search ?? '';
+    let selectedAirport = selected_airport ?? '';
+    let selectedCompany = selected_company ?? '';
+    let bookingStatus   = booking_status ?? '';
+    $('#data_collection').DataTable({
       "paging"      : true,
       "pageLength"  : 10,
       "lengthChange": false,
@@ -346,504 +347,554 @@ $(document).ready(function(){
       "serverSide"  : true,
       "ajax"        :"{{ url('admin/bookings') }}?start_date="+start_date+"&end_date="+end_date+"&search_text="+search_text+"&selected_airport="+selectedAirport+"&selected_company="+selectedCompany+"&booking_status="+bookingStatus,
       "columns"     : [
-            // {
-            //   data: 'DT_RowIndex',
-            //   name: 'DT_RowIndex',
-            //   searchable: false,
-            //   orderable: false
-            // },
-            {
-              data: 'ref_id',
-              name: 'ref_id',
-              orderable: true,
-              render: function ( data, type, row) {
-                if(type === 'sort'){
-                    return data;
-                }else{
-                    return  data??'NA';
-                }
-              }
-            },
-            {
-              data: 'customer',
-              name: 'customer',
-              orderable: true,
-              render: function ( data, type, row) {
-                if(type === 'sort'){
-                    return data;
-                }else{
-                    return  data??'NA';
-                }
-              }
-            },
-            {
-              data: 'company.company_title',
-              name: 'company.company_title',
-              orderable: true,
-              render: function ( data, type, row) {
-                if(type === 'sort'){
-                    return data;
-                }else{
-                    return  data??'NA';
-                }
-              }
-            },
-            {
-              data: 'mobile',
-              name: 'mobile',
-              orderable: true,
-              render: function ( data, type, row) {
-                if(type === 'sort'){
-                    return data;
-                }else{
-                    return  data??'NA';
-                }
-              }
-            },
-            {
-              data: 'created_at',
-              name: 'created_at',
-              orderable: true,
-              render: function ( data, type, row) {
-                if(type === 'sort'){
-                    return data;
-                }else{
-                    return  data??'NA';
-                }
-              }
-            },
-            {
-              data: 'dep_date_time',
-              name: 'dep_date_time',
-              orderable: true,
-              render: function ( data, type, row) {
-                if(type === 'sort'){
-                    return data;
-                }else{
-                    return  data??'NA';
-                }
-              }
-            },
-            {
-              data: 'return_date_time',
-              name: 'return_date_time',
-              orderable: true,
-              render: function ( data, type, row) {
-                if(type === 'sort'){
-                    return data;
-                }else{
-                    return  data??'NA';
-                }
-              }
-            },
-            {
-              data: 'total_days',
-              name: 'total_days',
-              orderable: true,
-              render: function ( data, type, row) {
-                if(type === 'sort'){
-                    return data;
-                }else{
-                    return  data??'NA';
-                }
-              }
-            },
-            {
-              data: 'vehicle.vehicle_reg',
-              name: 'vehicle.vehicle_reg',
-              orderable: true,
-              render: function ( data, type, row) {
-                if(type === 'sort'){
-                    return data;
-                }else{
-                    return  data??'NA';
-                }
-              }
-            },
-            {
-              data: 'price',
-              name: 'price',
-              orderable: true,
-              render: function ( data, type, row) {
-                if(type === 'sort'){
-                    return data;
-                }else{
-                    return  data??'NA';
-                }
-              }
-            },
-            {
-              data: 'cancellation_cover',
-              name: 'cancellation_cover',
-              orderable: true,
-              render: function ( data, type, row) {
-                if(type === 'sort'){
-                    return data;
-                }else{
-                    return  data??'NA';
-                }
-              }
-            },
-            {
-              data: 'sms_confirmation',
-              name: 'sms_confirmation',
-              orderable: true,
-              render: function ( data, type, row) {
-                if(type === 'sort'){
-                    return data;
-                }else{
-                    return  data??'NA';
-                }
-              }
-            },
-            {
-              data: 'discount_code',
-              name: 'discount_code',
-              orderable: true,
-              render: function ( data, type, row) {
-                if(type === 'sort'){
-                    return data;
-                }else{
-                    return  data??'NA';
-                }
-              }
-            },
-            {
-              data: 'status',
-              name: 'status',
-              orderable: true,
-              render: function ( data, type, row) {
-                if(type === 'sort'){
-                    return data;
-                }else{
-                    return  data??'NA';
-                }
-              }
-            },
-            {
-              data: 'action',
-              name: 'action',
-              orderable: false,
-              searchable: false
-            },
+        {
+          data: 'ref_id',
+          name: 'ref_id',
+          orderable: true,
+          render: function ( data, type, row) {
+            if(type === 'sort'){
+                return data;
+            }else{
+                return  data??'NA';
+            }
+          }
+        },
+        {
+          data: 'customer',
+          name: 'customer',
+          orderable: true,
+          render: function ( data, type, row) {
+            if(type === 'sort'){
+                return data;
+            }else{
+                return  data??'NA';
+            }
+          }
+        },
+        {
+          data: 'company.company_title',
+          name: 'company.company_title',
+          orderable: true,
+          render: function ( data, type, row) {
+            if(type === 'sort'){
+                return data;
+            }else{
+                return  data??'NA';
+            }
+          }
+        },
+        {
+          data: 'mobile',
+          name: 'mobile',
+          orderable: true,
+          render: function ( data, type, row) {
+            if(type === 'sort'){
+                return data;
+            }else{
+                return  data??'NA';
+            }
+          }
+        },
+        {
+          data: 'created_at',
+          name: 'created_at',
+          orderable: true,
+          render: function ( data, type, row) {
+            if(type === 'sort'){
+                return data;
+            }else{
+                return  data??'NA';
+            }
+          }
+        },
+        {
+          data: 'dep_date_time',
+          name: 'dep_date_time',
+          orderable: true,
+          render: function ( data, type, row) {
+            if(type === 'sort'){
+                return data;
+            }else{
+                return  data??'NA';
+            }
+          }
+        },
+        {
+          data: 'return_date_time',
+          name: 'return_date_time',
+          orderable: true,
+          render: function ( data, type, row) {
+            if(type === 'sort'){
+                return data;
+            }else{
+                return  data??'NA';
+            }
+          }
+        },
+        {
+          data: 'total_days',
+          name: 'total_days',
+          orderable: true,
+          render: function ( data, type, row) {
+            if(type === 'sort'){
+                return data;
+            }else{
+                return  data??'NA';
+            }
+          }
+        },
+        {
+          data: 'vehicle.vehicle_reg',
+          name: 'vehicle.vehicle_reg',
+          orderable: true,
+          render: function ( data, type, row) {
+            if(type === 'sort'){
+                return data;
+            }else{
+                return  data??'NA';
+            }
+          }
+        },
+        {
+          data: 'price',
+          name: 'price',
+          orderable: true,
+          render: function ( data, type, row) {
+            if(type === 'sort'){
+                return data;
+            }else{
+                return  data??'NA';
+            }
+          }
+        },
+        {
+          data: 'cancellation_cover',
+          name: 'cancellation_cover',
+          orderable: true,
+          render: function ( data, type, row) {
+            if(type === 'sort'){
+                return data;
+            }else{
+                return  data??'NA';
+            }
+          }
+        },
+        {
+          data: 'sms_confirmation',
+          name: 'sms_confirmation',
+          orderable: true,
+          render: function ( data, type, row) {
+            if(type === 'sort'){
+                return data;
+            }else{
+                return  data??'NA';
+            }
+          }
+        },
+        {
+          data: 'discount_code',
+          name: 'discount_code',
+          orderable: true,
+          render: function ( data, type, row) {
+            if(type === 'sort'){
+                return data;
+            }else{
+                return  data??'NA';
+            }
+          }
+        },
+        {
+          data: 'status',
+          name: 'status',
+          orderable: true,
+          render: function ( data, type, row) {
+            if(type === 'sort'){
+                return data;
+            }else{
+                return  data??'NA';
+            }
+          }
+        },
+        {
+          data: 'action',
+          name: 'action',
+          orderable: false,
+          searchable: false
+        },
       ],
     });
-}
+  }
 
-        $(document).on('click','.edit-booking',function(e){
-            e.preventDefault();
-            console.log('$(e.target):: ', $(e.target));
-            let model = $("#modal-default");
-            let booking_id = $(e.target).attr('data-id');
-            let booking_ref_id = $(e.target).attr('data-ref-id');
-            $("#modal-default").find('.modal-title').text(`Edit Booking - ${booking_ref_id}`);
-            let ajaxUrl = "{{ route('get-single-booking') }}";
-            ajaxUrl = `${ajaxUrl}?id=${booking_id}`;
-            // return;
-            $.ajax({
-            type:"GET",
-            url: ajaxUrl,
-            success: function(response){
-                $("#booking-edit-modal").html(response)
-                model.modal('show');
-            },
-            error: function(XHR, textStatus, errorThrown) {
-                // console.log(XHR.responseJSON.message);
-                if(XHR.responseJSON.message != undefined){
-                    toastr["error"](XHR.responseJSON.message);
-                }else{
-                    toastr["error"](errorThrown);
-                }
-            }
-            });
-        });
+  $(document).on('click','.edit-booking',function(e){
+      e.preventDefault();
+      console.log('$(e.target):: ', $(e.target));
+      let model = $("#modal-default");
+      let booking_id = $(e.target).attr('data-id');
+      let booking_ref_id = $(e.target).attr('data-ref-id');
+      $("#modal-default").find('.modal-title').text(`Edit Booking - ${booking_ref_id}`);
+      let ajaxUrl = "{{ route('get-single-booking') }}";
+      ajaxUrl = `${ajaxUrl}?id=${booking_id}`;
+      // return;
+      $.ajax({
+      type:"GET",
+      url: ajaxUrl,
+      success: function(response){
+          $("#booking-edit-modal").html(response)
+          model.modal('show');
+      },
+      error: function(XHR, textStatus, errorThrown) {
+          // console.log(XHR.responseJSON.message);
+          if(XHR.responseJSON.message != undefined){
+              toastr["error"](XHR.responseJSON.message);
+          }else{
+              toastr["error"](errorThrown);
+          }
+      }
+      });
+  });
 
-        $(document).on('click', '#edit_booking_button', (e)=>{
-            e.preventDefault();
-            let validationPass = true;
-            let excludeElementValidation = [
-                'discount_code', 'cancellation_cover', 'sms_confirmation', 'city_town',
-                'address', 'country', 'postcode', 'flight_number', 'special_notes', 'admin_charge',
-                'extended_price', 'payment_amount', 'payment_method', 'payment_status', 'transaction_id', 'transaction_id_get'
-            ]
-            let ajaxUrl = "{{ route('booking-update') }}";
-            let editBookingForm = $("#edit_booking_form");
+  $(document).on('click', '#edit_booking_button', (e)=>{
+      e.preventDefault();
+      let validationPass = true;
+      let excludeElementValidation = [
+          'discount_code', 'cancellation_cover', 'sms_confirmation', 'city_town',
+          'address', 'country', 'postcode', 'flight_number', 'special_notes', 'admin_charge',
+          'extended_price', 'payment_amount', 'payment_method', 'payment_status', 'transaction_id', 'transaction_id_get'
+      ]
+      let ajaxUrl = "{{ route('booking-update') }}";
+      let editBookingForm = $("#edit_booking_form");
 
-            let formDataArray = editBookingForm.serializeArray();
-            let formDataSerialize = editBookingForm.serialize();
+      let formDataArray = editBookingForm.serializeArray();
+      let formDataSerialize = editBookingForm.serialize();
 
-            console.log('formDataArray:: ', formDataArray, 'ajaxUrl:: ', ajaxUrl);
+      console.log('formDataArray:: ', formDataArray, 'ajaxUrl:: ', ajaxUrl);
 
-            formDataArray.forEach(element => {
-                if($.inArray(element.name, excludeElementValidation) == -1){
-                    if(element.value == ''){
-                        editBookingForm.find(`input[name='${element.name}'], select[name='${element.name}']`).addClass('jqueryValidation');
-                        editBookingForm.find(`input[name='${element.name}'], select[name='${element.name}']`).siblings('.validationFail').show()
-                    }
-                    else{
-                        editBookingForm.find(`input[name='${element.name}'], select[name='${element.name}']`).removeClass('jqueryValidation');
-                        editBookingForm.find(`input[name='${element.name}'], select[name='${element.name}']`).siblings('.validationFail').hide()
-                    }
-                }
-            });
-
-            formDataArray.forEach(element => {
-                if($.inArray(element.name, excludeElementValidation) == -1){
-                    if(element.value == ''){
-                    validationPass = false;
-                    return;
-                    }
-                }
-            });
-
-            if(!validationPass){
-                toastr["error"]('Please check ! Some required filed is empty.');
-                console.log(`validationPass :: ${validationPass}`);
-            }
-            else{
-                let updated_dep_date = $("#updated_dep_date").val();
-                let updated_dep_time = $("#updated_dep_time").val();
-                let updated_return_date = $("#updated_return_date").val();
-                let updated_return_time = $("#updated_return_time").val();
-
-                let start_date = `${updated_dep_date} ${updated_dep_time}:00`;
-                let end_date = `${updated_return_date} ${updated_return_time}:00`;
-                let ajaxUrl2 = "{{ route('compare-two-date') }}"
-                $.ajax({
-                  type:"POST",
-                  url: ajaxUrl2,
-                  data: {"start_date": start_date,"end_date": end_date},
-                  success: function(response){
-                    console.log(` date comparision:: `, response);
-                    if(response.data == false){
-                      toastr["error"]('Arrival date time shouldn\'t be less then to Departure date time');
-                      editBookingForm.find('button').attr('disabled', false)
-                    }
-                    else{
-                      editBookingForm.find('button').attr('disabled', true)
-                      $.ajax({
-                          type:"POST",
-                          url: ajaxUrl,
-                          data: formDataSerialize,
-                          success: function(response){
-                            console.log(`form submited`, response);
-                            if(response.code == 200){
-                              $("#modal-default").modal('hide');
-                              toastr["success"](response.success);
-                              setTimeout(() => {
-                                window.location.href = response.path;
-                              }, 1000);
-                            }
-                          },
-                          error: function(XHR, textStatus, errorThrown) {
-                          // console.log(XHR.responseJSON.message);
-                          if(XHR.responseJSON.message != undefined){
-                              toastr["error"](XHR.responseJSON.message);
-                          }else{
-                              toastr["error"](errorThrown);
-                          }
-                          }
-                      });
-                    }
-                  }
-                });
-
-            }
-        });
-
-        $(document).on('click', '.change-status', (e)=>{
-          e.preventDefault();
-          console.log(`change status`)
-          let booking_id = $(e.target).attr('data-id');
-
-          let ajaxUrl = "{{ route('get-change-status-html') }}";
-            ajaxUrl = `${ajaxUrl}?id=${booking_id}`;
-            $.ajax({
-              type:"GET",
-              url: ajaxUrl,
-              success: function(response){
-                  $("#change_status_modal .modal-body").html(response)
-                  $("#change_status_modal").modal('show');
-                  $('.select2').select2();
-              },
-              error: function(XHR, textStatus, errorThrown) {
-                  // console.log(XHR.responseJSON.message);
-                  if(XHR.responseJSON.message != undefined){
-                      toastr["error"](XHR.responseJSON.message);
-                  }else{
-                      toastr["error"](errorThrown);
-                  }
+      formDataArray.forEach(element => {
+          if($.inArray(element.name, excludeElementValidation) == -1){
+              if(element.value == ''){
+                  editBookingForm.find(`input[name='${element.name}'], select[name='${element.name}']`).addClass('jqueryValidation');
+                  editBookingForm.find(`input[name='${element.name}'], select[name='${element.name}']`).siblings('.validationFail').show()
               }
-            });
-        })
+              else{
+                  editBookingForm.find(`input[name='${element.name}'], select[name='${element.name}']`).removeClass('jqueryValidation');
+                  editBookingForm.find(`input[name='${element.name}'], select[name='${element.name}']`).siblings('.validationFail').hide()
+              }
+          }
+      });
 
-        $(document).on('click', '.close-status-button', (e)=>{
-          $("#change_status_modal").modal('hide');
-        })
+      formDataArray.forEach(element => {
+          if($.inArray(element.name, excludeElementValidation) == -1){
+              if(element.value == ''){
+              validationPass = false;
+              return;
+              }
+          }
+      });
 
-        $(document).on('click', '.close-edit-booking-button', (e)=>{
-          $("#modal-default").modal('hide');
-        })
+      if(!validationPass){
+          toastr["error"]('Please check ! Some required filed is empty.');
+          console.log(`validationPass :: ${validationPass}`);
+      }
+      else{
+          let updated_dep_date = $("#updated_dep_date").val();
+          let updated_dep_time = $("#updated_dep_time").val();
+          let updated_return_date = $("#updated_return_date").val();
+          let updated_return_time = $("#updated_return_time").val();
 
-        $(document).on('click', '.close-view-booking-button', (e)=>{
-          $("#modal-default1").modal('hide');
-        })
-
-        $(document).on('click', '#close-view-booking-button', (e)=>{
-          $("#modal-default1").modal('hide');
-        })
-
-        $(document).on('click', '.close-cancel-booking-button', (e)=>{
-          $("#modal-default2").modal('hide');
-        })
-
-        $(document).on('click', '#change_booking_status_button', (e)=>{
-          e.preventDefault();
-          console.log(`update status`)
-
-          let ajaxUrl = "{{ route('change-booking-status') }}";
-          let formDataSerialize = $("#change_booking_status_form").serialize();
-          ajaxUrl = ajaxUrl +'?'+formDataSerialize
-          console.log('formDataSerialize:: ', formDataSerialize, 'ajaxUrl:: ', ajaxUrl);
-
-
-
-          $("#change_booking_status_form").find("#change_booking_status_button").attr('disabled', true)
+          let start_date = `${updated_dep_date} ${updated_dep_time}:00`;
+          let end_date = `${updated_return_date} ${updated_return_time}:00`;
+          let ajaxUrl2 = "{{ route('compare-two-date') }}"
           $.ajax({
             type:"POST",
-            url: ajaxUrl,
-            data: formDataSerialize,
+            url: ajaxUrl2,
+            data: {"start_date": start_date,"end_date": end_date},
             success: function(response){
-              console.log(`form submited`, response);
-              if(response.code == 200){
-                $("#modal-default").modal('hide');
-                toastr["success"](response.success);
-                setTimeout(() => {
-                  window.location.href = response.path;
-                }, 1000);
+              console.log(` date comparision:: `, response);
+              if(response.data == false){
+                toastr["error"]('Arrival date time shouldn\'t be less then to Departure date time');
+                editBookingForm.find('button').attr('disabled', false)
               }
-            },
-            error: function(XHR, textStatus, errorThrown) {
-              // console.log(XHR.responseJSON.message);
-              if(XHR.responseJSON.message != undefined){
-                  toastr["error"](XHR.responseJSON.message);
-              }else{
-                  toastr["error"](errorThrown);
+              else{
+                editBookingForm.find('button').attr('disabled', true)
+                $.ajax({
+                    type:"POST",
+                    url: ajaxUrl,
+                    data: formDataSerialize,
+                    success: function(response){
+                      console.log(`form submited`, response);
+                      if(response.code == 200){
+                        $("#modal-default").modal('hide');
+                        toastr["success"](response.success);
+                        setTimeout(() => {
+                          window.location.href = response.path;
+                        }, 1000);
+                      }
+                    },
+                    error: function(XHR, textStatus, errorThrown) {
+                    // console.log(XHR.responseJSON.message);
+                    if(XHR.responseJSON.message != undefined){
+                        toastr["error"](XHR.responseJSON.message);
+                    }else{
+                        toastr["error"](errorThrown);
+                    }
+                    }
+                });
               }
             }
           });
-        })
-        $(document).on('click','.view-booking',function(e){
-            e.preventDefault();
-            let model = $("#modal-default1");
-            let booking_id = $(e.target).attr('data-id');
-            let booking_ref_id = $(e.target).attr('data-ref-id');
-            $("#modal-default1").find('.modal-title').text(`Booking Details - ${booking_ref_id}`);
-            let ajaxUrl = "{{ route('get-booking-view') }}";
-            ajaxUrl = `${ajaxUrl}?id=${booking_id}`;
-            // return;
-            $.ajax({
-            type:"GET",
-            url: ajaxUrl,
-            success: function(response){
-                $("#booking-view-modal").html(response)
-                model.modal('show');
-            },
-            error: function(XHR, textStatus, errorThrown) {
-                // console.log(XHR.responseJSON.message);
-                if(XHR.responseJSON.message != undefined){
-                    toastr["error"](XHR.responseJSON.message);
-                }else{
-                    toastr["error"](errorThrown);
-                }
+
+      }
+  });
+
+  $(document).on('click', '.change-status', (e)=>{
+    e.preventDefault();
+    console.log(`change status`)
+    let booking_id = $(e.target).attr('data-id');
+
+    let ajaxUrl = "{{ route('get-change-status-html') }}";
+      ajaxUrl = `${ajaxUrl}?id=${booking_id}`;
+      $.ajax({
+        type:"GET",
+        url: ajaxUrl,
+        success: function(response){
+            $("#change_status_modal .modal-body").html(response)
+            $("#change_status_modal").modal('show');
+            $('.select2').select2();
+        },
+        error: function(XHR, textStatus, errorThrown) {
+            // console.log(XHR.responseJSON.message);
+            if(XHR.responseJSON.message != undefined){
+                toastr["error"](XHR.responseJSON.message);
+            }else{
+                toastr["error"](errorThrown);
             }
-            });
-        });
-        $(document).on('click','.cancel-booking',function(e){
-            e.preventDefault();
-            let model = $("#modal-default2");
-            let booking_id = $(e.target).attr('data-id');
-            let booking_ref_id = $(e.target).attr('data-ref-id');
-            $("#modal-default2").find('.modal-title').text(`Booking Details - ${booking_ref_id}`);
-            let ajaxUrl = "{{ route('get-booking-cancel') }}";
-            ajaxUrl = `${ajaxUrl}?id=${booking_id}`;
-            // return;
-            $.ajax({
-            type:"GET",
-            url: ajaxUrl,
-            success: function(response){
-                $("#booking-cancel-modal").html(response)
-                model.modal('show');
-            },
-            error: function(XHR, textStatus, errorThrown) {
-                // console.log(XHR.responseJSON.message);
-                if(XHR.responseJSON.message != undefined){
-                    toastr["error"](XHR.responseJSON.message);
-                }else{
-                    toastr["error"](errorThrown);
-                }
-            }
-            });
-        });
+        }
+      });
+  })
 
-        $(document).on('click','.delete-booking',function(e){
+  $(document).on('click', '.close-status-button', (e)=>{
+    $("#change_status_modal").modal('hide');
+  })
 
-          e.preventDefault();
-            var delete_type     = $(this).data('type');
-            var delete_message  = 'Do you want to Delete Booking';
-            var success_message = 'Booking Deleted successfully';
-            var deny_message    = 'Booking not deleted.';
-            var href            = $(this).attr('href');
-            console.log('href',href);
-            Swal.fire({
-                title: delete_message,
-                showDenyButton: false,
-                showCancelButton: true,
-                confirmButtonText: `OK`,
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    $.ajax({
-                      url: href,
-                      type: 'get',
-                      success:function(data){
-                      //  console.log(data);
-                         Swal.fire(success_message, '', 'success');
-                         window.location.reload();
-                      },
-                    });
+  $(document).on('click', '.close-edit-booking-button', (e)=>{
+    $("#modal-default").modal('hide');
+  })
 
-                  } else if (result.isDenied) {
-                    Swal.fire(deny_message, '', 'info')
-                  }
-            });
-        });
+  $(document).on('click', '.close-view-booking-button', (e)=>{
+    $("#modal-default1").modal('hide');
+  })
 
-        $(document).on('click','.sms-send',function(e){
-            e.preventDefault();
-            let model = $("#modal-default2");
-            let booking_id = $(e.target).attr('data-id');
-            let booking_ref_id = $(e.target).attr('data-ref-id');
-            $("#modal-default2").find('.modal-title').text(`SMS Service`);
-            let ajaxUrl = "{{ route('get-booking-sms') }}";
-            ajaxUrl = `${ajaxUrl}?id=${booking_id}`;
-            // return;
-            $.ajax({
-            type:"GET",
-            url: ajaxUrl,
-            success: function(response){
-                $("#booking-cancel-modal").html(response)
-                model.modal('show');
-            },
-            error: function(XHR, textStatus, errorThrown) {
-                // console.log(XHR.responseJSON.message);
-                if(XHR.responseJSON.message != undefined){
-                    toastr["error"](XHR.responseJSON.message);
-                }else{
-                    toastr["error"](errorThrown);
-                }
-            }
-            });
-        });
+  $(document).on('click', '#close-view-booking-button', (e)=>{
+    $("#modal-default1").modal('hide');
+  })
+
+  $(document).on('click', '.close-cancel-booking-button', (e)=>{
+    $("#modal-default2").modal('hide');
+  })
+
+  $(document).on('click', '#change_booking_status_button', (e)=>{
+    e.preventDefault();
+    console.log(`update status`)
+
+    let ajaxUrl = "{{ route('change-booking-status') }}";
+    let formDataSerialize = $("#change_booking_status_form").serialize();
+    ajaxUrl = ajaxUrl +'?'+formDataSerialize
+    console.log('formDataSerialize:: ', formDataSerialize, 'ajaxUrl:: ', ajaxUrl);
+
+
+
+    $("#change_booking_status_form").find("#change_booking_status_button").attr('disabled', true)
+    $.ajax({
+      type:"POST",
+      url: ajaxUrl,
+      data: formDataSerialize,
+      success: function(response){
+        console.log(`form submited`, response);
+        if(response.code == 200){
+          $("#modal-default").modal('hide');
+          toastr["success"](response.success);
+          setTimeout(() => {
+            window.location.href = response.path;
+          }, 1000);
+        }
+      },
+      error: function(XHR, textStatus, errorThrown) {
+        // console.log(XHR.responseJSON.message);
+        if(XHR.responseJSON.message != undefined){
+            toastr["error"](XHR.responseJSON.message);
+        }else{
+            toastr["error"](errorThrown);
+        }
+      }
     });
+  });
+
+  $(document).on('click','.view-booking',function(e){
+      e.preventDefault();
+      let model = $("#modal-default1");
+      let booking_id = $(e.target).attr('data-id');
+      let booking_ref_id = $(e.target).attr('data-ref-id');
+      $("#modal-default1").find('.modal-title').text(`Booking Details - ${booking_ref_id}`);
+      let ajaxUrl = "{{ route('get-booking-view') }}";
+      ajaxUrl = `${ajaxUrl}?id=${booking_id}`;
+      // return;
+      $.ajax({
+      type:"GET",
+      url: ajaxUrl,
+      success: function(response){
+          $("#booking-view-modal").html(response)
+          model.modal('show');
+      },
+      error: function(XHR, textStatus, errorThrown) {
+          // console.log(XHR.responseJSON.message);
+          if(XHR.responseJSON.message != undefined){
+              toastr["error"](XHR.responseJSON.message);
+          }else{
+              toastr["error"](errorThrown);
+          }
+      }
+      });
+  });
+
+  $(document).on('click','.cancel-booking',function(e){
+      e.preventDefault();
+      let model = $("#modal-default2");
+      let booking_id = $(e.target).attr('data-id');
+      let booking_ref_id = $(e.target).attr('data-ref-id');
+      $("#modal-default2").find('.modal-title').text(`Booking Details - ${booking_ref_id}`);
+      let ajaxUrl = "{{ route('get-booking-cancel') }}";
+      ajaxUrl = `${ajaxUrl}?id=${booking_id}`;
+      // return;
+      $.ajax({
+      type:"GET",
+      url: ajaxUrl,
+      success: function(response){
+          $("#booking-cancel-modal").html(response)
+          model.modal('show');
+      },
+      error: function(XHR, textStatus, errorThrown) {
+          // console.log(XHR.responseJSON.message);
+          if(XHR.responseJSON.message != undefined){
+              toastr["error"](XHR.responseJSON.message);
+          }else{
+              toastr["error"](errorThrown);
+          }
+      }
+      });
+  });
+
+  $(document).on('click','.delete-booking',function(e){
+
+    e.preventDefault();
+      var delete_type     = $(this).data('type');
+      var delete_message  = 'Do you want to Delete Booking';
+      var success_message = 'Booking Deleted successfully';
+      var deny_message    = 'Booking not deleted.';
+      var href            = $(this).attr('href');
+      console.log('href',href);
+      Swal.fire({
+          title: delete_message,
+          showDenyButton: false,
+          showCancelButton: true,
+          confirmButtonText: `OK`,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $.ajax({
+                url: href,
+                type: 'get',
+                success:function(data){
+                //  console.log(data);
+                    Swal.fire(success_message, '', 'success');
+                    window.location.reload();
+                },
+              });
+
+            } else if (result.isDenied) {
+              Swal.fire(deny_message, '', 'info')
+            }
+      });
+  });
+
+  $(document).on('click','.sms-send',function(e){
+      e.preventDefault();
+      let model = $("#modal-default2");
+      let booking_id = $(e.target).attr('data-id');
+      let booking_ref_id = $(e.target).attr('data-ref-id');
+      $("#modal-default2").find('.modal-title').text(`SMS Service`);
+      let ajaxUrl = "{{ route('get-booking-sms') }}";
+      ajaxUrl = `${ajaxUrl}?id=${booking_id}`;
+      // return;
+      $.ajax({
+      type:"GET",
+      url: ajaxUrl,
+      success: function(response){
+          $("#booking-cancel-modal").html(response)
+          model.modal('show');
+      },
+      error: function(XHR, textStatus, errorThrown) {
+          // console.log(XHR.responseJSON.message);
+          if(XHR.responseJSON.message != undefined){
+              toastr["error"](XHR.responseJSON.message);
+          }else{
+              toastr["error"](errorThrown);
+          }
+      }
+      });
+  });
+
+  function toSimpleJson(serializedData) {
+    var ar1 = serializedData.split("&");
+    var json = "{";
+    for (var i = 0; i<ar1.length; i++) {
+        var ar2 = ar1[i].split("=");
+        json += i > 0 ? ", " : "";
+        json += "\"" + ar2[0] + "\" : ";
+        json += "\"" + (ar2.length < 2 ? "" : ar2[1]) + "\"";
+    }
+    json += "}";
+    return json;
+  }
+  
+  $(document).on('click', '#get_extended_charge', (e)=>{
+    e.preventDefault();
+
+    let editBookingForm = $("#edit_booking_form");
+    let returnTimeNew = $(editBookingForm).find('#return_time').val();
+
+    let formData = $(editBookingForm).serialize();
+    formData = formData+'&return_time_new='+returnTimeNew;
+    
+    let ajaxUrl = "{{ route('get-updated-price') }}";
+    $.ajax({
+      type:"GET",
+      url: ajaxUrl,
+      data: formData,
+      success: function(response){
+        if(!Number.isInteger(response.data.diff_price)){
+          response.data.diff_price = parseFloat(response.data.diff_price.toFixed(2));
+        }
+        console.log('response:: ', response);
+        $(editBookingForm).find("#price").val(response.data.new_price);
+        $(editBookingForm).find("#extended_price").val(response.data.diff_price);
+        $(editBookingForm).find("#total_days").val(response.data.no_of_days);
+        $(editBookingForm).find("#admin_charge").val(response.data.admin_charge);
+        $(editBookingForm).find("#payment_amount").val(response.data.new_price);
+
+      },
+      error: function(XHR, textStatus, errorThrown) {
+          if(XHR.responseJSON.message != undefined){
+              toastr["error"](XHR.responseJSON.message);
+          }else{
+              toastr["error"](errorThrown);
+          }
+      }
+    });
+
+    
+    return;
+
+    
+  })
+});
 </script>
 @stop

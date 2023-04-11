@@ -12,6 +12,7 @@ if (! function_exists('getCompanyPriceByDays')) {
      */
     function getCompanyPriceByDays($data)
     {
+        // dd($data);
         $company_details = $data['company'];
         $company_price_brand = CompanyBrandPrice::where([
                                 'company_id' => $company_details->id, 
@@ -22,6 +23,7 @@ if (! function_exists('getCompanyPriceByDays')) {
         if($company_price_brand != null && $company_price_brand->count() > 0){
             $company_price_brand->brand_id = json_decode($company_price_brand->brand_id, true);
             $key = 'day_'.$data['no_of_days_booking'];
+            // echo $key;
             $brand_id = $company_price_brand->brand_id[$key]['id'];
             $get_brand_price = BrandPrices::find($brand_id);
             if($get_brand_price->count() > 0){

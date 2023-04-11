@@ -115,6 +115,7 @@ class Bookings extends Model
             $booking->updated_dep_date_time = $data->updated_dep_date_time;
         }
         if($data->has('updated_return_date_time') && $data->updated_return_date_time ){
+            $booking->return_date_time = $data->updated_return_date_time;
             $booking->updated_return_date_time = $data->updated_return_date_time;
         }
         if($data->has('discount_code') && $data->discount_code){
