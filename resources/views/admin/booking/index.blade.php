@@ -110,6 +110,7 @@
             <th>CNC</th>
             <th>SMS</th>
             <th>DIS</th>
+            <th>Email</th>
             <th>Status</th>
             <th>Action</th>
           </tr>
@@ -494,6 +495,18 @@ $(document).ready(function(){
         {
           data: 'discount_code',
           name: 'discount_code',
+          orderable: true,
+          render: function ( data, type, row) {
+            if(type === 'sort'){
+                return data;
+            }else{
+                return  data??'NA';
+            }
+          }
+        },
+        {
+          data: 'email',
+          name: 'email',
           orderable: true,
           render: function ( data, type, row) {
             if(type === 'sort'){
