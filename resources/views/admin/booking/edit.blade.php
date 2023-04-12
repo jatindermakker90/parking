@@ -2,23 +2,23 @@
 <div style="background-color:#0a515e;color:#fff;padding:16px 16px 16px 20px;;font-size:17px;font-weight:600;" >BOOKING REFRENCE - {{ $ref_id }} | AIRPORT - {{ $airport['airport_name'] }} | COMPANY - {{ $company['company_title'] }}</div>
 <nav>
             <div class="nav nav-tabs nav-justified" id="nav-tab" role="tablist">
-                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" 
+                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab"
                         data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
                         aria-selected="true">Personal Details</button>
-                <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" 
-                        data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" 
+                <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab"
+                        data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile"
                         aria-selected="false">Flight Details</button>
-                <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" 
-                        data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" 
+                <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab"
+                        data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact"
                         aria-selected="false">Vehicle Details</button>
-                <button class="nav-link" id="nav-travel-tab" data-bs-toggle="tab" 
-                        data-bs-target="#nav-travel" type="button" role="tab" aria-controls="nav-contact" 
+                <button class="nav-link" id="nav-travel-tab" data-bs-toggle="tab"
+                        data-bs-target="#nav-travel" type="button" role="tab" aria-controls="nav-contact"
                         aria-selected="false">Travel Details</button>
-                <button class="nav-link" id="nav-special-tab" data-bs-toggle="tab" 
-                        data-bs-target="#nav-special" type="button" role="tab" aria-controls="nav-contact" 
+                <button class="nav-link" id="nav-special-tab" data-bs-toggle="tab"
+                        data-bs-target="#nav-special" type="button" role="tab" aria-controls="nav-contact"
                         aria-selected="false">Special Instruction</button>
-                <button class="nav-link" id="nav-shift-tab" data-bs-toggle="tab" 
-                        data-bs-target="#nav-shift" type="button" role="tab" aria-controls="nav-contact" 
+                <button class="nav-link" id="nav-shift-tab" data-bs-toggle="tab"
+                        data-bs-target="#nav-shift" type="button" role="tab" aria-controls="nav-contact"
                         aria-selected="false">Shift Booking</button>
             </div>
         </nav>
@@ -61,9 +61,9 @@
                 </div>
                 <div class="col-2">
                 <div class="form-group">
-                    <label>Mobile</label>
+                    <label>Contact</label>
                     <input type="text" class="form-control" id ="mobile" name="mobile" value="{{$mobile}}">
-                    <span class="validationFail">Please select mobile</span>
+                    <span class="validationFail">Please select contact</span>
                 </div>
                 </div>
             </div>
@@ -120,8 +120,8 @@
                 </div>
                 <div class="col-4">
                 <div class="form-group">
-                    <label for="flight_number">Flight Number</label>
-                    <input type="text" class="form-control" placeholder="Enter vehicle colour" name="flight_number" id="flight_number" value="{{ $flight_number }}">
+                    <label for="flight_number">Return Flight Number</label>
+                    <input type="text" class="form-control" placeholder="We only need flight number" name="flight_number" id="flight_number" value="{{ $flight_number }}">
                     <span class="validationFail">Please select flight number</span>
                 </div>
                 </div>
@@ -152,7 +152,7 @@
                     </div>
                     <div class="col-3">
                     <div class="form-group">
-                        <label for="vehicle_reg">Vehicle Reg #</label>
+                        <label for="vehicle_reg">Vehicle Reg</label>
                         <input type="text" class="form-control" placeholder="Enter vehicle reg" name="vehicle_reg" id="vehicle_reg" value="{{ $vehicle['vehicle_reg'] }}">
                         <span class="validationFail">Please select vehicle reg.</span>
                     </div>
@@ -328,7 +328,7 @@
                         <option value="">Select company</option>
                         @foreach($all_companies as $key => $value )
                             <option value="{{$value['id']}}" <?php echo ($company_id == $value['id'])  ? 'selected' : '' ?>>{{$value['company_title']}}</option>
-                        @endforeach                              
+                        @endforeach
                     </select>
                     <span class="validationFail">Please select company</span>
                 </div>

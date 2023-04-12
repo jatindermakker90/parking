@@ -20,13 +20,13 @@
 <div class="row">
   <div class="col-12">
     <div class="card">
-      <form method="POST" action="{{ route('search-booking-companies') }}" enctype="multipart/form-data" id="filter-form">    
+      <form method="POST" action="{{ route('search-booking-companies') }}" enctype="multipart/form-data" id="filter-form">
         <div class="card-header">
           <h3 class="card-title">{{ $header }}</h3>
         </div>
         <div class="card-body">
           <div class="col-12">
-            <div class="form-row">          
+            <div class="form-row">
               <input type="hidden" name="_token" value="{{ csrf_token() }}">
               <input type="hidden" name="no_of_days_booking" id="no_of_days_booking">
               <div class="form-group {{ $errors->has('select_airport') ? 'has-error' : '' }} col-4">
@@ -35,7 +35,7 @@
                   <option value="">Select airport</option>
                   @foreach ($airports as $airport_key => $airport_value)
                     <option value="{{ $airport_value->id }}" <?php echo (isset($request) && $request['select_airport'] == $airport_value->id)  ? 'selected' : '' ?>>{{ $airport_value->airport_name }}</option>
-                  @endforeach               
+                  @endforeach
                 </select>
                 <span class="validationFail">Please select airport</span>
                 @if($errors->first('select_airport'))
@@ -65,7 +65,7 @@
                     <span style="color:red;" class="form-error">Please enter departure time</span>
                   @endif
               </div>
-              
+
               <div class="form-group {{ $errors->has('return_date') ? 'has-error' : '' }} col-4">
                 <label for="return_date">Arrival Date</label>
                   <input type="date" class="form-control" min="{{ now()->format('Y-m-d')  }}" name ="return_date" id="return_date" value="<?php echo (isset($request) && $request['return_date'])  ? $request['return_date'] : '' ?>">
@@ -91,15 +91,15 @@
 
               <div class="form-group {{ $errors->has('discount_code') ? 'has-error' : '' }} col-4">
                 <label for="discount_code">Discount Code</label>
-                <input type="text" class="form-control"  placeholder="Enter Test Cost" name ="discount_code" id ="discount_code" value="<?php echo (isset($request) && $request['discount_code'])  ? $request['discount_code'] : '' ?>">           
+                <input type="text" class="form-control"  placeholder="Enter Test Cost" name ="discount_code" id ="discount_code" value="<?php echo (isset($request) && $request['discount_code'])  ? $request['discount_code'] : '' ?>">
                 <span class="validationFail">Please select discount code</span>
                 <span class="isValid"></span>
-              </div>                 
-            </div>            
+              </div>
+            </div>
           </div>
           <!-- /.card-body -->
           <div class="card-footer">
-            <button type="button" class="btn btn-primary" id="filter_form_submit">Search Now</button>        
+            <button type="button" class="btn btn-primary" id="filter_form_submit">Search Now</button>
           </div>
         </form>
       </div>
@@ -114,7 +114,7 @@
   <div class="row" id="company-list">
     @foreach($searchedCompanies as $searchedCompanies_key => $searchedCompanies_value)
       <div class="col-3 company" data-id="{{ $searchedCompanies_value->id }}">
-        <div class="card">     
+        <div class="card">
           <div class="card-header text-center">
             <div>
               <p class="m-0 text-success"><i class="fas fa-window-close mr-1"></i>Cancellation Cover Available</p>
@@ -137,7 +137,7 @@
             </div>
           </div>
           <div class="card-footer">
-            <button type="button" class="btn btn-primary w-100 book-now" data-id="{{ $searchedCompanies_value->id }}">Book Now</button>        
+            <button type="button" class="btn btn-primary w-100 book-now" data-id="{{ $searchedCompanies_value->id }}">Book Now</button>
           </div>
         </div>
       </div>
@@ -201,9 +201,9 @@
                 </div>
                 <div class="col-6">
                   <div class="form-group">
-                    <label for="mobile">Mobile Number</label>
+                    <label for="mobile">Contact Number</label>
                     <input type="number" class="form-control" placeholder="Enter mobile" name="mobile" id="mobile">
-                    <span class="validationFail">Please select mobile</span>
+                    <span class="validationFail">Please enter contact number </span>
                   </div>
                 </div>
               </div>
@@ -228,7 +228,7 @@
                       <span class="mr-2">
                         <input type="checkbox" class="sms_confirmation" name="sms_confirmation">
                       </span>
-                      Sms Confirmation 
+                      Sms Confirmation
                     </div>
                   </div>
                   <p class="m-0">Select this option and you will receive your parking order confirmation Via sms text message.</p>
@@ -261,7 +261,7 @@
                 </div>
                 <div class="col-3">
                   <div class="form-group">
-                    <label for="vehicle_reg">Vehicle Reg #</label>
+                    <label for="vehicle_reg">Vehicle Reg</label>
                     <input type="text" class="form-control" placeholder="Enter vehicle reg" name="vehicle_reg" id="vehicle_reg">
                     <span class="validationFail">Please select vehicle reg.</span>
                   </div>
@@ -286,7 +286,7 @@
                 <div class="col-4">
                   <div class="form-group">
                     <label for="drop_off_terminal">Drop-off Terminal</label>
-                    @if(isset($terminal))  
+                    @if(isset($terminal))
                     <select class="form-control select2" style="width: 100%;" name="drop_off_terminal" id="drop_off_terminal">
                       <option value="tbc">TBC</option>
                     @foreach ($terminal as $terminal_value)
@@ -299,7 +299,7 @@
                 <div class="col-4">
                   <div class="form-group">
                     <label for="return_terminal">Return Terminal</label>
-                    @if(isset($terminal))  
+                    @if(isset($terminal))
                     <select class="form-control select2" style="width: 100%;" name="return_terminal" id="return_terminal">
                       <option value="tbc">TBC</option>
                     @foreach ($terminal as $terminal_value)
@@ -320,9 +320,9 @@
              </div>
             </div>
             <div class="card-footer">
-              <button type="submit" class="btn btn-primary w-100 submit-button">Submit</button>        
+              <button type="submit" class="btn btn-primary w-100 submit-button">Submit</button>
             </div>
-          </form>     
+          </form>
           <!-- /.card-body -->
         </div>
       </div>
@@ -398,7 +398,7 @@
 <!-- DataTables  & Plugins -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
- 
+
 <script type="text/javascript">
 $(document).ready(function(){
   $(document).on('change', '#filter-form #return_date', (e)=>{
@@ -428,7 +428,7 @@ $(document).ready(function(){
       e.preventDefault();
       $("#filter_form_submit").trigger('click');
       return;
-      // alert('You pressed a "enter" key in somewhere');	
+      // alert('You pressed a "enter" key in somewhere');
     }
   });
 
@@ -522,7 +522,7 @@ $(document).ready(function(){
 
   $(document).on('click','.book-now',function(e){
     var company_id    = $(this).data('id');
-    
+
     let filterEle = $("#filter-form");
     filterEle.find(`input, select, button`).attr('disabled', true);
     let airport = filterEle.find("#select_airport option:selected").text();
@@ -534,16 +534,16 @@ $(document).ready(function(){
     let returnfTime = filterEle.find("#return_time").val();
 
     let companyTab = $(this).parents('.card');
-    
+
     let companyPrice = $(companyTab).find(".company-price span").text().trim('');
     let companyPriceWithAdminChareg = $(companyTab).find("#price_with_admin_charge").val().trim('');
     let bookingCharge = "{{ config('constant.BOOKING.BOOKING_CHARGE') }}";
-    
+
     console.log('companyPrice:: ', companyPrice);
-    
+
     let imageUrl = companyTab.find('img').attr('src');
     let companyTitle = companyTab.find('.card-header .company-title').text();
-    
+
     let bookingForm = $("#booking-form");
     let bookingSummaryEle = $("#booking-summary");
 
@@ -562,7 +562,7 @@ $(document).ready(function(){
     bookingForm.find(`input[name='return_date']`).val(filterEle.find('#return_date').val());
     bookingForm.find(`input[name='return_time']`).val(filterEle.find('#return_time').val());
     bookingForm.find(`input[name='discount_code']`).val(filterEle.find('#discount_code').val());
-    
+
     $("#company-list").hide();
     bookingForm.css('display', 'flex');
   });
@@ -600,20 +600,20 @@ $(document).ready(function(){
   $(document).on('submit', '#booking_form', function(e) {
     e.preventDefault();
 
-    let validationPass = true; 
+    let validationPass = true;
     let excludeElementValidation = ['discount_code', 'cancellation_cover', 'sms_confirmation', 'flight_number']
     let form = $(this);
 
     let getFinalPrice = $("#booking-summary .total-charge").text().slice(8);
-    
+
     let formData = form.serialize();
     formData = formData +'&price='+getFinalPrice;
-    
+
     console.log('formData:: ', formData);
-    
+
     let ajaxUrl = "{{ route('booking-store') }}"
 
-    // get array of both 
+    // get array of both
     let bookingFormArray = form.serializeArray();
     let combinedFormDataArray = bookingFormArray;
 
@@ -661,9 +661,9 @@ $(document).ready(function(){
         error: function(XHR, textStatus, errorThrown) {
           // console.log(XHR.responseJSON.message);
           if(XHR.responseJSON.message != undefined){
-              toastr["error"](XHR.responseJSON.message);  
+              toastr["error"](XHR.responseJSON.message);
           }else{
-              toastr["error"](errorThrown);  
+              toastr["error"](errorThrown);
           }
         }
       });
@@ -705,9 +705,9 @@ $(document).ready(function(){
       },
       error: function(XHR, textStatus, errorThrown) {
         if(XHR.responseJSON.message != undefined){
-            toastr["error"](XHR.responseJSON.message);  
+            toastr["error"](XHR.responseJSON.message);
         }else{
-            toastr["error"](errorThrown);  
+            toastr["error"](errorThrown);
         }
       }
     });
