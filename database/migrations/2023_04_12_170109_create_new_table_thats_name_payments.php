@@ -23,7 +23,7 @@ class CreateNewTableThatsNamePayments extends Migration
             $table->float('cancellation_charge')->default(0.00);
             $table->float('discount_amount')->default(0.00);
             $table->float('total_price')->default(0.00);
-            $table->integer('status')->default(2)->comments('1 For Complete, 2 For In-Complete, 3 For In-Process');
+            $table->tinyInteger('status')->default(2)->length(4)->comment('1 For Complete, 2 For In-Complete, 3 For In-Process');
             $table->string('transaction_id')->nullable(true);
             $table->string('payment_method')->nullable(true);
             $table->float('paid_amount')->default(0.00);
