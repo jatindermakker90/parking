@@ -109,12 +109,12 @@ class BookingsController extends WebController
                         return $full_name = $row->first_name.' '.$row->last_name;
                     })
                     ->editColumn('price', function($row){
-                        $payment_status = false;
-                        if($payment_status){
-                            return '<button type="button" class="btn btn-sm btn-success" style="padding: 0px 2px 0px 2px;">$'.$row->price.' Payed</button>';
+                        //$payment_status = false;
+                        if($row->payment_status){
+                            return '<span style="padding: 0px 2px 0px 2px;">$'.$row->price.'</span>';
                         }
                         else{
-                            return '<button type="button" class="btn btn-sm btn-danger" style="padding: 0px 2px 0px 2px;">$'.$row->price.' Not Payed</button>';
+                            return '<button type="button" class="btn btn-sm btn-danger price-pay" style="padding: 0px 2px 0px 2px;" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'">$'.$row->price.' Not Payed</button>';
                         }
                     })
                     ->editColumn('cancellation_cover', function($row){
@@ -139,12 +139,12 @@ class BookingsController extends WebController
                         }
                     })
                     ->editColumn('status', function($row){
-                        $payment_status = false;
-                        if($payment_status){
+                        //$payment_status = false;
+                        if($row->payment_status == 1){
                             return '<button type="button" title="Payment Status" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;"><i class="fa fa-check"></i></button>';
                         }
                         else{
-                            return '<button type="button" title="Payment Status" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;"><i class="fa fa-times"></i></button>';
+                            return '<button type="button" title="Payment Status" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"><i class="fa fa-times" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"></i></button>';
                         }
                     })
                     ->editColumn('email', function($row){
@@ -858,6 +858,46 @@ class BookingsController extends WebController
         $booking->email_status = '1';
         if($booking->save()){
           return redirect()->route('bookings.index');
+        }
+    }
+
+    public function getBookingPricePay(Request $request, Bookings $booking, Company $company)
+    {
+        if(!$request->id){
+            return response()->json([
+                'code' => 203,
+                'success' => 'Booking id is required !'
+            ]);
+        }
+
+        $get_booking = $booking->with(['vehicle', 'company', 'airport'])->find($request->id);
+        $get_booking->booking_id = $request->id;
+        $all_companies = $company->where('airport_id', $get_booking->airport_id)->where('company_status','!=',config('constant.STATUS.DELETED'))->get();
+        $get_booking->all_companies = $all_companies;
+
+        $get_booking->dep_date = date("Y-m-d", strtotime($get_booking->dep_date_time));
+        $get_booking->dep_time = date("H:i", strtotime($get_booking->dep_date_time));
+        $get_booking->updated_dep_date = date("Y-m-d", strtotime($get_booking->updated_dep_date_time));
+        $get_booking->updated_dep_time = date("H:i", strtotime($get_booking->updated_dep_date_time));
+
+        $get_booking->return_date = date("Y-m-d", strtotime($get_booking->return_date_time));
+        $get_booking->return_time = date("H:i", strtotime($get_booking->return_date_time));
+        $get_booking->updated_return_date = date("Y-m-d", strtotime($get_booking->updated_return_date_time));
+        $get_booking->updated_return_time = date("H:i", strtotime($get_booking->updated_return_date_time));
+
+        return response()->view('admin.booking.pricepay', $get_booking, 200);
+    }
+
+    public function postBookingPricePay(Request $request){
+      $booking = Bookings::where('id',$request->booking_id)->first();
+        if($booking){
+          $booking->payment_status = '1';
+          $booking->payment_notes = $request->notes;
+          if($booking->save()){
+            return redirect()->route('bookings.index');
+          }
+        } else {
+          return redirect()->back();
         }
     }
 

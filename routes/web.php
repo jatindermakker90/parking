@@ -102,6 +102,8 @@ Route::prefix('admin')->group(function () {
         Route::post('booking/send-sms',                [BookingsController::class, 'postBookingSMS'])->name('post-booking-sms');
         Route::get('booking/get-email-view',                [BookingsController::class, 'getBookingEmail'])->name('get-booking-email');
         Route::post('booking/send-email',                [BookingsController::class, 'postBookingEmail'])->name('post-booking-email');
+        Route::get('booking/get-pricepay-view',                [BookingsController::class, 'getBookingPricePay'])->name('get-booking-pricepay');
+        Route::post('booking/pricepay',                [BookingsController::class, 'postBookingPricePay'])->name('post-booking-pricepay');
 
         Route::resource('invoices',                            InvoiceController::class);
         Route::get('change/invoice/status/{table_id}',           [InvoiceController::class, 'changeInvoiceStatus'])->name('change_invoice_status');

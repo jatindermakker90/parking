@@ -882,6 +882,33 @@ $(document).ready(function(){
       });
   });
 
+  $(document).on('click','.price-pay',function(e){
+      e.preventDefault();
+      let model = $("#modal-default2");
+      let booking_id = $(e.target).attr('data-id');
+      let booking_ref_id = $(e.target).attr('data-ref-id');
+      $("#modal-default2").find('.modal-title').text(`Booking Details`);
+      let ajaxUrl = "{{ route('get-booking-pricepay') }}";
+      ajaxUrl = `${ajaxUrl}?id=${booking_id}`;
+      // return;
+      $.ajax({
+      type:"GET",
+      url: ajaxUrl,
+      success: function(response){
+          $("#booking-cancel-modal").html(response)
+          model.modal('show');
+      },
+      error: function(XHR, textStatus, errorThrown) {
+          // console.log(XHR.responseJSON.message);
+          if(XHR.responseJSON.message != undefined){
+              toastr["error"](XHR.responseJSON.message);
+          }else{
+              toastr["error"](errorThrown);
+          }
+      }
+      });
+  });
+
   function toSimpleJson(serializedData) {
     var ar1 = serializedData.split("&");
     var json = "{";
