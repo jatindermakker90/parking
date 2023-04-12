@@ -149,9 +149,9 @@ class BookingsController extends WebController
                     })
                     ->editColumn('email', function($row){
                         if($row->email_status){
-                            return '<button type="button" title="Email" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;"><i class="fa fa-check"></i></button>';
+                            return '<button type="button" title="Email" class="btn btn-sm btn-success email-send" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'" style="padding: 0px 4px 0px 4px;"><i class="fa fa-check" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"></i></button>';
                         }else{
-                            return '<button type="button" title="Email" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;"><i class="fa fa-times"></i></button>';
+                            return '<button type="button" title="Email" class="btn btn-sm btn-danger email-send" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'" style="padding: 0px 4px 0px 4px;"><i class="fa fa-times" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"></i></button>';
                         }
                     })
                     ->addColumn('action', function($row){
@@ -829,6 +829,38 @@ class BookingsController extends WebController
         }
     }
 
+    public function getBookingEmail(Request $request, Bookings $booking, Company $company)
+    {
+        if(!$request->id){
+            return response()->json([
+                'code' => 203,
+                'success' => 'Booking id is required !'
+            ]);
+        }
+
+        $get_booking = $booking->with(['vehicle', 'company', 'airport'])->find($request->id);
+        $get_booking->booking_id = $request->id;
+        $all_companies = $company->where('airport_id', $get_booking->airport_id)->where('company_status','!=',config('constant.STATUS.DELETED'))->get();
+        $get_booking->all_companies = $all_companies;
+
+        // dd($get_booking->toArray());
+        return response()->view('admin.booking.emailview', $get_booking, 200);
+    }
+
+    public function postBookingEmail(Request $request){
+      if(!$request->booking_id){
+          return response()->json([
+              'code' => 203,
+              'success' => 'Booking id is required !'
+          ]);
+      }
+        $booking = Bookings::where('id',$request->booking_id)->first();
+        $booking->email_status = '1';
+        if($booking->save()){
+          return redirect()->route('bookings.index');
+        }
+    }
+
     public function getChangeStatusHtml(Request $request, Bookings $booking)
     {
         $booking_status =  $booking->select(['id','booking_status'])->find($request->id);
@@ -881,10 +913,10 @@ class BookingsController extends WebController
         $plusOne = 1;
         $diffInDaysUpdated = $diffInDaysUpdated + $plusOne;
         $month = $to_updated->month;
-        $year = $to_updated->year; 
+        $year = $to_updated->year;
 
         $get_price = getCompanyPriceByDays([
-                    'company' => $company_details, 
+                    'company' => $company_details,
                     'no_of_days_booking' => $diffInDaysUpdated,
                     'month' => $month,
                     'year' => $year

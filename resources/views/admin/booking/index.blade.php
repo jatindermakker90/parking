@@ -855,6 +855,33 @@ $(document).ready(function(){
       });
   });
 
+  $(document).on('click','.email-send',function(e){
+      e.preventDefault();
+      let model = $("#modal-default2");
+      let booking_id = $(e.target).attr('data-id');
+      let booking_ref_id = $(e.target).attr('data-ref-id');
+      $("#modal-default2").find('.modal-title').text(`Email Sending Option`);
+      let ajaxUrl = "{{ route('get-booking-email') }}";
+      ajaxUrl = `${ajaxUrl}?id=${booking_id}`;
+      // return;
+      $.ajax({
+      type:"GET",
+      url: ajaxUrl,
+      success: function(response){
+          $("#booking-cancel-modal").html(response)
+          model.modal('show');
+      },
+      error: function(XHR, textStatus, errorThrown) {
+          // console.log(XHR.responseJSON.message);
+          if(XHR.responseJSON.message != undefined){
+              toastr["error"](XHR.responseJSON.message);
+          }else{
+              toastr["error"](errorThrown);
+          }
+      }
+      });
+  });
+
   function toSimpleJson(serializedData) {
     var ar1 = serializedData.split("&");
     var json = "{";
@@ -867,7 +894,7 @@ $(document).ready(function(){
     json += "}";
     return json;
   }
-  
+
   $(document).on('click', '#get_extended_charge', (e)=>{
     e.preventDefault();
 
@@ -876,7 +903,7 @@ $(document).ready(function(){
 
     let formData = $(editBookingForm).serialize();
     formData = formData+'&return_time_new='+returnTimeNew;
-    
+
     let ajaxUrl = "{{ route('get-updated-price') }}";
     $.ajax({
       type:"GET",
@@ -903,10 +930,10 @@ $(document).ready(function(){
       }
     });
 
-    
+
     return;
 
-    
+
   })
 });
 </script>

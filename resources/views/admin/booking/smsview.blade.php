@@ -13,9 +13,17 @@
       <label><input type="checkbox" name="force" value="1"> &nbsp;Force resend even if sent before</label>
     </div>
   </div>
+  @if($sms_status == 1)
+  <div class="row">
+    <div class="col-sm-4" style="margin-left:7px;">
+      <input type="submit" class="btn btn-success" name="submit" value="Resend Message">
+    </div>
+  </div>
+  @else
   <div class="row">
     <div class="col-sm-4" style="margin-left:7px;">
       <input type="submit" class="btn btn-success" name="submit" value="Send Message">
     </div>
   </div>
+  @endif
 </form>
