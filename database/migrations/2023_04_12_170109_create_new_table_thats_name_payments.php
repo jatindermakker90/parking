@@ -28,6 +28,7 @@ class CreateNewTableThatsNamePayments extends Migration
             $table->string('payment_method')->nullable(true);
             $table->float('paid_amount')->default(0.00);
             $table->dateTime('payment_date');
+            $table->text('payment_notes')->nullable(true);
             $table->timestamps();
         });
     }
