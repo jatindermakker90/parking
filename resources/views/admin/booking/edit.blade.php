@@ -283,7 +283,7 @@
                     <div class="col-3">
                         <div class="form-group">
                             <label for="payment_method">Payment method</label>
-                            <input type="text" class="form-control" readonly="readonly" name ="payment_method" id="payment_method" value="{{ config('constant.PAYMENT_METHODS.'.$payment['payment_method']) ?? '' }}">
+                            <input type="text" class="form-control" readonly="readonly" name ="payment_method" id="payment_method" value="{{ isset($payment['payment_method']) ? config('constant.PAYMENT_METHODS.'.$payment['payment_method']) : '' }}">
                         </div>
                     </div>
                     <div class="col-3">
