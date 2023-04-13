@@ -141,10 +141,10 @@
             <form id="edit_booking_form" method="POST" action="#" enctype="multipart/form-data">
                 @csrf
                 <div id="booking-edit-modal">
-
+                  <!-- insert html from ajax -->
                 </div>
-                <!-- insert html from ajax -->
-                <button type="button" class="btn btn-primary w-100" id="edit_booking_button">Update</button>
+                <span id="get_updated_price_warrning">*Please get updated price by the click on "Get extanded Quote" button</span>
+                <button type="button" class="btn btn-primary w-100 mt-3" id="edit_booking_button">Update</button>
             </form>
         </div>
       </div>
@@ -233,6 +233,11 @@
   .tab-pane{
     padding-top: 30px;
     padding-bottom: 30px;
+  }
+  #get_updated_price_warrning{
+    color: red;
+    display: none;
+    font-size: 20px;
   }
 </style>
 
@@ -928,39 +933,98 @@ $(document).ready(function(){
     let editBookingForm = $("#edit_booking_form");
     let returnTimeNew = $(editBookingForm).find('#return_time').val();
 
-    let formData = $(editBookingForm).serialize();
-    formData = formData+'&return_time_new='+returnTimeNew;
+    let updatedDepDate = $(editBookingForm).find("#updated_dep_date").val();
+    let updatedReturnDate = $(editBookingForm).find("#updated_return_date").val();
 
-    let ajaxUrl = "{{ route('get-updated-price') }}";
-    $.ajax({
-      type:"GET",
-      url: ajaxUrl,
-      data: formData,
-      success: function(response){
-        if(!Number.isInteger(response.data.diff_price)){
-          response.data.diff_price = parseFloat(response.data.diff_price.toFixed(2));
-        }
-        console.log('response:: ', response);
-        $(editBookingForm).find("#price").val(response.data.new_price);
-        $(editBookingForm).find("#extended_price").val(response.data.diff_price);
-        $(editBookingForm).find("#total_days").val(response.data.no_of_days);
-        $(editBookingForm).find("#admin_charge").val(response.data.admin_charge);
-        $(editBookingForm).find("#payment_amount").val(response.data.new_price);
-
-      },
-      error: function(XHR, textStatus, errorThrown) {
-          if(XHR.responseJSON.message != undefined){
-              toastr["error"](XHR.responseJSON.message);
-          }else{
-              toastr["error"](errorThrown);
+    let isDepDateBeforToReturnDate = moment(updatedReturnDate).isBefore(updatedDepDate);
+    console.log('isDepDateBeforToReturnDate:: ', isDepDateBeforToReturnDate);
+    if(!isDepDateBeforToReturnDate){
+      let formData = $(editBookingForm).serialize();
+      formData = formData+'&return_time_new='+returnTimeNew;
+  
+      let ajaxUrl = "{{ route('get-updated-price') }}";
+      $.ajax({
+        type:"GET",
+        url: ajaxUrl,
+        data: formData,
+        success: function(response){
+          if(!Number.isInteger(response.data.diff_price)){
+            response.data.diff_price = parseFloat(response.data.diff_price.toFixed(2));
           }
-      }
-    });
+          if(!Number.isInteger(response.data.new_price)){
+            response.data.new_price = parseFloat(response.data.new_price.toFixed(2));
+          }
+          console.log('response:: ', response);
+          $(editBookingForm).find("#price").val(response.data.new_price);
+          $(editBookingForm).find("#extended_price").val(response.data.diff_price);
+          $(editBookingForm).find("#total_days").val(response.data.no_of_days);
+          $(editBookingForm).find("#admin_charge").val(response.data.admin_charge);
+          $(editBookingForm).find("#payment_amount").val(response.data.new_price);
+  
+        },
+        error: function(XHR, textStatus, errorThrown) {
+            if(XHR.responseJSON.message != undefined){
+                toastr["error"](XHR.responseJSON.message);
+            }else{
+                toastr["error"](errorThrown);
+            }
+        }
+      });
+    }
+    else{
+      toastr["error"]("Departure can not be greter then return date");
+      return false;
+    }
+  })
 
+  $(document).on('change', '#updated_dep_date', (e)=>{
+    e.preventDefault();
+    let editBookingForm = $("#edit_booking_form");
+    
+    let oldDepDate = $(editBookingForm).find('#dep_date').val();
+    let updatedDepDate = $(e.target).val();
 
-    return;
+    let oldReturnDate = $(editBookingForm).find('#return_date').val();
+    let updatedReturnDate = $(editBookingForm).find("#updated_return_date").val();
+    
+    let isDeptDateSame = moment(oldDepDate).isSame(updatedDepDate);
+    let isRaturnDateSame = moment(oldReturnDate).isSame(updatedReturnDate);
+    
+    console.log('oldDepDate:: ', oldDepDate, 'updatedDepDate:: ', updatedDepDate, 'isSameDate:: ', isDeptDateSame);
+    
+    if(!isDeptDateSame || !isRaturnDateSame){
+      $(editBookingForm).find("#edit_booking_button").attr("disabled", true);
+      $(editBookingForm).find("#get_updated_price_warrning").show();
+    }
+    else{
+      $(editBookingForm).find("#edit_booking_button").removeAttr("disabled");
+      $(editBookingForm).find("#get_updated_price_warrning").hide();
+    }
+  });
 
+  $(document).on('change', '#updated_return_date', (e)=>{
+    e.preventDefault();
+    let editBookingForm = $("#edit_booking_form");
+    
+    let oldDepDate = $(editBookingForm).find('#dep_date').val();
+    let updatedDepDate = $(editBookingForm).find("#updated_dep_date").val();
 
+    let oldReturnDate = $(editBookingForm).find('#return_date').val();
+    let updatedReturnDate = $(e.target).val();
+    
+    let isDeptDateSame = moment(oldDepDate).isSame(updatedDepDate);
+    let isRaturnDateSame = moment(oldReturnDate).isSame(updatedReturnDate);
+    
+    console.log('oldDepDate:: ', oldDepDate, 'updatedDepDate:: ', updatedDepDate, 'isSameDate:: ', isDeptDateSame);
+    
+    if(!isDeptDateSame || !isRaturnDateSame){
+      $(editBookingForm).find("#edit_booking_button").attr("disabled", true);
+      $(editBookingForm).find("#get_updated_price_warrning").show();
+    }
+    else{
+      $(editBookingForm).find("#edit_booking_button").removeAttr("disabled");
+      $(editBookingForm).find("#get_updated_price_warrning").hide();
+    }
   })
 });
 </script>

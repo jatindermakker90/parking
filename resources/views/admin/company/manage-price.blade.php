@@ -419,6 +419,15 @@
         });
       })
 
+      $(document).on('change', '#comman-brand-list', (e)=>{
+        e.preventDefault();
+        let brandId = $(e.target).val();
+        if(brandId != "null"){
+          $('#all-days-brands div select').val(brandId).change()
+        }
+        console.log('brandId:: ', brandId);
+      })
+
     });
 </script>
 @stop

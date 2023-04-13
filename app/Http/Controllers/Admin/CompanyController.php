@@ -46,10 +46,14 @@ class CompanyController extends WebController
                     ->addIndexColumn()
                     ->editColumn('company_status',function($row){
                         $modify_url = route('change_company_status',[$row->id]);
+                        $operation_status = 0;
+                        if($row->operation != null){
+                            $operation_status = 1;
+                        }
                         if($row->company_status)
-                        $btn = '<input type="checkbox" name="change_status" checked data-bootstrap-switch data-off-color="danger" data-on-color="success"  data-on-text="ACTIVE" data-off-text="INACTIVE" data-href ="'.$modify_url.'">';
+                        $btn = '<input type="checkbox" data-operation="'.$operation_status.'" name="change_status" checked data-bootstrap-switch data-off-color="danger" data-on-color="success"  data-on-text="ACTIVE" data-off-text="INACTIVE" data-href ="'.$modify_url.'">';
                         else
-                        $btn = '<input type="checkbox" name="change_status" data-bootstrap-switch data-off-color="danger" data-on-color="success"  data-on-text="ACTIVE" data-off-text="INACTIVE" data-href ="'.$modify_url.'">';
+                        $btn = '<input type="checkbox" data-operation="'.$operation_status.'" name="change_status" data-bootstrap-switch data-off-color="danger" data-on-color="success"  data-on-text="ACTIVE" data-off-text="INACTIVE" data-href ="'.$modify_url.'">';
                         return $btn;
                     })
                     ->editColumn('logo_id', function($row){
@@ -294,7 +298,7 @@ class CompanyController extends WebController
          $company_details->save();
         }
 
-        $message         = "User status updated successfully";
+        $message         = "Company status updated successfully";
         return $this->sendSuccess([],$message,200);   
     }
 
@@ -554,8 +558,9 @@ class CompanyController extends WebController
         }
     }
 
-    public function saveCompanyOperations(Request $request, CompaniesOperation $companiesOperation)
+    public function saveCompanyOperations(Request $request, Company $company, CompaniesOperation $companiesOperation)
     {
+        // dd($request->all());
         $defaultOperationTime = [
             "monday" => [
                 "day" => "monday",
@@ -630,6 +635,14 @@ class CompanyController extends WebController
         $response = [];
         $response['path'] = route('companies.index');
         if($save_and_update_operation->id){
+            if($request->from_status){
+                $company_details = $company->find($request->company_id);
+                if(!$company_details->company_status){
+                    $company_details->company_status = 1;
+                    $company_details->save();
+                }
+            }
+
             $message = 'Company operation has been updated successfully !';
             return $this->sendSuccess($response,$message,200);
         }

@@ -398,6 +398,7 @@
 <!-- DataTables  & Plugins -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -595,7 +596,28 @@ $(document).ready(function(){
       $("#booking-summary .total-charge").text(`TOTAL : ${newTotalCharge.toFixed(2)}`);
       $("#booking-summary .sms_confirmation_charge").text('').hide();
     }
-  })
+  });
+
+  // $(document).on('click', '#booking_form .submit-button', (e)=>{
+  //   e.preventDefault();
+  //   Swal.fire({
+  //     title: `{{ config('constant.ALERTS.BOOKING_TERMS_AND_COND') }}`,
+  //     showDenyButton: false,
+  //     showCancelButton: true,
+  //     confirmButtonText: `Go Ahead !`,
+  //     allowOutsideClick: false,
+  //     allowEscapeKey: false,
+  //     allowOutsideClick: false
+  //   }).then((result) => {
+  //     console.log('result:: ', result)
+  //     if(result.isConfirmed){
+  //       $("#booking_form").submit();
+  //     }
+  //     else{
+  //       window.location.reload();
+  //     }
+  //   });
+  // })
 
   $(document).on('submit', '#booking_form', function(e) {
     e.preventDefault();
@@ -644,27 +666,46 @@ $(document).ready(function(){
       console.log(`validationPass :: ${validationPass}`);
     }
     else{
-      form.find('.submit-button').attr('disabled', true)
-      $.ajax({
-        type:"POST",
-        url: ajaxUrl,
-        data: formData,
-        success: function(response){
-          console.log(`form submited`, response);
-          if(response.status_code == 200){
-            toastr["success"](response.message);
-            setTimeout(() => {
-              window.location.href = response.result.path;
-            }, 1000);
-          }
-        },
-        error: function(XHR, textStatus, errorThrown) {
-          // console.log(XHR.responseJSON.message);
-          if(XHR.responseJSON.message != undefined){
-              toastr["error"](XHR.responseJSON.message);
-          }else{
-              toastr["error"](errorThrown);
-          }
+      Swal.fire({
+        title: "Terms and Conditions",
+        html: "<div>Lorem ipsum dolor sit amet. Qui expedita iusto in dolore aspernatur ut Quis beatae. Vel blanditiis quis aut veniam ducimus ut eaque recusandae sed labore soluta sit soluta ducimus sit accusamus odio. Eos totam porro rem ratione quis sed magnam exercitationem. Sed dolorum incidunt aut expedita natus sit sint eaque et dolor obcaecati rem blanditiis nihil qui voluptatem dolorem.</div><br><div>Eum eligendi cumque est aspernatur quos id numquam velit. Et voluptatem quisquam eum consequatur enim qui placeat minus. Est recusandae aperiam et illum Quis sed ratione eius non saepe excepturi et amet excepturi est aliquid cupiditate.</div><br><div>Et quia eaque sed quis nihil qui cupiditate aperiam 33 perspiciatis nemo ex maxime voluptatum et nesciunt recusandae. Ut quidem dolorem ea beatae deleniti qui impedit sint.</div><br><div>Et sunt dolor qui sint inventore sed labore inventore qui dolorem reprehenderit. Ut atque facilis qui exercitationem distinctio ab sunt quasi aut saepe error est iusto saepe. Aut reprehenderit quia eos ipsum dicta et sint omnis ad quas dolor ut amet voluptas sit quas quos. In error accusantium sed placeat voluptatum et voluptatem voluptatem ut perferendis enim est vero autem et reiciendis nihil quo assumenda quia.</div><br><div>Hic aliquid consequatur et sint laborum in laudantium molestias? Et dignissimos sint aut itaque distinctio eos blanditiis dolore et suscipit voluptatem.</div>",
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonText: `Accept`,
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        allowOutsideClick: false,
+        width: '1024px'
+      }).then((result) => {
+        console.log('result:: ', result)
+        if(result.isConfirmed){
+          // $("#booking_form").submit();
+          form.find('.submit-button').attr('disabled', true);
+          $.ajax({
+            type:"POST",
+            url: ajaxUrl,
+            data: formData,
+            success: function(response){
+              console.log(`form submited`, response);
+              if(response.status_code == 200){
+                toastr["success"](response.message);
+                setTimeout(() => {
+                  window.location.href = response.result.path;
+                }, 1000);
+              }
+            },
+            error: function(XHR, textStatus, errorThrown) {
+              // console.log(XHR.responseJSON.message);
+              if(XHR.responseJSON.message != undefined){
+                  toastr["error"](XHR.responseJSON.message);
+              }else{
+                  toastr["error"](errorThrown);
+              }
+            }
+          });
+        }
+        else{
+          // window.location.reload();
         }
       });
     }

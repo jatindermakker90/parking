@@ -116,6 +116,10 @@ return [
       11 => 'November',
       12 => 'December'
     ],
+    'ALERTS' => [
+      'OPERATION_PENDING' => "Please provide the company operation timing. \nOtherwise you can not active this company !",
+      'BOOKING_TERMS_AND_COND' => `Lorem ipsum dolor sit amet. Qui expedita iusto in dolore aspernatur ut Quis beatae. Vel blanditiis quis aut veniam ducimus ut eaque recusandae sed labore soluta sit soluta ducimus sit accusamus odio. Eos totam porro rem ratione quis sed magnam exercitationem. Sed dolorum incidunt aut expedita natus sit sint eaque et dolor obcaecati rem blanditiis nihil qui voluptatem dolorem.\n\nEum eligendi cumque est aspernatur quos id numquam velit. Et voluptatem quisquam eum consequatur enim qui placeat minus. Est recusandae aperiam et illum Quis sed ratione eius non saepe excepturi et amet excepturi est aliquid cupiditate.\n\nEt quia eaque sed quis nihil qui cupiditate aperiam 33 perspiciatis nemo ex maxime voluptatum et nesciunt recusandae. Ut quidem dolorem ea beatae deleniti qui impedit sint.\n\nEt sunt dolor qui sint inventore sed labore inventore qui dolorem reprehenderit. Ut atque facilis qui exercitationem distinctio ab sunt quasi aut saepe error est iusto saepe. Aut reprehenderit quia eos ipsum dicta et sint omnis ad quas dolor ut amet voluptas sit quas quos. In error accusantium sed placeat voluptatum et voluptatem voluptatem ut perferendis enim est vero autem et reiciendis nihil quo assumenda quia.\n\nHic aliquid consequatur et sint laborum in laudantium molestias? Et dignissimos sint aut itaque distinctio eos blanditiis dolore et suscipit voluptatem.`,
+    ]
 
 
 ];

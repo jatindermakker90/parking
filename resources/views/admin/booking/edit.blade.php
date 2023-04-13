@@ -200,14 +200,14 @@
                     <div class="col-2">
                         <div class="form-group">
                             <label for="updated_dep_date">Updated Dep Date</label>
-                            <input type="date" class="form-control" min="{{ now()->format('Y-m-d')  }}" name ="updated_dep_date" placeholder="Select departure date" id="updated_dep_date" value="{{ $updated_dep_date }}">
+                            <input type="date" class="form-control" min="{{ $dep_date  }}" name ="updated_dep_date" placeholder="Select departure date" id="updated_dep_date" value="{{ $updated_dep_date }}">
                             <span class="validationFail">Please select departure date</span>
                         </div>
                     </div>
                     <div class="col-2">
                         <div class="form-group">
                             <label for="updated_return_date">Updated Arrival Date</label>
-                            <input type="date" class="form-control" min="{{ now()->format('Y-m-d')  }}" name ="updated_return_date" id="updated_return_date" value="{{ $updated_return_date }}">
+                            <input type="date" class="form-control" min="{{ $dep_date  }}" name ="updated_return_date" id="updated_return_date" value="{{ $updated_return_date }}">
                             <span class="validationFail">Please select arrival date</span>
                         </div>
                     </div>
@@ -244,8 +244,8 @@
                     </div>
                     <div class="col-2">
                         <div class="form-group">
-                            <label for="admin_charge">Admin Charge</label>
-                            <input type="text" class="form-control" placeholder="Enter admin charge" name="admin_charge" id="admin_charge" value="{{ $admin_charge }}">
+                            <label for="admin_charge">Booking Charge</label>
+                            <input type="text" class="form-control" readonly placeholder="Enter admin charge" name="admin_charge" id="admin_charge" value="{{ $admin_charge }}">
                             <span class="validationFail">Please select price</span>
                         </div>
                     </div>

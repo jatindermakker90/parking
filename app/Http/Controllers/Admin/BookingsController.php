@@ -119,32 +119,32 @@ class BookingsController extends WebController
                     })
                     ->editColumn('cancellation_cover', function($row){
                         if($row->cancellation_cover){
-                            return '<button type="button" title="Cancellation Cover" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;"><i class="fa fa-check"></i></button>';
+                            return '<button type="button" title="Cancellation Covered" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;"><i class="fa fa-check"></i></button>';
                         }else{
-                            return '<button type="button" title="Cancellation Cover" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;"><i class="fa fa-times"></i></button>';
+                            return '<button type="button" title="Cancellation not Covered" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;"><i class="fa fa-times"></i></button>';
                         }
                     })
                     ->editColumn('sms_confirmation', function($row){
                         if($row->sms_confirmation){
-                            return '<button type="button" title="SMS Confirmation" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;"><i class="fa fa-check"></i></button>';
+                            return '<button type="button" title="SMS Confirmation covered" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;"><i class="fa fa-check"></i></button>';
                         }else{
-                            return '<button type="button" title="SMS Confirmation" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;"><i class="fa fa-times"></i></button>';
+                            return '<button type="button" title="SMS Confirmation not covered" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;"><i class="fa fa-times"></i></button>';
                         }
                     })
                     ->editColumn('discount_code', function($row){
                         if($row->discount_code != null){
-                            return '<button type="button" title="Discount Code" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;">Yes</button>';
+                            return '<button type="button" title="Discount Code applied" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;">Yes</button>';
                         }else{
-                            return '<button type="button" title="Discount Code" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;">No</button>';
+                            return '<button type="button" title="Discount Code not applied" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;">No</button>';
                         }
                     })
                     ->editColumn('status', function($row){
                         //$payment_status = false;
                         if($row->payment_status == 1){
-                            return '<button type="button" title="Payment Status" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;"><i class="fa fa-check"></i></button>';
+                            return '<button type="button" title="Complete" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;"><i class="fa fa-check"></i></button>';
                         }
                         else{
-                            return '<button type="button" title="Payment Status" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"><i class="fa fa-times" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"></i></button>';
+                            return '<button type="button" title="Incomplete" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"><i class="fa fa-times" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"></i></button>';
                         }
                     })
                     ->editColumn('email', function($row){
@@ -245,7 +245,9 @@ class BookingsController extends WebController
             $nextBookingRefId = $nextBookingRefId.$increasedId;
         }
         $request->merge(['ref_id'=> $nextBookingRefId]);
+
         $bookingSave = $bookings::addBooking($request);
+
         if($bookingSave->count() > 0  && $bookingSave->id){
             $request->merge(['booking_id' => $bookingSave->id]);
             $bookingVehicle = $vehicle_details::addVehical($request);
@@ -623,8 +625,9 @@ class BookingsController extends WebController
         $year = $to->year;
 
         $airports = Airport::where('airport_status',config('constant.STATUS.ACTIVE'))->get();
+        $terminal = AirportTerminal::where('airport_id', $request->select_airport)->get();
 
-        $companies  = Company::where('company_status','!=',config('constant.STATUS.DELETED'))
+        $companies  = Company::where('company_status', config('constant.STATUS.ACTIVE'))
                             ->where('airport_id', $request->select_airport)
                             ->get();
 
@@ -651,7 +654,6 @@ class BookingsController extends WebController
                 }
 
             }
-            $terminal = AirportTerminal::where('airport_id', $request->select_airport)->get();
         }
         // dd($companies->toArray());
         return view('admin.booking.create')->with([
@@ -678,7 +680,8 @@ class BookingsController extends WebController
             ]);
         }
 
-        $get_booking = $booking->with(['vehicle', 'company', 'airport'])->find($request->id);
+        $get_booking = $booking->with(['vehicle', 'company', 'airport', 'payment'])->find($request->id);
+        dd($get_booking);
         $get_booking->booking_id = $request->id;
         $all_companies = $company->where('airport_id', $get_booking->airport_id)->where('company_status','!=',config('constant.STATUS.DELETED'))->get();
         $get_booking->all_companies = $all_companies;

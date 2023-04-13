@@ -123,6 +123,7 @@
               <form id="company_operations_form" enctype="multipart/form-data">
                 <input type="hidden" name="company_id" id="operation_modal_company_id">
                 <input type="hidden" name="id" id="operation_modal_operation_id">
+                <input type="hidden" name="from_status" id="operation_modal_from_status">
                 <div class="modal-header">
                   <h4 class="modal-title">Compny Operations</h4>
                   <button type="button" class="close close-operations-button" aria-label="Close">
@@ -682,10 +683,39 @@ $(document).ready(function(){
       fnDrawCallback: function (oSettings, json) {
 
           $("input[data-bootstrap-switch]").bootstrapSwitch({
-              'state':$(this).prop('checked'),
-                onSwitchChange: function(e, state) {
-                  var status   = state;
-                  var href     = $(this).data('href')+"?status="+status;
+            // 'state':$(this).prop('checked'),
+            onSwitchChange: function(e, state) {
+              e.preventDefault();
+              var status   = state;
+              var href     = $(this).data('href')+"?status="+status;
+              let operationButton = $(this).parents('tr').find('.company-operation');
+              console.log('status:: ', status, 'operationButton:: ', operationButton);
+              if(status){
+                let operationStatus = $(this).data('operation');
+                if(!operationStatus){
+                  e.preventDefault();
+                  console.log('status:: ', status, 'operationStatus:: ', operationStatus);
+                  Swal.fire({
+                    title: `{{ config('constant.ALERTS.OPERATION_PENDING') }}`,
+                    showDenyButton: false,
+                    showCancelButton: true,
+                    confirmButtonText: `Go Ahead !`,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowOutsideClick: false
+                  }).then((result) => {
+                    console.log('result:: ', result)
+                    if(result.isConfirmed){
+                      $(operationButton).trigger('click', 1);
+                      // operationsModel.modal('show');
+                    }
+                    else{
+                      window.location.reload();
+                    }
+                  });
+
+                }
+                else{
                   $.get(href, function(data) {
                     var message = null;
                     var response_status  = data.success;
@@ -695,19 +725,42 @@ $(document).ready(function(){
                       message = data.message;
                     }
                     Swal.fire({
-                          title: message,
-                          showDenyButton: false,
-                          showCancelButton: false,
-                          confirmButtonText: `OK`,
-                          allowOutsideClick: false,
-                          allowEscapeKey: false,
-                          allowOutsideClick: false
-                        }).then((result) => {
-                          window.location.reload();
-                       
-                        });
+                      title: message,
+                      showDenyButton: false,
+                      showCancelButton: false,
+                      confirmButtonText: `OK`,
+                      allowOutsideClick: false,
+                      allowEscapeKey: false,
+                      allowOutsideClick: false
+                    }).then((result) => {
+                      window.location.reload();
                     });
+                  });
                 }
+              }
+              else{
+                $.get(href, function(data) {
+                  var message = null;
+                  var response_status  = data.success;
+                  if(data.success){
+                    message = data.message;
+                  }else{
+                    message = data.message;
+                  }
+                  Swal.fire({
+                    title: message,
+                    showDenyButton: false,
+                    showCancelButton: false,
+                    confirmButtonText: `OK`,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowOutsideClick: false
+                  }).then((result) => {
+                    window.location.reload();
+                  });
+                });
+              }
+            }
           });
           
       } 
@@ -762,6 +815,13 @@ $(document).ready(function(){
   })
   $(document).on('click', '.close-operations-button', (e)=>{
     operationsModel.modal('hide');
+    let fromStatus = $('#company_operations_form #operation_modal_from_status').val();
+    if(fromStatus == "0"){
+      console.log('fromStatus:: ', fromStatus);
+    }
+    else{
+      window.location.reload();
+    }
   })
   $(document).on('change', '.per-day-increment-status', (e) => {
     let isChecked = $(e.target).is(':checked');
@@ -822,13 +882,16 @@ $(document).ready(function(){
 
   })
 
-  $(document).on('click','.company-operation',function(e){
+  $(document).on('click','.company-operation',function(e, fromStatus){
     e.preventDefault();
 
     let company_id  = $(this).data('id');
     let operation_id  = $(this).data('operation');
     let operation_url  = $(this).attr('href');
-    console.log('company_id:: ', company_id, 'operation_url:: ', operation_url);
+    if(fromStatus == undefined){
+      fromStatus = 0;
+    }
+    console.log('company_id:: ', company_id, 'operation_url:: ', operation_url, 'fromStatus::', fromStatus);
     let modal = $("#operations_modal");
     let twentyFouropeningStatus = $("#operations_modal").find('.24-7-opening-status-div');
     let flexibleOpeningStatus = $("#operations_modal").find('.flexible-opening-status');
@@ -840,6 +903,7 @@ $(document).ready(function(){
     $(flexibleOpeningStatus).hide();
     $(modal).find("#operation_modal_company_id").val(company_id);
     $(modal).find("#operation_modal_operation_id").val(operation_id);
+    $(modal).find("#operation_modal_from_status").val(fromStatus);
 
     $.each( modalInputField, function( key, element ) {
       if($(element).attr('type') == 'radio'){
@@ -1115,14 +1179,14 @@ $(document).ready(function(){
     let formDataSerialize = $(form).serialize();
     let formDaraArray = $(form).serializeArray();
     let validationKey = ["start_time", "end_time"];
-    let skipKeys = ['twenty_four_into_seven[status]', 'operating_type', 'company_id', 'id'];
+    let skipKeys = ['twenty_four_into_seven[status]', 'operating_type', 'company_id', 'id', 'from_status'];
 
     console.log("formDaraArray", formDaraArray, 'form data length:: ', formDaraArray.length);
     
     if(formDaraArray.length > 0){
       let validationPass = false;
 
-      let selectedOperantionType = formDaraArray[2].value;
+      let selectedOperantionType = formDaraArray[3].value;
 
       console.log('selectedOperantionType:: ', selectedOperantionType);
 

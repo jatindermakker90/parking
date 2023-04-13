@@ -139,7 +139,7 @@ class Company extends Model
             $company->levy_charge_status = $data->is_levy_charge;
         }
 
-        $company->company_status  = 1;
+        $company->company_status  = 0;
         $company->save();
         
         return $company;
