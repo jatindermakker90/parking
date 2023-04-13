@@ -105,6 +105,7 @@ class Bookings extends Model
         if($data->has('total_days') && $data->total_days){
             $booking->total_days = $data->total_days;
         }
+        $booking->payment_status = 2;
         $booking->booking_status  = 1;
         $booking->save();
         return $booking;

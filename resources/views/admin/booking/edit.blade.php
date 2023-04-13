@@ -26,8 +26,9 @@
             <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
             <div class="row">
                 <div class="col-2">
-                    <input type="hidden" name="booking_id" value="{{ $booking_id }}">
-                    <input type="hidden" name="vehicle_id" value="{{ $vehicle['id'] }}">
+                    <input type="hidden" name="booking_id" value="{{ $booking_id ?? ''}}">
+                    <input type="hidden" name="vehicle_id" value="{{ $vehicle['id'] ?? ''}}">
+                    <input type="hidden" name="payment_id" value="{{ $payment['id'] ?? '' }}">
                     <div class="form-group">
                         <label for="title">Title</label>
                         <select class="form-control select2" style="width: 100%;" name="title" id="title">
@@ -41,28 +42,28 @@
                 <div class="col-2">
                 <div class="form-group">
                     <label>First Name</label>
-                    <input type="text" class="form-control" id ="first_name" name="first_name" value="{{$first_name}}">
+                    <input type="text" class="form-control" id ="first_name" name="first_name" value="{{$first_name ?? ''}}">
                     <span class="validationFail">Please select first name</span>
                 </div>
                 </div>
                 <div class="col-2">
                 <div class="form-group">
                     <label>Last Name</label>
-                    <input type="text" class="form-control" id ="last_name" name="last_name" value="{{$last_name}}">
+                    <input type="text" class="form-control" id ="last_name" name="last_name" value="{{$last_name ?? ''}}">
                     <span class="validationFail">Please select last name</span>
                 </div>
                 </div>
                 <div class="col-4">
                 <div class="form-group">
                     <label>Email</label>
-                    <input type="text" class="form-control" id ="email" name="email" value="{{$email}}">
+                    <input type="text" class="form-control" id ="email" name="email" value="{{$email ?? ''}}">
                     <span class="validationFail">Please select email</span>
                 </div>
                 </div>
                 <div class="col-2">
                 <div class="form-group">
                     <label>Contact</label>
-                    <input type="text" class="form-control" id ="mobile" name="mobile" value="{{$mobile}}">
+                    <input type="text" class="form-control" id ="mobile" name="mobile" value="{{ $mobile ?? '' }}">
                     <span class="validationFail">Please select contact</span>
                 </div>
                 </div>
@@ -71,28 +72,28 @@
                 <div class="col-2">
                 <div class="form-group">
                     <label>City/ Town</label>
-                    <input type="text" class="form-control" id ="city_town" name="city_town" placeholder="Enter city" value="{{ $city_town }}">
+                    <input type="text" class="form-control" id ="city_town" name="city_town" placeholder="Enter city" value="{{ $city_town ?? ''}}">
                     <span class="validationFail">Please select city/ Town</span>
                 </div>
                 </div>
                 <div class="col-4">
                 <div class="form-group">
                     <label>Address</label>
-                    <input type="text" class="form-control" id ="address" name="address" placeholder="Enter address" value="{{ $address }}">
+                    <input type="text" class="form-control" id ="address" name="address" placeholder="Enter address" value="{{ $address ?? ''}}">
                     <span class="validationFail">Please select address</span>
                 </div>
                 </div>
                 <div class="col-4">
                 <div class="form-group">
                     <label>Country</label>
-                    <input type="text" class="form-control" id ="country" name="country" placeholder="Enter country" value="{{ $country }}">
+                    <input type="text" class="form-control" id ="country" name="country" placeholder="Enter country" value="{{ $country ?? ''}}">
                     <span class="validationFail">Please select country</span>
                 </div>
                 </div>
                 <div class="col-2">
                 <div class="form-group">
                     <label>Postcode</label>
-                    <input type="text" class="form-control" id ="postcode" name="postcode" placeholder="Enter postcode" value="{{ $postcode }}">
+                    <input type="text" class="form-control" id ="postcode" name="postcode" placeholder="Enter postcode" value="{{ $postcode ?? ''}}">
                     <span class="validationFail">Please select postcode</span>
                 </div>
                 </div>
@@ -121,7 +122,7 @@
                 <div class="col-4">
                 <div class="form-group">
                     <label for="flight_number">Return Flight Number</label>
-                    <input type="text" class="form-control" placeholder="We only need flight number" name="flight_number" id="flight_number" value="{{ $flight_number }}">
+                    <input type="text" class="form-control" placeholder="We only need flight number" name="flight_number" id="flight_number" value="{{ $flight_number ?? '' }}">
                     <span class="validationFail">Please select flight number</span>
                 </div>
                 </div>
@@ -132,28 +133,28 @@
                     <div class="col-3">
                     <div class="form-group">
                         <label for="vehicle_make">Vehicle Make</label>
-                        <input type="text" class="form-control" placeholder="Enter vehicle make" name="vehicle_make" id="vehicle_make" value="{{ $vehicle['vehicle_make'] }}">
+                        <input type="text" class="form-control" placeholder="Enter vehicle make" name="vehicle_make" id="vehicle_make" value="{{ $vehicle['vehicle_make'] ?? ''}}">
                         <span class="validationFail">Please select vehicle make</span>
                     </div>
                     </div>
                     <div class="col-3">
                     <div class="form-group">
                         <label for="vehicle_model">Vehicle Model</label>
-                        <input type="text" class="form-control" placeholder="Enter vehicle model" name="vehicle_model" id="vehicle_model" value="{{ $vehicle['vehicle_model'] }}">
+                        <input type="text" class="form-control" placeholder="Enter vehicle model" name="vehicle_model" id="vehicle_model" value="{{ $vehicle['vehicle_model'] ?? ''}}">
                         <span class="validationFail">Please select vehicle model</span>
                     </div>
                     </div>
                     <div class="col-3">
                     <div class="form-group">
                         <label for="vehicle_colour">Vehicle Colour</label>
-                        <input type="text" class="form-control" placeholder="Enter vehicle colour" name="vehicle_colour" id="vehicle_colour" value="{{ $vehicle['vehicle_colour'] }}">
+                        <input type="text" class="form-control" placeholder="Enter vehicle colour" name="vehicle_colour" id="vehicle_colour" value="{{ $vehicle['vehicle_colour'] ?? ''}}">
                         <span class="validationFail">Please select vehicle colour</span>
                     </div>
                     </div>
                     <div class="col-3">
                     <div class="form-group">
                         <label for="vehicle_reg">Vehicle Reg</label>
-                        <input type="text" class="form-control" placeholder="Enter vehicle reg" name="vehicle_reg" id="vehicle_reg" value="{{ $vehicle['vehicle_reg'] }}">
+                        <input type="text" class="form-control" placeholder="Enter vehicle reg" name="vehicle_reg" id="vehicle_reg" value="{{ $vehicle['vehicle_reg'] ?? ''}}">
                         <span class="validationFail">Please select vehicle reg.</span>
                     </div>
                     </div>
@@ -165,33 +166,33 @@
                     <div class="col-3">
                     <div class="form-group">
                         <label for="dep_date">Departure Date</label>
-                        <input type="date" readonly="readonly" class="form-control" min="{{ now()->format('Y-m-d')  }}" name ="dep_date" placeholder="Select departure date" id="dep_date" value="{{ $dep_date }}">
+                        <input type="date" readonly="readonly" class="form-control" min="{{ now()->format('Y-m-d')  }}" name ="dep_date" placeholder="Select departure date" id="dep_date" value="{{ $dep_date ?? ''}}">
                         <span class="validationFail">Please select departure date</span>
                     </div>
                     </div>
                     <div class="col-3">
                         <div class="form-group">
                             <label for="return_date">Arrival Date</label>
-                            <input type="date" readonly="readonly" class="form-control" min="{{ now()->format('Y-m-d')  }}" name ="return_date" id="return_date" value="{{ $return_date }}">
+                            <input type="date" readonly="readonly" class="form-control" min="{{ now()->format('Y-m-d')  }}" name ="return_date" id="return_date" value="{{ $return_date ?? ''}}">
                             <span class="validationFail">Please select arrival date</span>
                         </div>
                     </div>
                     <div class="col-2">
                         <div class="form-group">
                             <label for="dep_time">Departure Time</label>
-                            <input type="text" readonly="readonly" class="form-control" name ="dep_time" id="dep_time" value="{{ $dep_time }}">
+                            <input type="text" readonly="readonly" class="form-control" name ="dep_time" id="dep_time" value="{{ $dep_time ?? ''}}">
                         </div>
                     </div>
                     <div class="col-2">
                         <div class="form-group">
                             <label for="return_time">Arrival Time</label>
-                            <input type="text" readonly="readonly" class="form-control" name ="return_time" id="return_time" value="{{ $return_time }}">
+                            <input type="text" readonly="readonly" class="form-control" name ="return_time" id="return_time" value="{{ $return_time ?? ''}}">
                         </div>
                     </div>
                     <div class="col-2">
                         <div class="form-group">
                             <label for="price">Quote Price</label>
-                            <input type="text" class="form-control" readonly="readonly" placeholder="Enter price" name="price" id="price" value="{{ $price }}">
+                            <input type="text" class="form-control" readonly="readonly" placeholder="Enter price" name="price" id="price" value="{{ $price ?? ''}}">
                             <span class="validationFail">Please select price</span>
                         </div>
                     </div>
@@ -200,14 +201,14 @@
                     <div class="col-2">
                         <div class="form-group">
                             <label for="updated_dep_date">Updated Dep Date</label>
-                            <input type="date" class="form-control" min="{{ $dep_date  }}" name ="updated_dep_date" placeholder="Select departure date" id="updated_dep_date" value="{{ $updated_dep_date }}">
+                            <input type="date" class="form-control" min="{{ $dep_date  }}" name ="updated_dep_date" placeholder="Select departure date" id="updated_dep_date" value="{{ $updated_dep_date ?? '' }}">
                             <span class="validationFail">Please select departure date</span>
                         </div>
                     </div>
                     <div class="col-2">
                         <div class="form-group">
                             <label for="updated_return_date">Updated Arrival Date</label>
-                            <input type="date" class="form-control" min="{{ $dep_date  }}" name ="updated_return_date" id="updated_return_date" value="{{ $updated_return_date }}">
+                            <input type="date" class="form-control" min="{{ $dep_date  }}" name ="updated_return_date" id="updated_return_date" value="{{ $updated_return_date ?? ''}}">
                             <span class="validationFail">Please select arrival date</span>
                         </div>
                     </div>
@@ -238,14 +239,14 @@
                     <div class="col-2">
                         <div class="form-group">
                             <label for="discount_code">Discount Code</label>
-                            <input type="text" class="form-control" placeholder="Discount code" name="discount_code" id="discount_code" value="{{ $discount_code }}">
+                            <input type="text" class="form-control" placeholder="Discount code" name="discount_code" id="discount_code" value="{{ $discount_code ?? '' }}">
                             <span class="validationFail">Please select price</span>
                         </div>
                     </div>
                     <div class="col-2">
                         <div class="form-group">
                             <label for="admin_charge">Booking Charge</label>
-                            <input type="text" class="form-control" readonly placeholder="Enter admin charge" name="admin_charge" id="admin_charge" value="{{ $admin_charge }}">
+                            <input type="text" class="form-control" readonly placeholder="Enter admin charge" name="admin_charge" id="admin_charge" value="{{ $admin_charge ?? '' }}">
                             <span class="validationFail">Please select price</span>
                         </div>
                     </div>
@@ -260,40 +261,41 @@
                     <div class="col-3">
                         <div class="form-group">
                             <label for="total_days">Total Days</label>
-                            <input type="text" class="form-control" readonly="readonly" placeholder="Total days" name="total_days" id="total_days" value="{{ $total_days }}">
+                            <input type="text" class="form-control" readonly="readonly" placeholder="Total days" name="total_days" id="total_days" value="{{ $total_days ?? '' }}">
                         </div>
                     </div>
                     <div class="col-3">
                         <div class="form-group">
                             <label for="extended_price">Extended Price</label>
-                            <input type="text" class="form-control" placeholder="Extended price" name="extended_price" id="extended_price" value="{{ $extanded_price }}">
+                            <input type="text" class="form-control" placeholder="Extended price" name="extended_price" id="extended_price" value="{{ $extanded_price ?? ''}}">
                             <span class="validationFail">Please select price</span>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-3">
+                        <input type="hidden" name="base_price" value="{{ $payment['base_price'] ?? '' }}" id="base_price">
                         <div class="form-group">
                             <label for="payment_amount">Payment Amount</label>
-                            <input type="text" class="form-control" readonly="readonly" name ="payment_amount" placeholder="" id="payment_amount" value="">
+                            <input type="text" class="form-control" readonly="readonly" name ="payment_amount" placeholder="" id="payment_amount" value="{{ $payment['total_price'] ?? '' }}">
                         </div>
                     </div>
                     <div class="col-3">
                         <div class="form-group">
                             <label for="payment_method">Payment method</label>
-                            <input type="text" class="form-control" readonly="readonly" name ="payment_method" id="payment_method" value="">
+                            <input type="text" class="form-control" readonly="readonly" name ="payment_method" id="payment_method" value="{{ isset($payment['payment_method']) ? config('constant.PAYMENT_METHODS.'.$payment['payment_method']) : '' }}">
                         </div>
                     </div>
                     <div class="col-3">
                         <div class="form-group">
                             <label for="payment_status">Payment status</label>
-                            <input type="text" class="form-control" readonly="readonly" name ="payment_status" id="payment_status" value="">
+                            <input type="text" class="form-control" readonly="readonly" name ="payment_status" id="payment_status" value="{{ config('constant.PAYMENT_STATUS.'.$payment_status) ?? '' }}">
                         </div>
                     </div>
                     <div class="col-3">
                         <div class="form-group">
                             <label for="transaction_id">Transaction ID</label>
-                            <input type="text" class="form-control" readonly="readonly" placeholder="" name="transaction_id" id="transaction_id" value="">
+                            <input type="text" class="form-control" readonly="readonly" placeholder="" name="transaction_id" id="transaction_id" value="{{ $payment['transaction_id'] ?? '' }}">
                         </div>
                     </div>
                 </div>
@@ -301,7 +303,7 @@
                     <div class="col-6">
                         <div class="form-group">
                             <label for="return_time">Payment Method</label>
-                            <select class="form-control last_option" name="return_time" id="return_time">
+                            <select class="form-control last_option" name="payment_method_get" id="payment_method_get">
                                 @foreach(config('constant.PAYMENT_METHODS') as $time_key => $time_value)
                                     <option value="{{$time_key}}">{{$time_value}}</option>
                                 @endforeach
@@ -318,7 +320,7 @@
             </div>
             <div class="tab-pane fade" id="nav-special" role="tabpanel" aria-labelledby="nav-special-tab">
                 <label for="special_notes">Special Notes</label>
-                <textarea class="w-100" name="special_notes" id="special_notes" rows="5">{{ $special_notes }}</textarea>
+                <textarea class="w-100" name="special_notes" id="special_notes" rows="5">{{ $special_notes ?? '' }}</textarea>
                 <span class="validationFail">Please write some special notes</span>
             </div>
             <div class="tab-pane fade" id="nav-shift" role="tabpanel" aria-labelledby="nav-shift-tab">
