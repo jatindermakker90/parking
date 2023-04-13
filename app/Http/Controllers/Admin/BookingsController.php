@@ -109,10 +109,10 @@ class BookingsController extends WebController
                     ->editColumn('price', function($row){
                         if(isset($row->payment)){
                             if($row->payment->status === 2){
-                                return '<button type="button" class="btn btn-sm btn-danger price-pay" style="padding: 0px 2px 0px 2px;" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'">$'.$row->price.' Not Payed</button>';    
+                                return '<button type="button" class="btn btn-sm btn-danger price-pay" style="padding: 0px 2px 0px 2px;" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'">$'.$row->payment->total_price.' Not Payed</button>';    
                                 
                             }else if($row->payment->status === 1){
-                                return '<span style="padding: 0px 2px 0px 2px;">$'.$row->payment->status.'</span>';
+                                return '<span style="padding: 0px 2px 0px 2px;">$'.$row->payment->total_price.'</span>';
                             }
                         }
                         else{

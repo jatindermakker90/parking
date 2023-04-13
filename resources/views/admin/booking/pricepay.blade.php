@@ -91,7 +91,7 @@
     </div>
     <div class="row" style="margin-left: -5px; margin-right: -5px; margin-top: 10px;">
     <div class="col-sm-2" style="margin-top:0px;">
-    <label>Payed Amount</label>
+    <label>Amount To Be Payed</label>
     <input type="text" class="form-control" name="totalPaidAmount" required="" placeholder="" value="35.49">
     </div>
     <div class="col-sm-2" style="margin-top:0px;">
