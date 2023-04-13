@@ -577,7 +577,7 @@ $(document).ready(function(){
       let excludeElementValidation = [
           'discount_code', 'cancellation_cover', 'sms_confirmation', 'city_town',
           'address', 'country', 'postcode', 'flight_number', 'special_notes', 'admin_charge',
-          'extended_price', 'payment_amount', 'payment_method', 'payment_status', 'transaction_id', 'transaction_id_get'
+          'extended_price', 'payment_amount', 'payment_method', 'payment_method_get', 'payment_status', 'transaction_id', 'transaction_id_get'
       ]
       let ajaxUrl = "{{ route('booking-update') }}";
       let editBookingForm = $("#edit_booking_form");
@@ -960,6 +960,7 @@ $(document).ready(function(){
           $(editBookingForm).find("#total_days").val(response.data.no_of_days);
           $(editBookingForm).find("#admin_charge").val(response.data.admin_charge);
           $(editBookingForm).find("#payment_amount").val(response.data.new_price);
+          $(editBookingForm).find("#base_price").val(response.data.base_price);
 
           $(editBookingForm).find("#edit_booking_button").removeAttr("disabled");
           $(editBookingForm).find("#get_updated_price_warrning").hide();

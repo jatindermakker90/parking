@@ -156,6 +156,7 @@
             <input type="hidden" name="return_date" id="booking_return_date">
             <input type="hidden" name="return_time" id="booking_return_time">
             <input type="hidden" name="discount_code" id="booking_discount_code">
+            <input type="hidden" name="base_price" id="booking_base_price">
             <div class="card-header text-center">
               <h3 class="card-title">Fill Your Deatils</h3>
             </div>
@@ -524,6 +525,9 @@ $(document).ready(function(){
   $(document).on('click','.book-now',function(e){
     var company_id    = $(this).data('id');
 
+    let bookingForm = $("#booking-form");
+    let bookingSummaryEle = $("#booking-summary");
+
     let filterEle = $("#filter-form");
     filterEle.find(`input, select, button`).attr('disabled', true);
     let airport = filterEle.find("#select_airport option:selected").text();
@@ -545,9 +549,6 @@ $(document).ready(function(){
     let imageUrl = companyTab.find('img').attr('src');
     let companyTitle = companyTab.find('.card-header .company-title').text();
 
-    let bookingForm = $("#booking-form");
-    let bookingSummaryEle = $("#booking-summary");
-
     bookingSummaryEle.find(".booking-company-logo").attr('src', imageUrl);
     bookingSummaryEle.find(".company-title").text(companyTitle);
     bookingSummaryEle.find(".drop-off").text(`DROP OFF : ${dropOffDate} at ${dropOffTime}`);
@@ -563,6 +564,7 @@ $(document).ready(function(){
     bookingForm.find(`input[name='return_date']`).val(filterEle.find('#return_date').val());
     bookingForm.find(`input[name='return_time']`).val(filterEle.find('#return_time').val());
     bookingForm.find(`input[name='discount_code']`).val(filterEle.find('#discount_code').val());
+    bookingForm.find(`input[name='base_price']`).val(companyPrice);
 
     $("#company-list").hide();
     bookingForm.css('display', 'flex');

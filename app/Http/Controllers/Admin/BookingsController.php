@@ -16,6 +16,7 @@ use App\Models\OfferType;
 use App\Models\CompanyType;
 use App\Models\ServiceType;
 use App\Models\VehicleDetails;
+use App\Models\Payment;
 
 use Carbon\Carbon;
 
@@ -31,8 +32,6 @@ class BookingsController extends WebController
     }
     public function checkIfEndDateIsGreater(Request $request)
     {
-        // dd($request->all());
-
         if(!$request->start_date){
             return response()->json([
                 'code' => 203,
@@ -50,7 +49,6 @@ class BookingsController extends WebController
         $from = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $request->end_date);
         $diffInDays = $from->diffInDays($to);
         $plusOne = 1;
-        // $diffInDays = $from->diff($to);
 
         $data = $from->greaterThanOrEqualTo($to);
         return response()->json([
@@ -67,7 +65,7 @@ class BookingsController extends WebController
      */
     public function index(Request $request){
         if ($request->ajax()) {
-            $booking = Bookings::with(['vehicle', 'company', 'airport']);
+            $booking = Bookings::with(['vehicle', 'company', 'airport', 'payment']);
 
             if($request->selected_airport && $request->selected_airport != null){
                 $booking->where('airport_id', $request->selected_airport);
@@ -109,7 +107,6 @@ class BookingsController extends WebController
                         return $full_name = $row->first_name.' '.$row->last_name;
                     })
                     ->editColumn('price', function($row){
-                        //$payment_status = false;
                         if($row->payment_status){
                             return '<span style="padding: 0px 2px 0px 2px;">$'.$row->price.'</span>';
                         }
@@ -139,7 +136,6 @@ class BookingsController extends WebController
                         }
                     })
                     ->editColumn('status', function($row){
-                        //$payment_status = false;
                         if($row->payment_status == 1){
                             return '<button type="button" title="Complete" class="btn btn-sm btn-success" style="padding: 0px 4px 0px 4px;"><i class="fa fa-check"></i></button>';
                         }
@@ -169,7 +165,6 @@ class BookingsController extends WebController
                             } else {
                                 $btn .= '<button type="button" class="sms-send btn btn-danger btn-sm mr-2" title="SMS Not Sent" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"><i class="fas fa-sms" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'" aria-hidden="true"></i></button>';
                             }
-                            //$btn .= '<button type="button" class="btn btn-danger btn-sm mr-2 change-status" title="Change Status" data-id="'.$row->id.'">Status</button>';
                             return $btn;
                     })
                     ->rawColumns([
@@ -215,7 +210,7 @@ class BookingsController extends WebController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Bookings $bookings, VehicleDetails $vehicle_details){
+    public function store(Request $request, Bookings $bookings, VehicleDetails $vehicle_details, Payment $payment){
         $validator = Validator::make($request->all(), [
             'select_airport'            => 'required'
         ]);
@@ -223,12 +218,12 @@ class BookingsController extends WebController
         if($validator->fails()){
            return redirect()->back()->withErrors($validator);
         }
+
         $dep_date = $request->dep_date.' '.$request->dep_time.':00';
         $return_date = $request->return_date.' '.$request->return_time.':00';
         $total_days = $this->getDaysFromDates($dep_date, $return_date);
-        if($total_days == 0){
-            $total_days = 1;
-        }
+        $plusOne = 1;
+        $total_days = $total_days = $plusOne;
 
         $request->merge(['total_days' => $total_days]);
 
@@ -251,6 +246,7 @@ class BookingsController extends WebController
         if($bookingSave->count() > 0  && $bookingSave->id){
             $request->merge(['booking_id' => $bookingSave->id]);
             $bookingVehicle = $vehicle_details::addVehical($request);
+            $paymentDetails = $payment->savePayment($request);
         }
         $response = [];
         $response['booking_details'] = $bookingSave;
@@ -290,8 +286,7 @@ class BookingsController extends WebController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Bookings $booking, VehicleDetails $vehicle_details){
-        // dd($request->all());
+    public function update(Request $request, Bookings $booking, VehicleDetails $vehicle_details, Payment $payment){
         if(!$request->booking_id){
             return response()->json([
                 'code' => 203,
@@ -338,29 +333,22 @@ class BookingsController extends WebController
         $dep_date = $updated_dep_date_time.':00';
         $return_date = $updated_return_date_time.':00';
         $total_days = $this->getDaysFromDates($dep_date, $return_date);
-        if($total_days == 0){
-            $total_days = 1;
-        }
+        $plusOne = 1;
+        $total_days = $total_days + $plusOne;
+        
 
         $request->merge(['total_days' => $total_days]);
 
-
-        // dd($request->all());
         $booking_updated_data = $booking->updateBooking($request);
         $vehicle_update_data = $vehicle_details->updateVehicle($request);
-
-        if($booking_updated_data->id && $vehicle_update_data->id){
+        $payment_update_data = $payment->updatePayment($request);
+        if($booking_updated_data->id && $vehicle_update_data->id && $payment_update_data->id){
             return response()->json([
                 'code' => 200,
                 'path' => route('bookings.index'),
                 'success' => 'Booking updated successfully !'
             ]);
         }
-
-
-
-
-        //  return $this->sendSuccess([],$message,200);
     }
 
     /**
@@ -372,8 +360,6 @@ class BookingsController extends WebController
      */
     public function cancelledBookingList(Request $request){
         if ($request->ajax()) {
-            // $booking = Bookings::with(['vehicle', 'company', 'airport'])->where('booking_status','=',config('constant.BOOKING_STATUS.CANCEL'))->get();
-            // dd($booking);
             $booking = Bookings::with(['vehicle', 'company', 'airport']);
 
             if($request->selected_airport && $request->selected_airport != null){
@@ -456,8 +442,6 @@ class BookingsController extends WebController
                     })
                     ->addColumn('action', function($row){
                             $btn = '';
-                            // $btn = '<button type="button" class="edit-booking btn btn-warning btn-sm mr-2" title="Edit Booking" data-id="'.$row->id.'"><i class="fa fa-edit" data-id="'.$row->id.'" aria-hidden="true"></i></button>';
-                            // $btn .= '<button class="delete btn btn-danger btn-sm mr-2 delete_record" title="Delete Booking" data-type =""><i class="fa fa-trash" aria-hidden="true"></i></button>';
                             $btn .= '<button type="button" class="btn btn-danger btn-sm mr-2 change-status" title="Change Status" data-id="'.$row->id.'"><i class="fas fa-stream" data-id="'.$row->id.'"></i></button>';
                             return $btn;
                     })
@@ -485,8 +469,6 @@ class BookingsController extends WebController
      */
     public function trashededBookingList(Request $request){
         if ($request->ajax()) {
-            // $booking = Bookings::with(['vehicle', 'company', 'airport'])->where('booking_status','=',config('constant.BOOKING_STATUS.TRASHED'))->get();
-            // dd($booking);
             $booking = Bookings::with(['vehicle', 'company', 'airport']);
 
             if($request->selected_airport && $request->selected_airport != null){
@@ -568,8 +550,6 @@ class BookingsController extends WebController
                     })
                     ->addColumn('action', function($row){
                             $btn = '';
-                            // $btn = '<button type="button" class="edit-booking btn btn-warning btn-sm mr-2" title="Edit Booking" data-id="'.$row->id.'"><i class="fa fa-edit" data-id="'.$row->id.'" aria-hidden="true"></i></button>';
-                            // $btn .= '<button class="delete btn btn-danger btn-sm mr-2 delete_record" title="Delete Booking" data-type =""><i class="fa fa-trash" aria-hidden="true"></i></button>';
                             $btn .= '<button type="button" class="btn btn-danger btn-sm mr-2 change-status" title="Change Status" data-id="'.$row->id.'"><i class="fas fa-stream" data-id="'.$row->id.'"></i></button>';
                             return $btn;
                     })
@@ -606,7 +586,6 @@ class BookingsController extends WebController
 
     public function searchCompanyList(Request $request)
     {
-        // dd($request->all());
         $validator = Validator::make($request->all(), [
             'select_airport'   => 'required',
         ]);
@@ -640,8 +619,6 @@ class BookingsController extends WebController
                                                 'month' => $month,
                                                 'year' => $year
                 ]);
-                // $booking_price = $booking_price + config('constant.BOOKING.BOOKING_CHARGE');
-                // $value->booking_admin_charge = config('constant.BOOKING.BOOKING_CHARGE');
                 $value->price_with_admin_charge = $value->final_booking_price + config('constant.BOOKING.BOOKING_CHARGE');
                 if(!empty($value->company_types)){
                     $value->company_types =  CompanyType::wherein('id', explode(",", $value->company_types))->get();
@@ -655,7 +632,6 @@ class BookingsController extends WebController
 
             }
         }
-        // dd($companies->toArray());
         return view('admin.booking.create')->with([
             'title' =>"Booking Management",
             "header" => "Add Booking",
@@ -681,12 +657,10 @@ class BookingsController extends WebController
         }
 
         $get_booking = $booking->with(['vehicle', 'company', 'airport', 'payment'])->find($request->id);
-        dd($get_booking);
         $get_booking->booking_id = $request->id;
         $all_companies = $company->where('airport_id', $get_booking->airport_id)->where('company_status','!=',config('constant.STATUS.DELETED'))->get();
         $get_booking->all_companies = $all_companies;
-        // dd($all_companies->toArray());
-
+        
         $get_booking->dep_date = date("Y-m-d", strtotime($get_booking->dep_date_time));
         $get_booking->dep_time = date("H:i", strtotime($get_booking->dep_date_time));
         $get_booking->updated_dep_date = date("Y-m-d", strtotime($get_booking->updated_dep_date_time));
@@ -696,8 +670,7 @@ class BookingsController extends WebController
         $get_booking->return_time = date("H:i", strtotime($get_booking->return_date_time));
         $get_booking->updated_return_date = date("Y-m-d", strtotime($get_booking->updated_return_date_time));
         $get_booking->updated_return_time = date("H:i", strtotime($get_booking->updated_return_date_time));
-
-        // dd($get_booking->toArray());
+        // dd($get_booking);
         return response()->view('admin.booking.edit', $get_booking, 200);
     }
 
@@ -714,8 +687,7 @@ class BookingsController extends WebController
         $get_booking->booking_id = $request->id;
         $all_companies = $company->where('airport_id', $get_booking->airport_id)->where('company_status','!=',config('constant.STATUS.DELETED'))->get();
         $get_booking->all_companies = $all_companies;
-        // dd($all_companies->toArray());
-
+        
         $get_booking->dep_date = date("Y-m-d", strtotime($get_booking->dep_date_time));
         $get_booking->dep_time = date("H:i", strtotime($get_booking->dep_date_time));
         $get_booking->updated_dep_date = date("Y-m-d", strtotime($get_booking->updated_dep_date_time));
@@ -726,7 +698,6 @@ class BookingsController extends WebController
         $get_booking->updated_return_date = date("Y-m-d", strtotime($get_booking->updated_return_date_time));
         $get_booking->updated_return_time = date("H:i", strtotime($get_booking->updated_return_date_time));
 
-        // dd($get_booking->toArray());
         return response()->view('admin.booking.view', $get_booking, 200);
     }
 
@@ -743,8 +714,7 @@ class BookingsController extends WebController
         $get_booking->booking_id = $request->id;
         $all_companies = $company->where('airport_id', $get_booking->airport_id)->where('company_status','!=',config('constant.STATUS.DELETED'))->get();
         $get_booking->all_companies = $all_companies;
-        // dd($all_companies->toArray());
-
+        
         $get_booking->dep_date = date("Y-m-d", strtotime($get_booking->dep_date_time));
         $get_booking->dep_time = date("H:i", strtotime($get_booking->dep_date_time));
         $get_booking->updated_dep_date = date("Y-m-d", strtotime($get_booking->updated_dep_date_time));
@@ -755,7 +725,6 @@ class BookingsController extends WebController
         $get_booking->updated_return_date = date("Y-m-d", strtotime($get_booking->updated_return_date_time));
         $get_booking->updated_return_time = date("H:i", strtotime($get_booking->updated_return_date_time));
 
-        // dd($get_booking->toArray());
         return response()->view('admin.booking.cancel', $get_booking, 200);
     }
 
@@ -792,7 +761,7 @@ class BookingsController extends WebController
         if($booking){
           $booking->booking_status = '2';
           if($booking->save()){
-            //return redirect()->route('bookings.index');
+            
           }
         } else {
           return redirect()->back();
@@ -814,7 +783,6 @@ class BookingsController extends WebController
         $all_companies = $company->where('airport_id', $get_booking->airport_id)->where('company_status','!=',config('constant.STATUS.DELETED'))->get();
         $get_booking->all_companies = $all_companies;
 
-        // dd($get_booking->toArray());
         return response()->view('admin.booking.smsview', $get_booking, 200);
     }
 
@@ -846,7 +814,6 @@ class BookingsController extends WebController
         $all_companies = $company->where('airport_id', $get_booking->airport_id)->where('company_status','!=',config('constant.STATUS.DELETED'))->get();
         $get_booking->all_companies = $all_companies;
 
-        // dd($get_booking->toArray());
         return response()->view('admin.booking.emailview', $get_booking, 200);
     }
 
@@ -907,19 +874,16 @@ class BookingsController extends WebController
     public function getChangeStatusHtml(Request $request, Bookings $booking)
     {
         $booking_status =  $booking->select(['id','booking_status'])->find($request->id);
-        // dd($booking_status);
         return response()->view('admin.booking.change-status-model-body', $booking_status, 200);
     }
 
     public function getChangeBookingStatus(Request $request, Bookings $booking)
     {
-        // dd($request->all());
         $get_booking = $booking->find($request->booking_id) ?? $booking;
         if($request->has('status') && $request->status){
             $get_booking->booking_status = $request->status;
         }
         $updated_booking = $get_booking->save();
-        // dd($updated_booking);
         if($updated_booking){
             return response()->json([
                 'code' => 200,
@@ -932,7 +896,6 @@ class BookingsController extends WebController
 
     public function getUpdatedPrice(Request $request, Company $company, Bookings $booking)
     {
-        // dd($request->all());
         $response = [];
         $booking_details = $booking->find($request->booking_id);
         $company_details = $company->find($request->company);
@@ -942,8 +905,6 @@ class BookingsController extends WebController
 
         $dep_date_updated = $request->updated_dep_date.' '.$request->updated_dep_time.':00';
         $return_date_updated = $request->updated_return_date.' '.$request->updated_return_time.':00';
-
-        // dd($dep_date, $return_date);
 
         $to = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $dep_date);
         $from = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $return_date);
@@ -964,6 +925,7 @@ class BookingsController extends WebController
                     'month' => $month,
                     'year' => $year
                 ]);
+        $base_price = $get_price;
         if($booking_details->cancellation_cover){
             $get_price = $get_price + config('constant.BOOKING.CANCELLATION_CHARGE');
         }
@@ -979,8 +941,7 @@ class BookingsController extends WebController
         $response['diff_price'] = $diff_in_price;
         $response['no_of_days'] = $diffInDaysUpdated;
         $response['admin_charge'] = config('constant.BOOKING.BOOKING_CHARGE');
-        // dd($response);
-        // dd($get_price, $diff_in_price, $company_details->toArray(), $booking_details->toArray());
+        $response['base_price'] = $base_price;
         return response()->json([
                 'code' => 200,
                 'success' => true,
