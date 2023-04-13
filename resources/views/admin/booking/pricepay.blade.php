@@ -96,15 +96,10 @@
     </div>
     <div class="col-sm-2" style="margin-top:0px;">
     <label>Payment Method</label>
-    <select class="form-control" id="type" name="type">
-    <option value="PayPal">PayPal</option>
-    <!-- <option value="PayPalExpress">PayPal Express</option>
-    <option value="Stripe" selected="selected">Stripe</option>
-    <option value="Stripe3DS">Stripe 3DS</option>
-    <option value="WorldPay">WorldPay</option> -->
-    <option value="card_payment">Card Payment</option>
-    <!-- <option value="Cash">Cash</option>
-    <option value="Phone">Phone</option> -->
+    <select class="form-control last_option" name="payment_method" id="payment_method_get">
+        @foreach(config('constant.PAYMENT_METHODS') as $time_key => $time_value)
+            <option value="{{$time_key}}">{{$time_value}}</option>
+        @endforeach
     </select>
     </div>
     <div class="col-sm-2" style="margin-top:0px;">
