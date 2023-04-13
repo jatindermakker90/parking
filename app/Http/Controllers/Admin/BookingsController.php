@@ -681,7 +681,7 @@ class BookingsController extends WebController
         }
 
         $get_booking = $booking->with(['vehicle', 'company', 'airport', 'payment'])->find($request->id);
-        dd($get_booking);
+        //dd($get_booking);
         $get_booking->booking_id = $request->id;
         $all_companies = $company->where('airport_id', $get_booking->airport_id)->where('company_status','!=',config('constant.STATUS.DELETED'))->get();
         $get_booking->all_companies = $all_companies;

@@ -960,7 +960,9 @@ $(document).ready(function(){
           $(editBookingForm).find("#total_days").val(response.data.no_of_days);
           $(editBookingForm).find("#admin_charge").val(response.data.admin_charge);
           $(editBookingForm).find("#payment_amount").val(response.data.new_price);
-  
+
+          $(editBookingForm).find("#edit_booking_button").removeAttr("disabled");
+          $(editBookingForm).find("#get_updated_price_warrning").hide();
         },
         error: function(XHR, textStatus, errorThrown) {
             if(XHR.responseJSON.message != undefined){
