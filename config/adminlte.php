@@ -390,7 +390,7 @@ return [
                 ],
                 [
                     'text'        => 'Daily Bookings',
-                    'url'         => '#',
+                    'url'         => 'admin/booking/booking-daily-list',
                 ],
             ]
         ],

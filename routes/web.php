@@ -176,6 +176,7 @@ Route::prefix('admin')->group(function () {
             Route::resource('revenue',                           RevenueController::class);
             Route::get('booking-revenue-airport',               [RevenueController::class,'getairportrevenuepage'])->name('airport_revenue');
             Route::get('booking-revenue-list',               [RevenueController::class,'getrevenuelistpage'])->name('revenue_list');
+            Route::get('booking-daily-list',               [RevenueController::class,'getdailybookingpage'])->name('daily_booking_list');
         });
         // ========================== discount =====================================//
         // ========================== discount =====================================//
