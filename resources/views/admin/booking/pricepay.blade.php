@@ -5,7 +5,7 @@
   @csrf
     <div class="row" style="margin-left: -5px; margin-right: -5px;">
       <input type="hidden" name="booking_id" value="{{ $id }}">
-      <input type="hidden" name="formtype" value="approve">
+      <input type="hidden" name="payment_id" value="{{ $payment['id'] }}">
     <div class="col-sm-12">
     <label>Booking Status</label>
     <span class="btn btn-primary btn-sm">
@@ -92,7 +92,7 @@
     <div class="row" style="margin-left: -5px; margin-right: -5px; margin-top: 10px;">
     <div class="col-sm-2" style="margin-top:0px;">
     <label>Amount To Be Payed</label>
-    <input type="text" class="form-control" name="totalPaidAmount" required="" placeholder="" value="35.49">
+    <input type="text" class="form-control" name="totalPaidAmount" required="" placeholder="" value="{{ $payment['total_price'] }}">
     </div>
     <div class="col-sm-2" style="margin-top:0px;">
     <label>Payment Method</label>
@@ -107,12 +107,12 @@
     <select class="form-control" id="status" name="status">
     <option value="1" selected="selected">Completed</option>
     <option value="2">In-Complete</option>
-    <option value="3">Pending</option>    
+    <option value="3">Pending</option>
     </select>
     </div>
     <div class="col-sm-4" style="margin-top:0px;">
     <label>Transaction ID</label>
-    <input type="text" class="form-control" name="transaction_id" required="" id="transaction_id" placeholder="" value="txn_1BzJEsDx2GhByPY5Rz8datAD">
+    <input type="text" class="form-control" name="transaction_id" required="" id="transaction_id" placeholder="Please enter Transaction ID">
     </div>
     </div>
     <div class="row" style="margin-left: -5px; margin-right: -5px;">
