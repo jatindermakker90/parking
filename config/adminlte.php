@@ -386,7 +386,7 @@ return [
                 ],
                 [
                     'text'        => 'Bookings Revenue List',
-                    'url'         => '#',
+                    'url'         => 'admin/booking/booking-revenue-list',
                 ],
                 [
                     'text'        => 'Daily Bookings',
