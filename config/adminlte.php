@@ -382,7 +382,7 @@ return [
                 ],
                 [
                     'text'        => 'Bookings Revenue Airport',
-                    'url'         => '#',
+                    'url'         => 'admin/booking/booking-revenue-airport',
                 ],
                 [
                     'text'        => 'Bookings Revenue List',

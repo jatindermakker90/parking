@@ -174,6 +174,7 @@ Route::prefix('admin')->group(function () {
         // ========================== Booking Reports =====================================//
         Route::prefix('booking')->group(function () {
             Route::resource('revenue',                           RevenueController::class);
+            Route::get('booking-revenue-airport',               [RevenueController::class,'getairportrevenuepage'])->name('airport_revenue');
         });
         // ========================== discount =====================================//
         // ========================== discount =====================================//
