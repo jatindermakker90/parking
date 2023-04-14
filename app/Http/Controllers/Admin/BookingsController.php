@@ -109,8 +109,8 @@ class BookingsController extends WebController
                     ->editColumn('price', function($row){
                         if(isset($row->payment)){
                             if($row->payment->status === 2){
-                                return '<button type="button" class="btn btn-sm btn-danger price-pay" style="padding: 0px 2px 0px 2px;" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'">$'.$row->payment->total_price.' Not Payed</button>';    
-                                
+                                return '<button type="button" class="btn btn-sm btn-danger price-pay" style="padding: 0px 2px 0px 2px;" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'">$'.$row->payment->total_price.' Not Payed</button>';
+
                             }else if($row->payment->status === 1){
                                 return '<span style="padding: 0px 2px 0px 2px;">$'.$row->payment->total_price.'</span>';
                             }
@@ -340,7 +340,7 @@ class BookingsController extends WebController
         $total_days = $this->getDaysFromDates($dep_date, $return_date);
         $plusOne = 1;
         $total_days = $total_days + $plusOne;
-        
+
 
         $request->merge(['total_days' => $total_days]);
 
@@ -665,7 +665,7 @@ class BookingsController extends WebController
         $get_booking->booking_id = $request->id;
         $all_companies = $company->where('airport_id', $get_booking->airport_id)->where('company_status','!=',config('constant.STATUS.DELETED'))->get();
         $get_booking->all_companies = $all_companies;
-        
+
         $get_booking->dep_date = date("Y-m-d", strtotime($get_booking->dep_date_time));
         $get_booking->dep_time = date("H:i", strtotime($get_booking->dep_date_time));
         $get_booking->updated_dep_date = date("Y-m-d", strtotime($get_booking->updated_dep_date_time));
@@ -692,7 +692,7 @@ class BookingsController extends WebController
         $get_booking->booking_id = $request->id;
         $all_companies = $company->where('airport_id', $get_booking->airport_id)->where('company_status','!=',config('constant.STATUS.DELETED'))->get();
         $get_booking->all_companies = $all_companies;
-        
+
         $get_booking->dep_date = date("Y-m-d", strtotime($get_booking->dep_date_time));
         $get_booking->dep_time = date("H:i", strtotime($get_booking->dep_date_time));
         $get_booking->updated_dep_date = date("Y-m-d", strtotime($get_booking->updated_dep_date_time));
@@ -719,7 +719,7 @@ class BookingsController extends WebController
         $get_booking->booking_id = $request->id;
         $all_companies = $company->where('airport_id', $get_booking->airport_id)->where('company_status','!=',config('constant.STATUS.DELETED'))->get();
         $get_booking->all_companies = $all_companies;
-        
+
         $get_booking->dep_date = date("Y-m-d", strtotime($get_booking->dep_date_time));
         $get_booking->dep_time = date("H:i", strtotime($get_booking->dep_date_time));
         $get_booking->updated_dep_date = date("Y-m-d", strtotime($get_booking->updated_dep_date_time));
@@ -766,7 +766,7 @@ class BookingsController extends WebController
         if($booking){
           $booking->booking_status = '2';
           if($booking->save()){
-            
+
           }
         } else {
           return redirect()->back();
@@ -864,10 +864,16 @@ class BookingsController extends WebController
 
     public function postBookingPricePay(Request $request){
       $booking = Bookings::where('id',$request->booking_id)->first();
+      $payment = Payment::where('id',$request->payment_id)->first();
         if($booking){
           $booking->payment_status = '1';
-          $booking->payment_notes = $request->notes;
-          if($booking->save()){
+          $payment->payment_notes = $request->notes;
+          $payment->status = $request->status;
+          $payment->paid_amount = $request->totalPaidAmount;
+          $payment->payment_method = $request->payment_method;
+          $payment->transaction_id = $request->transaction_id;
+          if($payment->save()){
+            $booking->save();
             return redirect()->route('bookings.index');
           }
         } else {
