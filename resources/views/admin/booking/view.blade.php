@@ -39,25 +39,21 @@
     <div class="col-md-3 breakWord">
         <i class="fa fa-credit-card-alt" aria-hidden="true" style="margin-right:10px;"></i><span style="font-size: 16px;display:inline-block;margin-top: 20px;color: #2e2e2e;"><strong>Payment Details</strong></span>
         <ul class="custom-ul">
-          <li>Quote Amount: <strong>59.00</strong></li>
           <li>Cancellation Protection: <strong>No</strong></li>
-          <li>Discount Amount: <strong>0.00</strong></li>
           <li>Levy Charge: <strong>0</strong></li>
           <li>Extra Amount: <strong>3</strong></li>
-           <li>Postal Charge: <strong>0</strong></li>
           <li>Cancellation Charge: <strong>0</strong></li>
           <li>Sms Charge: <strong>0</strong></li>
-          <li>Payment Method: <strong>talktosolutions</strong></li>
-          <li>Transaction ID: <strong>a8f745f2-ead5-ed11-80ed-0050569161f2</strong></li>
+          <li>Payment Method: <strong>Card Payment</strong></li>
+          <li>Quote Amount: <strong>59.00</strong></li>
+          <li>Discount Amount: <strong>0.00</strong></li>
           <li>Paid Amount: <strong>63.95 £</strong></li>
-          <li>Payment Status: <strong>Completed</strong></li>
-          <li>Email Status: <strong>Booking Email Sent</strong></li>
-          <li>Is Cash: <strong>No</strong></li>
-          <li>Is Amend: <strong>No</strong></li>
+          <li>Payment Status: <strong>Completed</strong></li>        
+          <li>Transaction ID: <strong>a8f745f2-ead5-0050569161f2</strong></li>
         </ul>
     </div>
 </div>
-<div class="row" style="padding: 10px;">
+<!-- <div class="row" style="padding: 10px;">
     <div class="col-md-12">
       <i class="fa fa-server" aria-hidden="true" style="margin-right: 10px;"></i><span style="font-size: 16px;display:inline-block;margin-top: 20px;color: #2e2e2e;"><strong>Other Details</strong></span>
     </div>
@@ -89,7 +85,7 @@
         <li>Is Phone: <strong>No</strong></li>
       </ul>
     </div>
-</div>
+</div> -->
 <div style="margin-top: 10px;margin-bottom: 0px;border-width: 400px;border-bottom: 1px solid #ddd; "></div>
 <div class="row">
     <div class="col-md-12">
