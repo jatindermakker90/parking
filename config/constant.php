@@ -98,7 +98,7 @@ return [
       2 => 'IN-COMPLETE', 
       3 =>'PROCESS'
     ],
-    'PAYMENT_METHODS' => ['Paypal', 'Card Payment'], //['Paypal', 'Stripe', 'Stripe 3DS', 'WorldPay', 'Online Payment', 'Cash', 'Phone'],
+    'PAYMENT_METHODS' => ['paypal' => 'Paypal', 'card_payment' => 'Card Payment'], //['Paypal', 'Stripe', 'Stripe 3DS', 'WorldPay', 'Online Payment', 'Cash', 'Phone'],
     'DEFAULT_OPERATION_TIME' => [
       'START' => '09:00',
       'END' => '19:00'

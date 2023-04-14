@@ -107,11 +107,16 @@ class BookingsController extends WebController
                         return $full_name = $row->first_name.' '.$row->last_name;
                     })
                     ->editColumn('price', function($row){
-                        if($row->payment_status){
-                            return '<span style="padding: 0px 2px 0px 2px;">$'.$row->price.'</span>';
+                        if(isset($row->payment)){
+                            if($row->payment->status === 2){
+                                return '<button type="button" class="btn btn-sm btn-danger price-pay" style="padding: 0px 2px 0px 2px;" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'">$'.$row->payment->total_price.' Not Payed</button>';    
+                                
+                            }else if($row->payment->status === 1){
+                                return '<span style="padding: 0px 2px 0px 2px;">$'.$row->payment->total_price.'</span>';
+                            }
                         }
                         else{
-                            return '<button type="button" class="btn btn-sm btn-danger price-pay" style="padding: 0px 2px 0px 2px;" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'">$'.$row->price.' Not Payed</button>';
+                            return '<button type="button" class="btn btn-sm btn-danger price-pay" style="padding: 0px 2px 0px 2px;" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'">$'.$row->price.' No Payed </button>';
                         }
                     })
                     ->editColumn('cancellation_cover', function($row){
@@ -839,8 +844,7 @@ class BookingsController extends WebController
                 'success' => 'Booking id is required !'
             ]);
         }
-
-        $get_booking = $booking->with(['vehicle', 'company', 'airport'])->find($request->id);
+        $get_booking = $booking->with(['vehicle', 'company', 'airport', 'payment'])->find($request->id);
         $get_booking->booking_id = $request->id;
         $all_companies = $company->where('airport_id', $get_booking->airport_id)->where('company_status','!=',config('constant.STATUS.DELETED'))->get();
         $get_booking->all_companies = $all_companies;

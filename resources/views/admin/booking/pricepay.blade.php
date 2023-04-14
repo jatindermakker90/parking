@@ -91,32 +91,23 @@
     </div>
     <div class="row" style="margin-left: -5px; margin-right: -5px; margin-top: 10px;">
     <div class="col-sm-2" style="margin-top:0px;">
-    <label>Payed Amount</label>
+    <label>Amount To Be Payed</label>
     <input type="text" class="form-control" name="totalPaidAmount" required="" placeholder="" value="35.49">
     </div>
     <div class="col-sm-2" style="margin-top:0px;">
     <label>Payment Method</label>
-    <select class="form-control" id="type" name="type">
-    <option value="PayPal">PayPal</option>
-    <option value="PayPalExpress">PayPal Express</option>
-    <option value="Stripe" selected="selected">Stripe</option>
-    <option value="Stripe3DS">Stripe 3DS</option>
-    <option value="WorldPay">WorldPay</option>
-    <option value="Online Payment">Online Payment</option>
-    <option value="Cash">Cash</option>
-    <option value="Phone">Phone</option>
+    <select class="form-control last_option" name="payment_method" id="payment_method_get">
+        @foreach(config('constant.PAYMENT_METHODS') as $time_key => $time_value)
+            <option value="{{$time_key}}">{{$time_value}}</option>
+        @endforeach
     </select>
     </div>
     <div class="col-sm-2" style="margin-top:0px;">
     <label>Payment Status</label>
     <select class="form-control" id="status" name="status">
-    <option value="Completed" selected="selected">Completed</option>
-    <option value="Incomplete">Incomplete</option>
-    <option value="Cancelled">Cancelled</option>
-    <option value="Pending">Pending</option>
-    <option value="Paid">Paid</option>
-    <option value="Deleted">Deleted</option>
-    <option value="Refunded">Refunded</option>
+    <option value="1" selected="selected">Completed</option>
+    <option value="2">In-Complete</option>
+    <option value="3">Pending</option>    
     </select>
     </div>
     <div class="col-sm-4" style="margin-top:0px;">
