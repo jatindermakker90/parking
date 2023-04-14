@@ -378,7 +378,7 @@ return [
             'submenu' => [
                 [
                     'text'        => 'Bookings Revenue',
-                    'url'         => '#',
+                    'url'         => 'admin/booking/revenue',
                 ],
                 [
                     'text'        => 'Bookings Revenue Airport',
@@ -387,11 +387,11 @@ return [
                 [
                     'text'        => 'Bookings Revenue List',
                     'url'         => '#',
-                ], 
+                ],
                 [
                     'text'        => 'Daily Bookings',
                     'url'         => '#',
-                ],                
+                ],
             ]
         ],
         [

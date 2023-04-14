@@ -30,6 +30,7 @@ use App\Http\Controllers\Admin\FlatDiscountController;
 use App\Http\Controllers\Admin\AssignDiscountController;
 use App\Http\Controllers\Admin\AffiliateDiscountController;
 use App\Http\Controllers\Admin\ReviewController;
+use App\Http\Controllers\Admin\RevenueController;
 
 use App\Http\Controllers\HomeController;
 
@@ -170,6 +171,11 @@ Route::prefix('admin')->group(function () {
             Route::get('delete/review/{ref}',                          [ReviewController::class,'reviewdelete'])->name('review_delete');
             Route::post('update',                            [ReviewController::class, 'update'])->name('review-update');
         });
+        // ========================== Booking Reports =====================================//
+        Route::prefix('booking')->group(function () {
+            Route::resource('revenue',                           RevenueController::class);
+        });
+        // ========================== discount =====================================//
         // ========================== discount =====================================//
         Route::prefix('discount')->group(function () {
             Route::resource('offer-type',                           OfferTypeController::class);
