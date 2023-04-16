@@ -238,46 +238,54 @@
               <div>
                 <h3 class="mt-5 mb-4">Vehicle Details</h3>
               </div>
-              <div class="row">
-                <div class="col-3">
-                  <div class="form-group">
-                    <label for="vehicle_make">Vehicle Make</label>
-                    <input type="text" class="form-control" placeholder="Enter vehicle make" name="vehicle_make" id="vehicle_make">
-                    <span class="validationFail">Please select vehicle make</span>
+              <div id="vehicle-details-row">
+                <div class="row" id="0">
+                  <div class="col-3">
+                    <div class="form-group">
+                      <label for="vehicle_make">Vehicle Make</label>
+                      <input type="text" class="form-control" placeholder="Enter vehicle make" name="vehicle_make" id="vehicle_make">
+                      <span class="validationFail">Please select vehicle make</span>
+                    </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="form-group">
+                      <label for="vehicle_model">Vehicle Model</label>
+                      <input type="text" class="form-control" placeholder="Enter vehicle model" name="vehicle_model" id="vehicle_model">
+                      <span class="validationFail">Please select vehicle model</span>
+                    </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="form-group">
+                      <label for="vehicle_colour">Vehicle Colour</label>
+                      <input type="text" class="form-control" placeholder="Enter vehicle colour" name="vehicle_colour" id="vehicle_colour">
+                      <span class="validationFail">Please select vehicle colour</span>
+                    </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="form-group">
+                      <label for="vehicle_reg">Vehicle Reg</label>
+                      <input type="text" class="form-control" placeholder="Enter vehicle reg" name="vehicle_reg" id="vehicle_reg">
+                      <span class="validationFail">Please select vehicle reg.</span>
+                    </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="form-group">
+                      <label for="no_of_peopele">No of People</label>
+                      <select class="form-control select2" style="width: 100%;" name="no_of_peopele" id="no_of_peopele">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
-                <div class="col-3">
-                  <div class="form-group">
-                    <label for="vehicle_model">Vehicle Model</label>
-                    <input type="text" class="form-control" placeholder="Enter vehicle model" name="vehicle_model" id="vehicle_model">
-                    <span class="validationFail">Please select vehicle model</span>
-                  </div>
-                </div>
-                <div class="col-3">
-                  <div class="form-group">
-                    <label for="vehicle_colour">Vehicle Colour</label>
-                    <input type="text" class="form-control" placeholder="Enter vehicle colour" name="vehicle_colour" id="vehicle_colour">
-                    <span class="validationFail">Please select vehicle colour</span>
-                  </div>
-                </div>
-                <div class="col-3">
-                  <div class="form-group">
-                    <label for="vehicle_reg">Vehicle Reg</label>
-                    <input type="text" class="form-control" placeholder="Enter vehicle reg" name="vehicle_reg" id="vehicle_reg">
-                    <span class="validationFail">Please select vehicle reg.</span>
-                  </div>
-                </div>
-                <div class="col-3">
-                  <div class="form-group">
-                    <label for="no_of_peopele">No of People</label>
-                    <select class="form-control select2" style="width: 100%;" name="no_of_peopele" id="no_of_peopele">
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
-                    </select>
-                  </div>
+              </div>
+              <div>
+                <div class="form-group">
+                  <label for=""></label>
+                  <button type="button" class="btn btn-default add-vehicle-button">Add Vehicle</button>
                 </div>
               </div>
               <div>
@@ -393,6 +401,32 @@
     font-weight: 500;
     text-align: center;
   }
+  .add-vehicle-button{
+    margin-top: 30px;
+  }
+  #vehicle-details-row .row{
+    padding: 21px 21px;
+    position: relative;
+  }
+  #vehicle-details-row .row:hover{
+    background-color: #adadad63;
+    border-radius: 10px;
+    box-shadow: #615f5fbf 0px 10px 11px;
+  }
+  .border-bottom{
+    border-bottom: 1px solid black;
+    margin-bottom: 16px;
+  }
+  .remove-Vehicle-button{
+    position: absolute;
+    right: 9px;
+    top: 0px;
+    font-size: 26px;
+    color: red;
+  }
+  .remove-Vehicle-button:hover{
+    color: red;
+  }
 </style>
 @stop
 @section('js')
@@ -424,6 +458,7 @@ $(document).ready(function(){
     console.log(`dep date:: `, returnDate)
     $("#filter-form #return_date").val(`${returnDate}`);
   })
+
   $(document).keypress(function(e){
     var keycode = (event.keyCode ? event.keyCode : event.which);
     if(keycode == '13'){
@@ -521,7 +556,6 @@ $(document).ready(function(){
     });
   })
 
-
   $(document).on('click','.book-now',function(e){
     var company_id    = $(this).data('id');
 
@@ -599,27 +633,6 @@ $(document).ready(function(){
       $("#booking-summary .sms_confirmation_charge").text('').hide();
     }
   });
-
-  // $(document).on('click', '#booking_form .submit-button', (e)=>{
-  //   e.preventDefault();
-  //   Swal.fire({
-  //     title: `{{ config('constant.ALERTS.BOOKING_TERMS_AND_COND') }}`,
-  //     showDenyButton: false,
-  //     showCancelButton: true,
-  //     confirmButtonText: `Go Ahead !`,
-  //     allowOutsideClick: false,
-  //     allowEscapeKey: false,
-  //     allowOutsideClick: false
-  //   }).then((result) => {
-  //     console.log('result:: ', result)
-  //     if(result.isConfirmed){
-  //       $("#booking_form").submit();
-  //     }
-  //     else{
-  //       window.location.reload();
-  //     }
-  //   });
-  // })
 
   $(document).on('submit', '#booking_form', function(e) {
     e.preventDefault();
@@ -754,8 +767,86 @@ $(document).ready(function(){
         }
       }
     });
-  })
+  });
 
+  $(document).on('click', '.add-vehicle-button', async (e)=>{
+    e.preventDefault();
+    console.log(`start clonning`);
+    let parentElement = $("#vehicle-details-row");
+    let childrens = $(parentElement).children();
+    let childrensId = [];
+    $(childrens).map((index, ele)=>{
+      console.log(`ele:: `, ele);
+      let id = $(ele).attr('id');
+      childrensId.push(parseInt(id));
+    });
+    let lastId = await getLargestNumberInArray(childrensId);
+    let plusOne = 1;
+    console.log(`childrensId:: `, childrensId, 'lastId:: ', lastId);
+    // return;
+    let id = lastId + plusOne;
+    let html = `<div class="row" id="${id}">
+                  <div class="col-3">
+                    <div class="form-group">
+                      <label for="vehicle_make">Vehicle Make</label>
+                      <input type="text" class="form-control" placeholder="Enter vehicle make" name="vehicle[${id}]['vehicle_make']" id="vehicle_make">
+                      <span class="validationFail">Please select vehicle make</span>
+                    </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="form-group">
+                      <label for="vehicle_model">Vehicle Model</label>
+                      <input type="text" class="form-control" placeholder="Enter vehicle model" name="vehicle[${id}]['vehicle_model']" id="vehicle_model">
+                      <span class="validationFail">Please select vehicle model</span>
+                    </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="form-group">
+                      <label for="vehicle_colour">Vehicle Colour</label>
+                      <input type="text" class="form-control" placeholder="Enter vehicle colour" name="vehicle[${id}]['vehicle_colour']" id="vehicle_colour">
+                      <span class="validationFail">Please select vehicle colour</span>
+                    </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="form-group">
+                      <label for="vehicle_reg">Vehicle Reg</label>
+                      <input type="text" class="form-control" placeholder="Enter vehicle reg" name="vehicle[${id}]['vehicle_reg']" id="vehicle_reg">
+                      <span class="validationFail">Please select vehicle reg.</span>
+                    </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="form-group">
+                      <label for="no_of_peopele">No of People</label>
+                      <select class="form-control select2" style="width: 100%;" name="vehicle[${id}]['no_of_peopele']" id="no_of_peopele">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                      </select>
+                    </div>
+                  </div>
+                  <a href="javascript:void(0);" title="Remove Vehicle" class="remove-Vehicle-button" onclick="removeVehicle(event, ${id})"><i class="fa-solid fa fa-trash"></i></a>
+                </div>`;
+    $(parentElement).find(`#${lastId}`).addClass('border-bottom');
+    $(parentElement).append(html);
+  })
 });
+function getLargestNumberInArray(array){
+  return new Promise((resolve, reject) => {
+    var largest= 0;
+
+    for (i=0; i<array.length; i++){
+        if (array[i]>largest) {
+            largest=array[i];
+        }
+    }
+    resolve(largest);
+  })
+}
+function removeVehicle(e, id){
+  e.preventDefault();
+  alert(`remove ${id}`)
+}
 </script>
 @stop
