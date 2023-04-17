@@ -28,7 +28,7 @@ class Bookings extends Model
 
     public function vehicle()
     {
-        return $this->hasOne(VehicleDetails::class, 'booking_id', 'id');
+        return $this->hasMany(VehicleDetails::class, 'booking_id', 'id');
     }
     public function payment()
     {
@@ -39,7 +39,6 @@ class Bookings extends Model
     public static function addBooking($data){
 
         $booking = new Bookings();
-        // dd($data);
         if($data->has('ref_id') && $data->ref_id){
             $booking->ref_id = $data->ref_id;
         }
@@ -90,9 +89,9 @@ class Bookings extends Model
         // add admin chrges for future data analays
         $booking->admin_charge = config('constant.BOOKING.BOOKING_CHARGE');
 
-        if($data->has('no_of_peopele') && $data->no_of_peopele){
-            $booking->no_of_people = $data->no_of_peopele;
-        }
+        // if($data->has('no_of_peopele') && $data->no_of_peopele){
+            $booking->no_of_people = 0;
+        // }
         if($data->has('drop_off_terminal') && $data->drop_off_terminal){
             $booking->drop_off_terminal = $data->drop_off_terminal;
         }

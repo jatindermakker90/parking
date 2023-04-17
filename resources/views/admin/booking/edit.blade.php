@@ -27,7 +27,6 @@
             <div class="row">
                 <div class="col-2">
                     <input type="hidden" name="booking_id" value="{{ $booking_id ?? ''}}">
-                    <input type="hidden" name="vehicle_id" value="{{ $vehicle['id'] ?? ''}}">
                     <input type="hidden" name="payment_id" value="{{ $payment['id'] ?? '' }}">
                     <div class="form-group">
                         <label for="title">Title</label>
@@ -129,36 +128,41 @@
             </div>
             </div>
             <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-                <div class="row">
-                    <div class="col-3">
-                    <div class="form-group">
-                        <label for="vehicle_make">Vehicle Make</label>
-                        <input type="text" class="form-control" placeholder="Enter vehicle make" name="vehicle_make" id="vehicle_make" value="{{ $vehicle['vehicle_make'] ?? ''}}">
-                        <span class="validationFail">Please select vehicle make</span>
+                @forelse ($vehicle as $single_vehicle_key => $single_vehicle)
+                    <div class="row" id="{{$single_vehicle_key}}">
+                        <input type="hidden" name="vehicle[{{$single_vehicle_key}}][vehicle_id]" value="{{ $single_vehicle['id'] ?? ''}}">
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label for="vehicle_make">Vehicle Make</label>
+                                <input type="text" class="form-control" placeholder="Enter vehicle make" name="vehicle[{{$single_vehicle_key}}][vehicle_make]" id="vehicle_make" value="{{ $single_vehicle['vehicle_make'] ?? ''}}">
+                                <span class="validationFail">Please select vehicle make</span>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label for="vehicle_model">Vehicle Model</label>
+                                <input type="text" class="form-control" placeholder="Enter vehicle model" name="vehicle[{{$single_vehicle_key}}][vehicle_model]" id="vehicle_model" value="{{ $single_vehicle['vehicle_model'] ?? ''}}">
+                                <span class="validationFail">Please select vehicle model</span>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label for="vehicle_colour">Vehicle Colour</label>
+                                <input type="text" class="form-control" placeholder="Enter vehicle colour" name="vehicle[{{$single_vehicle_key}}][vehicle_colour]" id="vehicle_colour" value="{{ $single_vehicle['vehicle_colour'] ?? ''}}">
+                                <span class="validationFail">Please select vehicle colour</span>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label for="vehicle_reg">Vehicle Reg</label>
+                                <input type="text" class="form-control" placeholder="Enter vehicle reg" name="vehicle[{{$single_vehicle_key}}][vehicle_reg]" id="vehicle_reg" value="{{ $single_vehicle['vehicle_reg'] ?? ''}}">
+                                <span class="validationFail">Please select vehicle reg.</span>
+                            </div>
+                        </div>
                     </div>
-                    </div>
-                    <div class="col-3">
-                    <div class="form-group">
-                        <label for="vehicle_model">Vehicle Model</label>
-                        <input type="text" class="form-control" placeholder="Enter vehicle model" name="vehicle_model" id="vehicle_model" value="{{ $vehicle['vehicle_model'] ?? ''}}">
-                        <span class="validationFail">Please select vehicle model</span>
-                    </div>
-                    </div>
-                    <div class="col-3">
-                    <div class="form-group">
-                        <label for="vehicle_colour">Vehicle Colour</label>
-                        <input type="text" class="form-control" placeholder="Enter vehicle colour" name="vehicle_colour" id="vehicle_colour" value="{{ $vehicle['vehicle_colour'] ?? ''}}">
-                        <span class="validationFail">Please select vehicle colour</span>
-                    </div>
-                    </div>
-                    <div class="col-3">
-                    <div class="form-group">
-                        <label for="vehicle_reg">Vehicle Reg</label>
-                        <input type="text" class="form-control" placeholder="Enter vehicle reg" name="vehicle_reg" id="vehicle_reg" value="{{ $vehicle['vehicle_reg'] ?? ''}}">
-                        <span class="validationFail">Please select vehicle reg.</span>
-                    </div>
-                    </div>
-                </div>
+                @empty
+                    <p>No Vehicle</p>
+                @endforelse
             </div>
             <div class="tab-pane fade" id="nav-travel" role="tabpanel" aria-labelledby="nav-travel-tab">
                 <!-- travels details -->

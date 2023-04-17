@@ -243,35 +243,35 @@
                   <div class="col-3">
                     <div class="form-group">
                       <label for="vehicle_make">Vehicle Make</label>
-                      <input type="text" class="form-control" placeholder="Enter vehicle make" name="vehicle_make" id="vehicle_make">
+                      <input type="text" class="form-control" placeholder="Enter vehicle make" name="vehicle[0][vehicle_make]" id="vehicle_make">
                       <span class="validationFail">Please select vehicle make</span>
                     </div>
                   </div>
                   <div class="col-3">
                     <div class="form-group">
                       <label for="vehicle_model">Vehicle Model</label>
-                      <input type="text" class="form-control" placeholder="Enter vehicle model" name="vehicle_model" id="vehicle_model">
+                      <input type="text" class="form-control" placeholder="Enter vehicle model" name="vehicle[0][vehicle_model]" id="vehicle_model">
                       <span class="validationFail">Please select vehicle model</span>
                     </div>
                   </div>
                   <div class="col-3">
                     <div class="form-group">
                       <label for="vehicle_colour">Vehicle Colour</label>
-                      <input type="text" class="form-control" placeholder="Enter vehicle colour" name="vehicle_colour" id="vehicle_colour">
+                      <input type="text" class="form-control" placeholder="Enter vehicle colour" name="vehicle[0][vehicle_colour]" id="vehicle_colour">
                       <span class="validationFail">Please select vehicle colour</span>
                     </div>
                   </div>
                   <div class="col-3">
                     <div class="form-group">
                       <label for="vehicle_reg">Vehicle Reg</label>
-                      <input type="text" class="form-control" placeholder="Enter vehicle reg" name="vehicle_reg" id="vehicle_reg">
+                      <input type="text" class="form-control" placeholder="Enter vehicle reg" name="vehicle[0][vehicle_reg]" id="vehicle_reg">
                       <span class="validationFail">Please select vehicle reg.</span>
                     </div>
                   </div>
                   <div class="col-3">
                     <div class="form-group">
                       <label for="no_of_peopele">No of People</label>
-                      <select class="form-control select2" style="width: 100%;" name="no_of_peopele" id="no_of_peopele">
+                      <select class="form-control select2" style="width: 100%;" name="vehicle[0][no_of_peopele]" id="no_of_peopele">
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -408,7 +408,7 @@
     padding: 21px 21px;
     position: relative;
   }
-  #vehicle-details-row .row:hover{
+  #vehicle-details-row .vehicle-row:hover{
     background-color: #adadad63;
     border-radius: 10px;
     box-shadow: #615f5fbf 0px 10px 11px;
@@ -646,7 +646,7 @@ $(document).ready(function(){
     let formData = form.serialize();
     formData = formData +'&price='+getFinalPrice;
 
-    console.log('formData:: ', formData);
+    console.log('formData:: ', formData, 'formDataArray:: ', form.serializeArray());
 
     let ajaxUrl = "{{ route('booking-store') }}"
 
@@ -658,12 +658,12 @@ $(document).ready(function(){
     combinedFormDataArray.forEach(element => {
       if($.inArray(element.name, excludeElementValidation) == -1){
         if(element.value == ''){
-          form.find(`input[name='${element.name}'], select[name='${element.name}']`).addClass('jqueryValidation');
-          form.find(`input[name='${element.name}'], select[name='${element.name}']`).siblings('.validationFail').show()
+          form.find(`input[name="${element.name}"], select[name="${element.name}"]`).addClass('jqueryValidation');
+          form.find(`input[name="${element.name}"], select[name="${element.name}"]`).siblings('.validationFail').show()
         }
         else{
-          form.find(`input[name='${element.name}'], select[name='${element.name}']`).removeClass('jqueryValidation');
-          form.find(`input[name='${element.name}'], select[name='${element.name}']`).siblings('.validationFail').hide()
+          form.find(`input[name="${element.name}"], select[name="${element.name}"]`).removeClass('jqueryValidation');
+          form.find(`input[name="${element.name}"], select[name="${element.name}"]`).siblings('.validationFail').hide()
         }
       }
     });
@@ -694,14 +694,12 @@ $(document).ready(function(){
       }).then((result) => {
         console.log('result:: ', result)
         if(result.isConfirmed){
-          // $("#booking_form").submit();
           form.find('.submit-button').attr('disabled', true);
           $.ajax({
             type:"POST",
             url: ajaxUrl,
             data: formData,
             success: function(response){
-              console.log(`form submited`, response);
               if(response.status_code == 200){
                 toastr["success"](response.message);
                 setTimeout(() => {
@@ -710,7 +708,6 @@ $(document).ready(function(){
               }
             },
             error: function(XHR, textStatus, errorThrown) {
-              // console.log(XHR.responseJSON.message);
               if(XHR.responseJSON.message != undefined){
                   toastr["error"](XHR.responseJSON.message);
               }else{
@@ -720,7 +717,6 @@ $(document).ready(function(){
           });
         }
         else{
-          // window.location.reload();
         }
       });
     }
@@ -774,50 +770,56 @@ $(document).ready(function(){
     console.log(`start clonning`);
     let parentElement = $("#vehicle-details-row");
     let childrens = $(parentElement).children();
+    let basePrice = $("#booking_form #booking_base_price").val();
+    let getFinalPrice = $("#booking-summary .total-charge").text().slice(8);
+    let extendedPrice = parseFloat(basePrice) + parseFloat(getFinalPrice);
+    extendedPrice = extendedPrice.toFixed(2);
+
     let childrensId = [];
     $(childrens).map((index, ele)=>{
-      console.log(`ele:: `, ele);
       let id = $(ele).attr('id');
       childrensId.push(parseInt(id));
     });
     let lastId = await getLargestNumberInArray(childrensId);
-    let plusOne = 1;
     console.log(`childrensId:: `, childrensId, 'lastId:: ', lastId);
-    // return;
+    if(lastId == 0){
+      $(parentElement).find(`#${lastId}`).addClass('vehicle-row');
+    }
+    let plusOne = 1;
     let id = lastId + plusOne;
-    let html = `<div class="row" id="${id}">
+    let html = `<div class="row vehicle-row" id="${id}">
                   <div class="col-3">
                     <div class="form-group">
                       <label for="vehicle_make">Vehicle Make</label>
-                      <input type="text" class="form-control" placeholder="Enter vehicle make" name="vehicle[${id}]['vehicle_make']" id="vehicle_make">
+                      <input type="text" class="form-control" placeholder="Enter vehicle make" name="vehicle[${id}][vehicle_make]" id="vehicle_make">
                       <span class="validationFail">Please select vehicle make</span>
                     </div>
                   </div>
                   <div class="col-3">
                     <div class="form-group">
                       <label for="vehicle_model">Vehicle Model</label>
-                      <input type="text" class="form-control" placeholder="Enter vehicle model" name="vehicle[${id}]['vehicle_model']" id="vehicle_model">
+                      <input type="text" class="form-control" placeholder="Enter vehicle model" name="vehicle[${id}][vehicle_model]" id="vehicle_model">
                       <span class="validationFail">Please select vehicle model</span>
                     </div>
                   </div>
                   <div class="col-3">
                     <div class="form-group">
                       <label for="vehicle_colour">Vehicle Colour</label>
-                      <input type="text" class="form-control" placeholder="Enter vehicle colour" name="vehicle[${id}]['vehicle_colour']" id="vehicle_colour">
+                      <input type="text" class="form-control" placeholder="Enter vehicle colour" name="vehicle[${id}][vehicle_colour]" id="vehicle_colour">
                       <span class="validationFail">Please select vehicle colour</span>
                     </div>
                   </div>
                   <div class="col-3">
                     <div class="form-group">
                       <label for="vehicle_reg">Vehicle Reg</label>
-                      <input type="text" class="form-control" placeholder="Enter vehicle reg" name="vehicle[${id}]['vehicle_reg']" id="vehicle_reg">
+                      <input type="text" class="form-control" placeholder="Enter vehicle reg" name="vehicle[${id}][vehicle_reg]" id="vehicle_reg">
                       <span class="validationFail">Please select vehicle reg.</span>
                     </div>
                   </div>
                   <div class="col-3">
                     <div class="form-group">
                       <label for="no_of_peopele">No of People</label>
-                      <select class="form-control select2" style="width: 100%;" name="vehicle[${id}]['no_of_peopele']" id="no_of_peopele">
+                      <select class="form-control select2" style="width: 100%;" name="vehicle[${id}][no_of_peopele]" id="no_of_peopele">
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -830,6 +832,7 @@ $(document).ready(function(){
                 </div>`;
     $(parentElement).find(`#${lastId}`).addClass('border-bottom');
     $(parentElement).append(html);
+    $("#booking-summary .total-charge").text(`TOTAL : ${extendedPrice}`);
   })
 });
 function getLargestNumberInArray(array){
@@ -846,7 +849,22 @@ function getLargestNumberInArray(array){
 }
 function removeVehicle(e, id){
   e.preventDefault();
-  alert(`remove ${id}`)
+  
+  let basePrice = $("#booking_form #booking_base_price").val();
+  let getFinalPrice = $("#booking-summary .total-charge").text().slice(8);
+  let deductedPrice = parseFloat(getFinalPrice) - parseFloat(basePrice);
+  deductedPrice = deductedPrice.toFixed(2);
+  let mainParents = $(e.target).parents(`#vehicle-details-row`)
+  $(e.target).parents(`#${id}`).remove();
+  $("#booking-summary .total-charge").text(`TOTAL : ${deductedPrice}`);
+
+  let mainParentsChilds = $(mainParents).children();
+  if($(mainParentsChilds).length == 1){
+    $(mainParentsChilds).removeClass('vehicle-row');
+  }
+  $(mainParentsChilds).last().removeClass('border-bottom')
+  console.log('target:: ', $(e.target).parents(`#${id}`), 'mainParentchild', mainParentsChild.length);
+
 }
 </script>
 @stop
