@@ -450,8 +450,8 @@ $(document).ready(function(){
           }
         },
         {
-          data: 'vehicle.vehicle_reg',
-          name: 'vehicle.vehicle_reg',
+          data: 'vehicle_reg',
+          name: 'vehicle_reg',
           orderable: true,
           render: function ( data, type, row) {
             if(type === 'sort'){
@@ -603,7 +603,8 @@ $(document).ready(function(){
       formDataArray.forEach(element => {
           if($.inArray(element.name, excludeElementValidation) == -1){
               if(element.value == ''){
-              validationPass = false;
+                console.log('element:: ', element);
+                validationPass = false;
               return;
               }
           }

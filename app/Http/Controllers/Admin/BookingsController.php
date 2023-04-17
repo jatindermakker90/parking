@@ -155,6 +155,15 @@ class BookingsController extends WebController
                             return '<button type="button" title="Email" class="btn btn-sm btn-danger email-send" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'" style="padding: 0px 4px 0px 4px;"><i class="fa fa-times" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"></i></button>';
                         }
                     })
+                    ->addColumn('vehicle_reg', function($row){
+                        $str = '';
+                        if($row->vehicle != null){
+                            foreach ($row->vehicle as $key => $value) {
+                                $str .= (strlen($str) > 0) ? ';<br>'.$value->vehicle_reg : $value->vehicle_reg;
+                            }
+                        }
+                        return $str;
+                    })
                     ->addColumn('action', function($row){
                             $delete_url  =  route('booking_delete',[$row->id]);
                             $btn = '<button type="button" class="view-booking btn btn-primary btn-sm mr-2" title="View Booking" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'"><i class="fa fa-eye" data-id="'.$row->id.'" data-ref-id="'.$row->ref_id.'" aria-hidden="true"></i></button>';
@@ -180,6 +189,7 @@ class BookingsController extends WebController
                         'sms_confirmation',
                         'discount_code',
                         'email',
+                        'vehicle_reg',
                         'status'
                     ])
                     ->make(true);
@@ -223,6 +233,8 @@ class BookingsController extends WebController
         if($validator->fails()){
            return redirect()->back()->withErrors($validator);
         }
+
+        // dd($request->all());
 
         $dep_date = $request->dep_date.' '.$request->dep_time.':00';
         $return_date = $request->return_date.' '.$request->return_time.':00';
@@ -347,7 +359,8 @@ class BookingsController extends WebController
         $booking_updated_data = $booking->updateBooking($request);
         $vehicle_update_data = $vehicle_details->updateVehicle($request);
         $payment_update_data = $payment->updatePayment($request);
-        if($booking_updated_data->id && $vehicle_update_data->id && $payment_update_data->id){
+        // dd($vehicle_update_data);
+        if($booking_updated_data->id && $vehicle_update_data && $payment_update_data->id){
             return response()->json([
                 'code' => 200,
                 'path' => route('bookings.index'),
@@ -675,7 +688,7 @@ class BookingsController extends WebController
         $get_booking->return_time = date("H:i", strtotime($get_booking->return_date_time));
         $get_booking->updated_return_date = date("Y-m-d", strtotime($get_booking->updated_return_date_time));
         $get_booking->updated_return_time = date("H:i", strtotime($get_booking->updated_return_date_time));
-        // dd($get_booking);
+        // dd($get_booking->toArray());
         return response()->view('admin.booking.edit', $get_booking, 200);
     }
 
