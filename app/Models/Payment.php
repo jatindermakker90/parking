@@ -34,6 +34,12 @@ class Payment extends Model
         if($data->has('price') && $data->price){
             $model->total_price = $data->price;
         }
+        if($data->has('discount_amount') && $data->discount_amount){
+            $model->discount_amount = $data->discount_amount;
+        }
+        if($data->has('discount_type') && $data->discount_type){
+            $model->discount_type = $data->discount_type;
+        }
         $model->payment_date = now()->format('Y-m-d H:i:s');
         $model->booking_charge = config('constant.BOOKING.BOOKING_CHARGE');
         $model->status = 2;

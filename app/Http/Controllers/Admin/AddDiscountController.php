@@ -95,9 +95,7 @@ class AddDiscountController extends WebController
      */
     public function edit($id, Request $request)
     {
-        // dd($id);
         $get_discount = AddDiscount::where('id', $id)->first();
-        // dd($get_discount);
         $get_offer_type = DiscountOfferType::get();
         return view('admin.discountAddDiscount.edit')->with([
             'title' => 'Edit Discount', 
@@ -116,7 +114,6 @@ class AddDiscountController extends WebController
      */
     public function update(Request $request, $id)
     {
-        // dd($id, $request->all());
          $validator = Validator::make($request->all(), [
             'start_date'    => 'required',
             'end_date'      => 'required',
@@ -143,7 +140,6 @@ class AddDiscountController extends WebController
      */
     public function destroy($id, Request $request)
     {
-        // dd($id);
         AddDiscount::where('id',$id)->delete();
         $message = "Discount deleted successfully";
         return $this->sendSuccess([],$message,200); 
@@ -272,7 +268,6 @@ class AddDiscountController extends WebController
 
     public function validateCouponCode(Request $request, AddDiscount $addDiscount)
     {   
-        // dd($request->all());
         if(!$request->coupon){
             return response()->json([
                 'code' => 203,
@@ -287,7 +282,7 @@ class AddDiscountController extends WebController
         }
         $isValid = false;
         $couponName = "'" . trim($request->coupon) . "'";
-        $couponData = \DB::select('select ad.*, `assign_discounts`.airport_id, `assign_discounts`.company_id, fd.amount from `add_discounts` ad inner join `assign_discounts` ON ad.`offer_type_id` = `assign_discounts`.`offer_type_id` join `flat_discounts` fd on ad.id = fd.flat_code_id where ad.name ='.$couponName);
+        $couponData = \DB::select('select ad.*, `assign_discounts`.airport_id, `assign_discounts`.company_id, fd.amount, fd.type as discount_type from `add_discounts` ad inner join `assign_discounts` ON ad.`offer_type_id` = `assign_discounts`.`offer_type_id` join `flat_discounts` fd on ad.id = fd.flat_code_id where ad.name ='.$couponName);
         if(count($couponData) > 0){
             
             $couponData = (Object)$couponData[0];
@@ -304,14 +299,18 @@ class AddDiscountController extends WebController
                     return response()->json([
                         'code' => 200,
                         'messsage' => 'Coupon is valid !, Amount is '.$couponData->amount,
-                        'data' => ["isValid" => $isValid, "amount"=> $couponData->amount]
+                        'data' => [
+                            "isValid" => $isValid, 
+                            "amount"=> $couponData->amount,
+                            "discount_type" => $couponData->discount_type
+                        ]
                     ]);
                 }
                 else{
                     return response()->json([
                         'code' => 203,
                         'messsage' => 'Coupon is not valid for this airport !',
-                        'data' => ["isValid" => $isValid, "amount"=> 0]
+                        'data' => ["isValid" => $isValid, "amount"=> 0, "discount_type" => null]
                     ]);
                 }
                 
@@ -320,7 +319,7 @@ class AddDiscountController extends WebController
                 return response()->json([
                     'code' => 203,
                     'messsage' => 'Coupon is invalid !',
-                    'data' => ["isValid" => $isValid, "amount"=> 0]
+                    'data' => ["isValid" => $isValid, "amount"=> 0, "discount_type" => null]
                 ]);
             }
         }
@@ -328,7 +327,7 @@ class AddDiscountController extends WebController
             return response()->json([
                 'code' => 203,
                 'messsage' => 'Coupon is invalid !',
-                'data' => ["isValid" => $isValid, "amount"=> 0]
+                'data' => ["isValid" => $isValid, "amount"=> 0, "discount_type" => null]
             ]);
         }
 

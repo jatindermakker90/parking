@@ -243,7 +243,7 @@
                     <div class="col-2">
                         <div class="form-group">
                             <label for="discount_code">Discount Code</label>
-                            <input type="text" class="form-control" placeholder="Discount code" name="discount_code" id="discount_code" value="{{ $discount_code ?? '' }}">
+                            <input type="text" class="form-control" readonly placeholder="Discount code" name="discount_code" id="discount_code" value="{{ $discount_code ?? '' }}">
                             <span class="validationFail">Please select price</span>
                         </div>
                     </div>
