@@ -29,12 +29,14 @@
     </div>
     <div class="col-md-3 breakWord">
       <i class="fa fa-car" aria-hidden="true" style="margin-right: 10px;"></i><span style="font-size: 16px;display:inline-block;margin-top: 20px;color: #2e2e2e;"><strong>Vehicle Details</strong></span>
-      <ul class="custom-ul">
-        <li>Make: <strong>{{ $vehicle['vehicle_make'] }}</strong></li>
-        <li>Model: <strong>{{ $vehicle['vehicle_model'] }}</strong></li>
-        <li>Color: <strong>{{ $vehicle['vehicle_colour'] }}</strong></li>
-        <li>Reg No: <strong>{{ $vehicle['vehicle_reg'] }}</strong></li>
-      </ul>
+      @foreach($vehicle as $vehicle_key => $vehicle_value)
+        <ul class="custom-ul {{ ((count($vehicle) == $vehicle_key+1) > 0) ? '' : 'border-bottom' }}">
+          <li>Make: <strong>{{ $vehicle_value['vehicle_make'] }}</strong></li>
+          <li>Model: <strong>{{ $vehicle_value['vehicle_model'] }}</strong></li>
+          <li>Color: <strong>{{ $vehicle_value['vehicle_colour'] }}</strong></li>
+          <li>Reg No: <strong>{{ $vehicle_value['vehicle_reg'] }}</strong></li>
+        </ul>
+      @endforeach
     </div>
     <div class="col-md-3 breakWord">
         <i class="fa fa-credit-card-alt" aria-hidden="true" style="margin-right:10px;"></i><span style="font-size: 16px;display:inline-block;margin-top: 20px;color: #2e2e2e;"><strong>Payment Details</strong></span>

@@ -359,8 +359,8 @@ $(document).ready(function(){
               }
             },
             {
-              data: 'vehicle.vehicle_reg',
-              name: 'vehicle.vehicle_reg', 
+              data: 'vehicle_reg',
+              name: 'vehicle_reg',
               orderable: true,
               render: function ( data, type, row) {
                 if(type === 'sort'){

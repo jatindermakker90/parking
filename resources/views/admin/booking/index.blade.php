@@ -239,6 +239,10 @@
     display: none;
     font-size: 20px;
   }
+  .custom-ul{
+    padding: 0px 0px 10px 40px;
+    margin-bottom: 3px;
+  }
 </style>
 
 @stop

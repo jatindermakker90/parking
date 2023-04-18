@@ -454,6 +454,15 @@ class BookingsController extends WebController
                             return '<button type="button" title="Payment Status" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;"><i class="fa fa-times"></i></button>';
                         }
                     })
+                    ->addColumn('vehicle_reg', function($row){
+                        $str = '';
+                        if($row->vehicle != null){
+                            foreach ($row->vehicle as $key => $value) {
+                                $str .= (strlen($str) > 0) ? ';<br>'.$value->vehicle_reg : $value->vehicle_reg;
+                            }
+                        }
+                        return $str;
+                    })
                     ->addColumn('action', function($row){
                             $btn = '';
                             $btn .= '<button type="button" class="btn btn-danger btn-sm mr-2 change-status" title="Change Status" data-id="'.$row->id.'"><i class="fas fa-stream" data-id="'.$row->id.'"></i></button>';
@@ -466,6 +475,7 @@ class BookingsController extends WebController
                         'cancellation_cover',
                         'sms_confirmation',
                         'discount_code',
+                        'vehicle_reg',
                         'status'
                     ])
                     ->make(true);
@@ -562,6 +572,15 @@ class BookingsController extends WebController
                             return '<button type="button" title="Payment Status" class="btn btn-sm btn-danger" style="padding: 0px 4px 0px 4px;"><i class="fa fa-times"></i></button>';
                         }
                     })
+                    ->addColumn('vehicle_reg', function($row){
+                        $str = '';
+                        if($row->vehicle != null){
+                            foreach ($row->vehicle as $key => $value) {
+                                $str .= (strlen($str) > 0) ? ';<br>'.$value->vehicle_reg : $value->vehicle_reg;
+                            }
+                        }
+                        return $str;
+                    })
                     ->addColumn('action', function($row){
                             $btn = '';
                             $btn .= '<button type="button" class="btn btn-danger btn-sm mr-2 change-status" title="Change Status" data-id="'.$row->id.'"><i class="fas fa-stream" data-id="'.$row->id.'"></i></button>';
@@ -574,6 +593,7 @@ class BookingsController extends WebController
                         'cancellation_cover',
                         'sms_confirmation',
                         'discount_code',
+                        'vehicle_reg',
                         'status'
                     ])
                     ->make(true);
@@ -688,7 +708,6 @@ class BookingsController extends WebController
         $get_booking->return_time = date("H:i", strtotime($get_booking->return_date_time));
         $get_booking->updated_return_date = date("Y-m-d", strtotime($get_booking->updated_return_date_time));
         $get_booking->updated_return_time = date("H:i", strtotime($get_booking->updated_return_date_time));
-        // dd($get_booking->toArray());
         return response()->view('admin.booking.edit', $get_booking, 200);
     }
 
