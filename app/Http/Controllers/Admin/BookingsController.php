@@ -636,36 +636,43 @@ class BookingsController extends WebController
 
         $month = $to->month;
         $year = $to->year;
+        $day = $to->format('l');
+        $time = $to->format('H:s:i');
 
         $airports = Airport::where('airport_status',config('constant.STATUS.ACTIVE'))->get();
         $terminal = AirportTerminal::where('airport_id', $request->select_airport)->get();
 
-        $companies  = Company::where('company_status', config('constant.STATUS.ACTIVE'))
+        $companies  = Company::with(['operation'])->where('company_status', config('constant.STATUS.ACTIVE'))
                             ->where('airport_id', $request->select_airport)
                             ->get();
 
         if($companies->count() > 0){
             foreach ($companies as $key => $value) {
-
-                $value->final_booking_price = getCompanyPriceByDays([
-                                                'company' => $value,
-                                                'no_of_days_booking' => $request->no_of_days_booking,
-                                                'month' => $month,
-                                                'year' => $year,
-                                                'discount_amount' => $request->discount_amount,
-                                                'discount_type' => $request->discount_type
-                                            ]);
-                $value->price_with_admin_charge = $value->final_booking_price + config('constant.BOOKING.BOOKING_CHARGE');
-                if(!empty($value->company_types)){
-                    $value->company_types =  CompanyType::wherein('id', explode(",", $value->company_types))->get();
+                $operations = json_decode($value->operation->weekdays, true);
+                $company_operation = getIsCompanyHasOperation($operations, $day, $to);
+                if($company_operation){
+                    $value->final_booking_price = getCompanyPriceByDays([
+                                                    'company' => $value,
+                                                    'no_of_days_booking' => $request->no_of_days_booking,
+                                                    'month' => $month,
+                                                    'year' => $year,
+                                                    'discount_amount' => $request->discount_amount,
+                                                    'discount_type' => $request->discount_type
+                                                ]);
+                    $value->price_with_admin_charge = $value->final_booking_price + config('constant.BOOKING.BOOKING_CHARGE');
+                    if(!empty($value->company_types)){
+                        $value->company_types =  CompanyType::wherein('id', explode(",", $value->company_types))->get();
+                    }
+                    if(!empty($value->offer_types)){
+                        $value->offer_types =  OfferType::wherein('id', explode(",", $value->offer_types))->get();
+                    }
+                    if(!empty($value->service_types)){
+                        $value->service_types =  ServiceType::wherein('id', explode(",", $value->service_types))->get();
+                    }
                 }
-                if(!empty($value->offer_types)){
-                    $value->offer_types =  OfferType::wherein('id', explode(",", $value->offer_types))->get();
-                }
-                if(!empty($value->service_types)){
-                    $value->service_types =  ServiceType::wherein('id', explode(",", $value->service_types))->get();
-                }
-
+                else{
+                    unset($companies[$key]);
+                }                
             }
         }
         return view('admin.booking.create')->with([

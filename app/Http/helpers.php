@@ -2,6 +2,7 @@
 use App\Models\Company;
 use App\Models\brandPrices as BrandPrices;
 use App\Models\CompanyBrandPrice;
+use Carbon\Carbon;
 
 if (! function_exists('getCompanyPriceByDays')) {
     /**
@@ -60,5 +61,25 @@ if (! function_exists('getPriceAfterDiscount')) {
             $new_price = number_format((float)$new_price, 2, '.', '');
         }
         return $new_price;
+    }
+}
+
+if (! function_exists('getIsCompanyHasOperation')) {
+    function getIsCompanyHasOperation($operations, $day, $time){
+        $result = false;
+        $day = strToLower($day);
+        $todayOperation = $operations[$day];
+        if($todayOperation['status'] == 'open'){
+            $todayOpenTime = Carbon::now()->format('Y-m-d').' '.$todayOperation['start_time'].':00';
+            $todayCloseTime = Carbon::now()->format('Y-m-d').' '.$todayOperation['end_time'].':00';
+
+            $carbonTodayOpenTime = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $todayOpenTime);
+            $carbonTodayCloseTime = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $todayCloseTime);
+            $isbetween = $time->between($carbonTodayOpenTime, $carbonTodayCloseTime);
+            if($isbetween){
+                $result = true;
+            }
+        }
+        return $result;
     }
 }
