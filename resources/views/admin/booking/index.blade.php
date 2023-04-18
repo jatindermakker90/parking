@@ -239,6 +239,10 @@
     display: none;
     font-size: 20px;
   }
+  .custom-ul{
+    padding: 0px 0px 10px 40px;
+    margin-bottom: 3px;
+  }
 </style>
 
 @stop
@@ -291,28 +295,27 @@ $(document).ready(function(){
         cancelLabel: 'Clear'
       }
   },function(start, end) {
-      console.log("Start time",start.format('Y-M-D'));
-       console.log("end time",end.format('Y-M-D'));
-       start_time = `${start.format('Y-M-D')} 00:00:00`;
-       end_time   = `${end.format('Y-M-D')} 23:59:59`;
-       $("#reservationtime").val(start.format('MM/DD/YYYY')+"-"+end.format('MM/DD/YYYY'));
-       $('#data_collection').dataTable().fnDestroy();
-      //  searchData(start.format('Y-M-D'),end.format('Y-M-D'),$('#search').val());
-       searchData();
+    console.log("Start time",start.format('Y-M-D'));
+      console.log("end time",end.format('Y-M-D'));
+      start_time = `${start.format('Y-M-D')} 00:00:00`;
+      end_time   = `${end.format('Y-M-D')} 23:59:59`;
+      $("#reservationtime").val(start.format('MM/DD/YYYY')+"-"+end.format('MM/DD/YYYY'));
+      $('#data_collection').dataTable().fnDestroy();
+      searchData();
   });
 
   $(document).on('click','.cancelBtn',function(){
-       $("#reservationtime").val("");
-       start_time = "";
-       end_time = "";
-       $('#data_collection').dataTable().fnDestroy();
-       searchData();
+    $("#reservationtime").val("");
+    start_time = "";
+    end_time = "";
+    $('#data_collection').dataTable().fnDestroy();
+    searchData();
   });
 
   $(document).on('click','#search_text',function(){
-        search = $('#search').val();
-        $('#data_collection').dataTable().fnDestroy();
-        searchData();
+    search = $('#search').val();
+    $('#data_collection').dataTable().fnDestroy();
+    searchData();
   });
 
   $(document).on('change', '#search_select_airport', (e) => {
@@ -552,16 +555,15 @@ $(document).ready(function(){
       $("#modal-default").find('.modal-title').text(`Edit Booking - ${booking_ref_id}`);
       let ajaxUrl = "{{ route('get-single-booking') }}";
       ajaxUrl = `${ajaxUrl}?id=${booking_id}`;
-      // return;
       $.ajax({
       type:"GET",
       url: ajaxUrl,
       success: function(response){
-          $("#booking-edit-modal").html(response)
+          $("#booking-edit-modal").html(response);
+          $('.select2').select2();
           model.modal('show');
       },
       error: function(XHR, textStatus, errorThrown) {
-          // console.log(XHR.responseJSON.message);
           if(XHR.responseJSON.message != undefined){
               toastr["error"](XHR.responseJSON.message);
           }else{

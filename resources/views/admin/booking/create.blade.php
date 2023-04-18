@@ -54,7 +54,7 @@
 
               <div class="form-group {{ $errors->has('dep_time') ? 'has-error' : '' }} col-4">
                 <label for="name">Departure Time</label>
-                  <select class="form-control" name="dep_time" id="dep_time">
+                  <select class="form-control select2" name="dep_time" id="dep_time">
                     <option value="">Select time</option>
                     @foreach(config('constant.TIME_INTERVAL') as $time_key => $time_value)
                       <option value="{{$time_value}}" <?php echo (isset($request) && $request['dep_time'] == $time_value)  ? 'selected' : '' ?>>{{$time_value}}</option>
@@ -77,7 +77,7 @@
 
               <div class="form-group {{ $errors->has('return_time') ? 'has-error' : '' }} col-4">
                 <label for="return_time">Arrival Time</label>
-                <select class="form-control last_option" name="return_time" id="return_time">
+                <select class="form-control last_option select2" name="return_time" id="return_time">
                   <option value="">Select time</option>
                   @foreach(config('constant.TIME_INTERVAL') as $time_key => $time_value)
                     <option value="{{$time_value}}" <?php echo (isset($request) && $request['return_time'] == $time_value)  ? 'selected' : '' ?>>{{$time_value}}</option>
@@ -92,6 +92,8 @@
               <div class="form-group {{ $errors->has('discount_code') ? 'has-error' : '' }} col-4">
                 <label for="discount_code">Discount Code</label>
                 <input type="text" class="form-control"  placeholder="Enter Test Cost" name ="discount_code" id ="discount_code" value="<?php echo (isset($request) && $request['discount_code'])  ? $request['discount_code'] : '' ?>">
+                <input type="hidden" name="discount_amount" id="discount_amount" value="<?php echo (isset($request) && $request['discount_amount'])  ? $request['discount_amount'] : '' ?>">
+                <input type="hidden" name="discount_type" id="discount_type" value="<?php echo (isset($request) && $request['discount_type'])  ? $request['discount_type'] : '' ?>">
                 <span class="validationFail">Please select discount code</span>
                 <span class="isValid"></span>
               </div>
@@ -156,6 +158,8 @@
             <input type="hidden" name="return_date" id="booking_return_date">
             <input type="hidden" name="return_time" id="booking_return_time">
             <input type="hidden" name="discount_code" id="booking_discount_code">
+            <input type="hidden" name="discount_amount" id="booking_discount_amount">
+            <input type="hidden" name="discount_type" id="booking_discount_type">
             <input type="hidden" name="base_price" id="booking_base_price">
             <div class="card-header text-center">
               <h3 class="card-title">Fill Your Deatils</h3>
@@ -299,7 +303,7 @@
                     <select class="form-control select2" style="width: 100%;" name="drop_off_terminal" id="drop_off_terminal">
                       <option value="tbc">TBC</option>
                     @foreach ($terminal as $terminal_value)
-                      <option value="{{ $terminal_value->terminal_name }}">{{ $terminal_value->terminal_name }}</option>
+                      <option value="{{ $terminal_value->id }}">{{ $terminal_value->terminal_name }}</option>
                     @endforeach
                     </select>
                     @endif
@@ -353,6 +357,7 @@
                 <h6 class="booking-charge font-weight-bold"></h6>
                 <h6 class="cancellation_cover_charge font-weight-bold"></h6>
                 <h6 class="sms_confirmation_charge font-weight-bold"></h6>
+                <h6 class="booking-discount-amount font-weight-bold text-success"></h6>
                 <hr>
                 <h6 class="total-charge font-weight-bold"></h6>
               </div>
@@ -437,6 +442,7 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
+  $('.select2').select2();
   $(document).on('change', '#filter-form #return_date', (e)=>{
     let departureDate = $("#filter-form #dep_date").val();
     if(!departureDate){
@@ -521,11 +527,12 @@ $(document).ready(function(){
       filterForm.find("#return_time").removeClass('jqueryValidation');
       filterForm.find("#return_time").siblings('.validationFail').hide();
     }
-    let start_date = `${departureDate} ${departureTime}:00`;
-    let end_date = `${returnDate} ${returnTime}:00`;
-    if(!start_date && !end_date){
+    if(!departureDate && !returnDate){
       return;
     }
+    console.log('departureDate:: ', departureDate, 'returnDate:: ', returnDate);
+    let start_date = `${departureDate} ${departureTime}:00`;
+    let end_date = `${returnDate} ${returnTime}:00`;
     let ajaxUrl = "{{ route('compare-two-date') }}"
     $.ajax({
       type:"POST",
@@ -589,6 +596,7 @@ $(document).ready(function(){
     bookingSummaryEle.find(".pick-up").text(`PICK UP : ${returnDate} at ${returnfTime}`);
     bookingSummaryEle.find(".airport").text(`AIRPORT : ${airport}`);
     bookingSummaryEle.find(".booking-charge").text(`BOOKING CHARGE : ${bookingCharge}`);
+    bookingSummaryEle.find(".booking-discount-amount").text(`DISCOUNT : ${filterEle.find('#discount_amount').val()}`);
     bookingSummaryEle.find(".total-charge").text(`TOTAL : ${companyPriceWithAdminChareg}`);
 
     bookingForm.find(`input[name='company_id']`).val(company_id);
@@ -598,6 +606,8 @@ $(document).ready(function(){
     bookingForm.find(`input[name='return_date']`).val(filterEle.find('#return_date').val());
     bookingForm.find(`input[name='return_time']`).val(filterEle.find('#return_time').val());
     bookingForm.find(`input[name='discount_code']`).val(filterEle.find('#discount_code').val());
+    bookingForm.find(`input[name='discount_amount']`).val(filterEle.find('#discount_amount').val());
+    bookingForm.find(`input[name='discount_type']`).val(filterEle.find('#discount_type').val());
     bookingForm.find(`input[name='base_price']`).val(companyPrice);
 
     $("#company-list").hide();
@@ -750,9 +760,13 @@ $(document).ready(function(){
       success: function(response){
         if(response.code == 200){
           $(e.target).siblings(".isValid").text(response.messsage).css('color', 'green').show();
+          $(e.target).siblings("input#discount_amount").val(response.data.amount);
+          $(e.target).siblings("input#discount_type").val(response.data.discount_type);
         }
         if(response.code == 203){
           $(e.target).siblings(".isValid").text(response.messsage).css('color', 'red').show();
+          $(e.target).siblings("input#discount_amount").val(null);
+          $(e.target).siblings("input#discount_type").val(null);
         }
       },
       error: function(XHR, textStatus, errorThrown) {

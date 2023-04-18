@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnInVehicleDetailsTable extends Migration
+class AddColumnInPaymentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddColumnInVehicleDetailsTable extends Migration
      */
     public function up()
     {
-        Schema::table('vehicle_details', function (Blueprint $table) {
-            $table->integer('no_of_people')->after('vehicle_reg')->nullable(true);
+        Schema::table('payments', function (Blueprint $table) {
+            $table->string('discount_type')->nullable(true);
         });
     }
 
@@ -25,7 +25,7 @@ class AddColumnInVehicleDetailsTable extends Migration
      */
     public function down()
     {
-        Schema::table('vehicle_details', function (Blueprint $table) {
+        Schema::table('payments', function (Blueprint $table) {
             //
         });
     }
