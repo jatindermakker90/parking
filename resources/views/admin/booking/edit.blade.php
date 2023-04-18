@@ -104,8 +104,9 @@
                 <div class="form-group">
                     <label for="drop_off_terminal">Drop-off Terminal</label>
                     <select class="form-control select2" style="width: 100%;" name="drop_off_terminal" id="drop_off_terminal">
-                        <option value="tbc" <?php echo ($drop_off_terminal == 'tbc')  ? 'selected' : '' ?>>TBC</option>
-                        <option value="main_terminal" <?php echo ($drop_off_terminal == 'main_terminal')  ? 'selected' : '' ?>>Main Terminal</option>
+                        @foreach($all_terminals as $terminal_key => $terminal_value)
+                            <option value="{{ $terminal_value->id }}" <?php echo ($drop_off_terminal == $terminal_value->id)  ? 'selected' : '' ?>>{{ $terminal_value->terminal_name }}</option>
+                        @endforeach
                     </select>
                 </div>
                 </div>
@@ -113,8 +114,9 @@
                 <div class="form-group">
                     <label for="return_terminal">Return Terminal</label>
                     <select class="form-control select2" style="width: 100%;" name="return_terminal" id="return_terminal">
-                        <option value="tbc" <?php echo ($return_terminal == 'tbc')  ? 'selected' : '' ?>>TBC</option>
-                        <option value="main_terminal" <?php echo ($return_terminal == 'main_terminal')  ? 'selected' : '' ?>>Main Terminal</option>
+                        @foreach($all_terminals as $terminal_key => $terminal_value)
+                            <option value="{{ $terminal_value->id }}" <?php echo ($return_terminal == $terminal_value->id)  ? 'selected' : '' ?>>{{ $terminal_value->terminal_name }}</option>
+                        @endforeach
                     </select>
                 </div>
                 </div>

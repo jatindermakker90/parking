@@ -303,7 +303,7 @@
                     <select class="form-control select2" style="width: 100%;" name="drop_off_terminal" id="drop_off_terminal">
                       <option value="tbc">TBC</option>
                     @foreach ($terminal as $terminal_value)
-                      <option value="{{ $terminal_value->terminal_name }}">{{ $terminal_value->terminal_name }}</option>
+                      <option value="{{ $terminal_value->id }}">{{ $terminal_value->terminal_name }}</option>
                     @endforeach
                     </select>
                     @endif

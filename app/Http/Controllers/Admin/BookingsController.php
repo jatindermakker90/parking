@@ -675,7 +675,9 @@ class BookingsController extends WebController
         $get_booking = $booking->with(['vehicle', 'company', 'airport', 'payment'])->find($request->id);
         $get_booking->booking_id = $request->id;
         $all_companies = $company->where('airport_id', $get_booking->airport_id)->where('company_status','!=',config('constant.STATUS.DELETED'))->get();
+        $all_terminals = AirportTerminal::where('airport_id', $get_booking->airport_id)->get();
         $get_booking->all_companies = $all_companies;
+        $get_booking->all_terminals = $all_terminals;
 
         $get_booking->dep_date = date("Y-m-d", strtotime($get_booking->dep_date_time));
         $get_booking->dep_time = date("H:i", strtotime($get_booking->dep_date_time));
@@ -686,6 +688,7 @@ class BookingsController extends WebController
         $get_booking->return_time = date("H:i", strtotime($get_booking->return_date_time));
         $get_booking->updated_return_date = date("Y-m-d", strtotime($get_booking->updated_return_date_time));
         $get_booking->updated_return_time = date("H:i", strtotime($get_booking->updated_return_date_time));
+        // dd($get_booking->toArray());
         return response()->view('admin.booking.edit', $get_booking, 200);
     }
 

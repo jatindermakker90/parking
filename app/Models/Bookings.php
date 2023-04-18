@@ -176,7 +176,7 @@ class Bookings extends Model
         if($data->has('total_days') && $data->total_days){
             $booking->total_days = $data->total_days;
         }
-        if($data->has('extended_price') && $data->extended_price){
+        if($data->has('extended_price')){
             $booking->extanded_price = $data->extended_price;
         }
         if($data->has('special_notes') && $data->special_notes){
