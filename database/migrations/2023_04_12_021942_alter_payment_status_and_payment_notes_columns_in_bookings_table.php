@@ -28,7 +28,7 @@ class AlterPaymentStatusAndPaymentNotesColumnsInBookingsTable extends Migration
     {
         Schema::table('bookings', function (Blueprint $table) {
             $table->dropColumn('payment_status');
-            $table->dropColumn('payment_status');
+            $table->dropColumn('payment_notes');
         });
     }
 }

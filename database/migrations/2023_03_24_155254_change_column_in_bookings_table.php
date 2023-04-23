@@ -29,7 +29,10 @@ class ChangeColumnInBookingsTable extends Migration
     public function down()
     {
         Schema::table('bookings', function (Blueprint $table) {
-            //
+            $table->dropColumn('special_notes');
+            $table->dropColumn('admin_charge');
+            $table->dropColumn('total_days');
+            $table->dropColumn('extanded_price');
         });
     }
 }
