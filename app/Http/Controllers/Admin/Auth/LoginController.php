@@ -34,7 +34,7 @@ class LoginController extends WebController
     public function login(Request $request){
 
         return view('admin.auth.login');
-        
+
     }
 
     public function postLogin(Request $request){
@@ -58,7 +58,9 @@ class LoginController extends WebController
             $check_user = User::where('email',$request->email)->first();
 
             if($check_user){
-               if(($check_user->hasRole('superadmin') || $check_user->hasRole('admin')) && ($check_user->user_status)){
+               // Commented above line because user_status create issue and not exist column in table 23-04-2023
+               // if(($check_user->hasRole('superadmin') || $check_user->hasRole('admin')) && ($check_user->user_status)){
+               if(($check_user->hasRole('superadmin') || $check_user->hasRole('admin'))){
                      $is_valid_user = true;
                }else{
 //                  return $this->sendSuccess([],$message,200);
@@ -79,7 +81,7 @@ class LoginController extends WebController
             $message         = "User login successfully";
             //return redirect();
             return $this->sendSuccess($result,$message,200);
-        
+
     }
 
     public function logout(Request $request) {

@@ -15,6 +15,8 @@ class DatabaseSeeder extends Seeder
      public function run(): void
     {
         $this->call([
+            AdminTableSeeder::class,
+            BrandPriceTableSeeder::class,
             ServiceTypeTableSeeder::class,
             CompanyTypesTableSeeder::class,
             OfferTypeTableSeeder::class,
@@ -23,6 +25,6 @@ class DatabaseSeeder extends Seeder
     // public function run()
     // {
     //     // \App\Models\User::factory(10)->create();
-       
+
     // }
 }

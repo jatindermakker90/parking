@@ -30,6 +30,6 @@ class CreateAirportsTerminalsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('airports_terminals');
+        Schema::dropIfExists('airport_terminals');
     }
 }

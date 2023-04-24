@@ -648,6 +648,7 @@ class BookingsController extends WebController
 
         if($companies->count() > 0){
             foreach ($companies as $key => $value) {
+              if(isset($value->operation->weekdays)){
                 $operations = json_decode($value->operation->weekdays, true);
                 $company_operation = getIsCompanyHasOperation($operations, $day, $to);
                 if($company_operation){
@@ -672,8 +673,9 @@ class BookingsController extends WebController
                 }
                 else{
                     unset($companies[$key]);
-                }                
+                }
             }
+          }
         }
         return view('admin.booking.create')->with([
             'title' =>"Booking Management",
@@ -944,7 +946,7 @@ class BookingsController extends WebController
     }
 
     public function getUpdatedPrice(Request $request, Company $company, Bookings $booking)
-    {   
+    {
         $response = [];
         $booking_details = $booking->with(['payment'])->find($request->booking_id);
         $company_details = $company->find($request->company);

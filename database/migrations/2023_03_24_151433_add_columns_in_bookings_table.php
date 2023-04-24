@@ -20,7 +20,11 @@ class AddColumnsInBookingsTable extends Migration
             $table->longText('special_notes')->after('booking_status');
             $table->float('admin_charge')->after('price');
             $table->float('total_days')->after('discount_code');
-            $table->float('extanded_price')->after('admin_charge');
+            $table->float('extanded_price')->after('admin_charge')
+            $table->longText('special_notes');
+            $table->float('admin_charge');
+            $table->float('total_days');
+            $table->float('extanded_price');
         });
     }
 
