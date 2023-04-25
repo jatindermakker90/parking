@@ -14,14 +14,10 @@ class ChangeColumnInBookingsTable extends Migration
     public function up()
     {
         Schema::table('bookings', function (Blueprint $table) {
-
-            $table->string('ref_id')->after('id')->nullable(true);
-            $table->dateTime('updated_dep_date_time')->after('dep_date_time')->nullable(true);
-            $table->dateTime('updated_return_date_time')->after('return_date_time')->nullable(true);
-            $table->longText('special_notes')->after('booking_status')->nullable(true);
-            $table->float('admin_charge')->after('price')->nullable(true);
-            $table->float('total_days')->after('discount_code')->nullable(true);
-            $table->float('extanded_price')->after('admin_charge')->nullable(true);
+            $table->longText('special_notes')->after('booking_status')->nullable(true)->change();
+            $table->float('admin_charge')->after('price')->nullable(true)->change();
+            $table->integer('total_days')->after('discount_code')->nullable(true)->change();
+             $table->float('extanded_price')->after('admin_charge')->nullable(true)->change();
         });
     }
 
