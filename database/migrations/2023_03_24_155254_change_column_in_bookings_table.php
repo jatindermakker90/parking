@@ -17,7 +17,7 @@ class ChangeColumnInBookingsTable extends Migration
             $table->longText('special_notes')->after('booking_status')->nullable(true)->change();
             $table->float('admin_charge')->after('price')->nullable(true)->change();
             $table->integer('total_days')->after('discount_code')->nullable(true)->change();
-            $table->float('extanded_price')->after('admin_charge')->nullable(true)->change();
+             $table->float('extanded_price')->after('admin_charge')->nullable(true)->change();
         });
     }
 
