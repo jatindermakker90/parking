@@ -258,13 +258,6 @@ $(document).ready(function(){
        searchData();
   });
 
-  $(document).on('click','.cancelBtn',function(){
-       $("#reservationtime").val("");
-       start_time = "";
-       end_time = "";
-       $('#data_collection').dataTable().fnDestroy();
-       searchData();
-  });
 
   $(document).on('click','#search_text',function(){
         search = $('#search').val();
@@ -274,12 +267,6 @@ $(document).ready(function(){
 
   $(document).on('change', '#search_select_airport', (e) => {
     selected_airport = $(e.target).val();
-    $('#data_collection').dataTable().fnDestroy();
-    searchData();
-  })
-
-  $(document).on('change', '#search_select_company', (e) => {
-    selected_company = $(e.target).val();
     $('#data_collection').dataTable().fnDestroy();
     searchData();
   })
@@ -301,185 +288,227 @@ $(document).ready(function(){
       "paging"      : true,
       "pageLength"  : 10,
       "lengthChange": false,
-      "searching"   : false,
+      "searching"   : true,
       "ordering"    : true,
       "info"        : true,
       "autoWidth"   : false,
       "responsive"  : true,
       "processing"  : true,
       "serverSide"  : true,
-      "ajax"        :"{{ url('admin/bookings') }}?start_date="+start_date+"&end_date="+end_date+"&search_text="+search_text+"&selected_airport="+selectedAirport+"&selected_company="+selectedCompany+"&booking_status="+bookingStatus,
+      
+      "ajax"        :"{{ url('admin/companies') }}",
       "columns"     : [
-        {
-          data: 'ref_id',
-          name: 'ref_id',
-          orderable: true,
-          render: function ( data, type, row) {
-            if(type === 'sort'){
-                return row;
-            }else{
-                return  row.company.company_title??'NA';
-            }
-          }
-        },
-        {
-          data: 'customer',
-          name: 'customer',
-          orderable: true,
-          render: function ( data, type, row) {
-            if(type === 'sort'){
-                return data;
-            }else{
-                return  '141'??'NA';
-            }
-          }
-        },
-        {
-          data: 'company.company_title',
-          name: 'company.company_title',
-          orderable: true,
-          render: function ( data, type, row) {
-            if(type === 'sort'){
-                return data;
-            }else{
-                return  '11'??'NA';
-            }
-          }
-        },
-        {
-          data: 'mobile',
-          name: 'mobile',
-          orderable: true,
-          render: function ( data, type, row) {
-            if(type === 'sort'){
-                return data;
-            }else{
-                return  '5789.47'??'NA';
-            }
-          }
-        },
-        {
-          data: 'created_at',
-          name: 'created_at',
-          orderable: true,
-          render: function ( data, type, row) {
-            if(type === 'sort'){
-                return data;
-            }else{
-                return  '68.53'??'NA';
-            }
-          }
-        },
-        {
-          data: 'dep_date_time',
-          name: 'dep_date_time',
-          orderable: true,
-          render: function ( data, type, row) {
-            if(type === 'sort'){
-                return data;
-            }else{
-                return  '1530'??'NA';
-            }
-          }
-        },
-        {
-          data: 'return_date_time',
-          name: 'return_date_time',
-          orderable: true,
-          render: function ( data, type, row) {
-            if(type === 'sort'){
-                return data;
-            }else{
-                return  '46'??'NA';
-            }
-          }
-        },
-        {
-          data: 'total_days',
-          name: 'total_days',
-          orderable: true,
-          render: function ( data, type, row) {
-            if(type === 'sort'){
-                return data;
-            }else{
-                return  '4'??'NA';
-            }
-          }
-        },
-        {
-          data: 'vehicle.vehicle_reg',
-          name: 'vehicle.vehicle_reg',
-          orderable: true,
-          render: function ( data, type, row) {
-            if(type === 'sort'){
-                return data;
-            }else{
-                return  '6410.69'??'NA';
-            }
-          }
-        },
-        {
-          data: 'price',
-          name: 'price',
-          orderable: true,
-          render: function ( data, type, row) {
-            if(type === 'sort'){
-                return data;
-            }else{
-                return  '659'??'NA';
-            }
-          }
-        },
-        {
-          data: 'cancellation_cover',
-          name: 'cancellation_cover',
-          orderable: true,
-          render: function ( data, type, row) {
-            if(type === 'sort'){
-                return data;
-            }else{
-                return  '1347'??'NA';
-            }
-          }
-        },
-        {
-          data: 'sms_confirmation',
-          name: 'sms_confirmation',
-          orderable: true,
-          render: function ( data, type, row) {
-            if(type === 'sort'){
-                return data;
-            }else{
-                return  '4510'??'NA';
-            }
-          }
-        },
-        {
-          data: 'discount_code',
-          name: 'discount_code',
-          orderable: true,
-          render: function ( data, type, row) {
-            if(type === 'sort'){
-                return data;
-            }else{
-                return  '9549.2566'??'NA';
-            }
-          }
-        },
-        {
-          data: 'email',
-          name: 'email',
-          orderable: true,
-          render: function ( data, type, row) {
-            if(type === 'sort'){
-                return data;
-            }else{
-                return  '2281.99'??'NA';
-            }
-          }
-        },
+            {
+              data: 'DT_RowIndex',         
+              name: 'DT_RowIndex',   
+              searchable: false,
+              orderable: false
+            },
+            {
+              data: 'company_title',
+              name: 'company_title', 
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type === 'sort'){
+                    return data;
+                }else{
+                    return  data??'NA';
+                }
+              }
+            },
+            {
+              data: 'company_phone',
+              name: 'company_phone', 
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type === 'sort'){
+                    return data;
+                }else{
+                    return  data??'NA';
+                }
+              }
+            },
+            {
+              data: 'company_email',
+              name: 'company_email', 
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type === 'sort'){
+                    return data;
+                }else{
+                    return  data??'NA';
+                }
+              }
+            },
+            {
+              data: 'company_url',
+              name: 'company_url', 
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type === 'sort'){
+                    return data;
+                }else{
+                    return  data??'NA';
+                }
+              }
+            },
+            {
+              data: 'airport.airport_name',
+              name: 'airport.airport_name', 
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type === 'sort'){
+                    return data;
+                }else{
+                    return  data??'NA';
+                }
+              }
+            },
+            {
+              data: 'terminal.terminal_name',
+              name: 'terminal.terminal_name', 
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type === 'sort'){
+                    return data;
+                }else{
+                    return  data??'NA';
+                }
+              }
+            },
+            {
+              data: 'logo_id',
+              name: 'logo_id', 
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type === 'sort'){
+                    return data;
+                }else{
+                    return  data??'NA';
+                }
+              }
+            },
+            {
+              data: 'manage_price',
+              name: 'manage_price',
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type == 'display'){
+                    return data;
+                }else if(type === 'sort'){
+                    return data;
+                }else{
+                    return data;
+                }
+              }
+            },
+            {
+              data: 'company_status',
+              name: 'company_status',
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type == 'display'){
+                    return data;
+                }else if(type === 'sort'){
+                    return data;
+                }else{
+                    return data;
+                }
+              }
+            },
+             
+            {
+              data: 'action',
+              name: 'action', 
+              orderable: false,
+            
+            },
       ],
-    });
+      fnDrawCallback: function (oSettings, json) {
+
+          $("input[data-bootstrap-switch]").bootstrapSwitch({
+            // 'state':$(this).prop('checked'),
+            onSwitchChange: function(e, state) {
+              e.preventDefault();
+              var status   = state;
+              var href     = $(this).data('href')+"?status="+status;
+              let operationButton = $(this).parents('tr').find('.company-operation');
+              console.log('status:: ', status, 'operationButton:: ', operationButton);
+              if(status){
+                let operationStatus = $(this).data('operation');
+                if(!operationStatus){
+                  e.preventDefault();
+                  console.log('status:: ', status, 'operationStatus:: ', operationStatus);
+                  Swal.fire({
+                    title: `{{ config('constant.ALERTS.OPERATION_PENDING') }}`,
+                    showDenyButton: false,
+                    showCancelButton: true,
+                    confirmButtonText: `Go Ahead !`,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowOutsideClick: false
+                  }).then((result) => {
+                    console.log('result:: ', result)
+                    if(result.isConfirmed){
+                      $(operationButton).trigger('click', 1);
+                      // operationsModel.modal('show');
+                    }
+                    else{
+                      window.location.reload();
+                    }
+                  });
+
+                }
+                else{
+                  $.get(href, function(data) {
+                    var message = null;
+                    var response_status  = data.success;
+                    if(data.success){
+                      message = data.message;
+                    }else{
+                      message = data.message;
+                    }
+                    Swal.fire({
+                      title: message,
+                      showDenyButton: false,
+                      showCancelButton: false,
+                      confirmButtonText: `OK`,
+                      allowOutsideClick: false,
+                      allowEscapeKey: false,
+                      allowOutsideClick: false
+                    }).then((result) => {
+                      window.location.reload();
+                    });
+                  });
+                }
+              }
+              else{
+                $.get(href, function(data) {
+                  var message = null;
+                  var response_status  = data.success;
+                  if(data.success){
+                    message = data.message;
+                  }else{
+                    message = data.message;
+                  }
+                  Swal.fire({
+                    title: message,
+                    showDenyButton: false,
+                    showCancelButton: false,
+                    confirmButtonText: `OK`,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowOutsideClick: false
+                  }).then((result) => {
+                    window.location.reload();
+                  });
+                });
+              }
+            }
+          });
+          
+      } 
+  });
   }
   });
 
