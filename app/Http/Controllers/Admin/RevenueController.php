@@ -58,11 +58,17 @@ class RevenueController extends Controller
                 ->addColumn('quote_price',function($row){
                     $quote_price = 0;
                     $quote_price = Bookings::where('company_id',$row->id)->where('discount_code','=',null)->sum('price');
+                    if($quote_price != 0){
+                        $quote_price = number_format($quote_price,2);
+                    }
                     return $quote_price;
                 })
                 ->addColumn('discount_price',function($row){
                     $discount_price = 0;
                     $discount_price = Bookings::where('company_id',$row->id)->where('discount_code','!=',null)->sum('price');
+                    if($discount_price != 0){
+                        $discount_price = number_format($discount_price,2);
+                    }
                     return $discount_price;
                 })
                 ->addColumn('cancellation_charge',function($row){
@@ -72,6 +78,9 @@ class RevenueController extends Controller
                     foreach($booking_ids as $booking_id){
                         $temp = Payment::select('cancellation_charge')->where('booking_id',$booking_id->id)->pluck('cancellation_charge')->first();
                         $cancellation_charge = $cancellation_charge + $temp;
+                    }
+                    if($cancellation_charge != 0){
+                        $cancellation_charge = number_format($cancellation_charge,2);
                     }
                     return $cancellation_charge;
                 })
@@ -83,6 +92,9 @@ class RevenueController extends Controller
                         $temp = Payment::select('sms_charge')->where('booking_id',$booking_id->id)->pluck('sms_charge')->first();
                         $sms_charge = $sms_charge + $temp;
                     }
+                    if($sms_charge != 0){
+                        $sms_charge = number_format($sms_charge,2);
+                    }
                     return $sms_charge;
                 })
                 ->addColumn('postal_charge',function($row){
@@ -92,6 +104,9 @@ class RevenueController extends Controller
                 ->addColumn('admin_charge',function($row){
                     $admin_charge = 0;
                     $admin_charge = Bookings::where('company_id',$row->id)->sum('admin_charge');
+                    if($admin_charge != 0){
+                        $admin_charge = number_format($admin_charge,2);
+                    }
                     return $admin_charge;
                 })
                 ->addColumn('extras',function($row){
@@ -105,6 +120,9 @@ class RevenueController extends Controller
                     foreach($booking_ids as $booking_id){
                         $temp = Payment::select('total_price')->where('booking_id',$booking_id->id)->pluck('total_price')->first();
                         $total_amount = $total_amount + $temp;
+                    }
+                    if($total_amount != 0){
+                        $total_amount = number_format($total_amount,2);
                     }
                     return $total_amount;
                 })
