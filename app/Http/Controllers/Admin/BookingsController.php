@@ -670,6 +670,9 @@ class BookingsController extends WebController
                     if(!empty($value->service_types)){
                         $value->service_types =  ServiceType::wherein('id', explode(",", $value->service_types))->get();
                     }
+                    if($value->final_booking_price == null){
+                        unset($companies[$key]);
+                    }
                 }
                 else{
                     unset($companies[$key]);
