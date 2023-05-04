@@ -152,30 +152,7 @@ class RevenueController extends Controller
 
     public function getairportrevenuepage(Request $request){
       if ($request->ajax()) {
-          $booking = Bookings::with(['vehicle', 'company', 'airport', 'payment']);
-
-          if($request->selected_airport && $request->selected_airport != null){
-              $booking->where('airport_id', $request->selected_airport);
-          }
-          if($request->selected_company && $request->selected_company != null){
-              $booking->where('company_id', $request->selected_company);
-          }
-
-          if($request->booking_status && $request->booking_status != null){
-              $booking->where('booking_status','=',$request->booking_status);
-          }
-          else{
-              $booking->where('booking_status','=',config('constant.BOOKING_STATUS.ACTIVE'));
-          }
-
-          if($request->start_date && $request->start_date != null){
-              $booking->where('dep_date_time','>=',$request->start_date);
-          }
-          if($request->end_date && $request->end_date != null){
-              $booking->where('return_date_time','<=',$request->end_date);
-          }
-
-
+          $booking = Bookings::with(['airport']);
           $booking->orderBy('id', 'desc');
           $booking_data = $booking->get();
 
