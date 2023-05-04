@@ -69,10 +69,10 @@ if (! function_exists('getIsCompanyHasOperation')) {
         $result = false;
         $day = strToLower($day);
         $todayOperation = $operations[$day];
-        if($todayOperation['status'] == 'open'){
-            $todayOpenTime = Carbon::now()->format('Y-m-d').' '.$todayOperation['start_time'].':00';
-            $todayCloseTime = Carbon::now()->format('Y-m-d').' '.$todayOperation['end_time'].':00';
-
+        if($todayOperation['status'] == 'open'){    
+            $todayOpenTime = Carbon::parse($time)->format('Y-m-d').' '.$todayOperation['start_time'].':00';
+            $todayCloseTime = Carbon::parse($time)->format('Y-m-d').' '.$todayOperation['end_time'].':00';
+            
             $carbonTodayOpenTime = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $todayOpenTime);
             $carbonTodayCloseTime = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $todayCloseTime);
             $isbetween = $time->between($carbonTodayOpenTime, $carbonTodayCloseTime);
