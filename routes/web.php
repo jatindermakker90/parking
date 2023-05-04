@@ -33,6 +33,7 @@ use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\RevenueController;
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\DashboardController;
 
 /* ==============  Admin =============== */
 /*
@@ -46,9 +47,13 @@ use App\Http\Controllers\HomeController;
 |
 */
 
-Route::get('/', function () {
-    return view('frontend.index');
-});
+
+ Route::get('/',  [DashboardController::class, 'index']);
+ Route::get('/about',  [DashboardController::class, 'about']);
+ Route::get('/faq',  [DashboardController::class, 'faq']);
+ Route::get('/contact-us',  [DashboardController::class, 'contactUs']);
+ Route::get('/airport/{airport_id}',  [DashboardController::class, 'getAirportDetails']);
+
 //==  Default views =========//
 Route::middleware('auth')->group(function () {
     Route::post('/upload-image',  [HomeController::class, 'uploadImage'])->name('upload-image');
