@@ -138,7 +138,7 @@
       "paging"      : false,
       "pageLength"  : 10,
       "lengthChange": false,
-      "searching"   : true,
+      "searching"   : false,
       "ordering"    : true,
       "info"        : false,
       "autoWidth"   : false,
@@ -187,6 +187,58 @@
             {
               data: 'total_booking',
               name: 'total_booking', 
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type === 'sort'){
+                    return data;
+                }else{
+                    return  data??'NA';
+                }
+              }
+            },
+        ], 
+    });
+    $('#data_collection2').DataTable({
+      "paging"      : false,
+      "pageLength"  : 10,
+      "lengthChange": false,
+      "searching"   : false,
+      "ordering"    : true,
+      "info"        : false,
+      "autoWidth"   : false,
+      "responsive"  : true,
+      "processing"  : true,
+      "serverSide"  : true,
+      
+      "ajax"        :"{{ url('admin/booking/booking-revenue-airport') }}",
+      "columns"     : [
+            {
+              data: 'custom_label',         
+              name: 'custom_label',   
+              orderable: false,
+              render: function ( data, type, row) {
+                if(type === 'sort'){
+                    return data;
+                }else{
+                    return  data??'NA';
+                }
+              }
+            },
+            {
+              data: 'total_normal_booking',
+              name: 'total_normal_booking', 
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type === 'sort'){
+                    return data;
+                }else{
+                    return  data??'NA';
+                }
+              }
+            },
+            {
+              data: 'total_discount_booking',
+              name: 'total_discount_booking', 
               orderable: true,
               render: function ( data, type, row) {
                 if(type === 'sort'){
