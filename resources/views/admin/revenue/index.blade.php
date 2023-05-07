@@ -73,26 +73,24 @@
           </thead>
           <tbody>
           </tbody>
-          <thead>
+          <tfoot>
           <tr>
+            <th>Total</th>
             <th></th>
-            <th>Normal Bookings</th>
-            <th>Discounted Bookings</th>
-            <th>Total Bookings</th>
-            <th>Quote </th>
-            <th>Discounted Price</th>
-            <th>Cancelation</th>
-            <th>SMS Cover</th>
-            <th>Total Postal</th>
-            <th>Admin Charges</th>
-            <th>Extras</th>
-            <th>Total Amount</th>
-            <th>Commission</th>
-            <th>Payed Amount</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
           </tr>
-          </thead>
-          <tbody>
-          </tbody>
+        </tfoot>
         </table>
       </div>
     </div>
@@ -338,6 +336,16 @@
               }
             },
         ], 
+        footerCallback: function( tfoot, data, start, end, display ) {
+            var api = this.api();
+            for(i=1; i<=13; i++){
+              $(api.column(i).footer()).html(
+                api.column(i).data().reduce(function ( a, b ) {
+                    return a + b;
+                }, 0)
+              );
+            }
+        }
     });
   });
 </script>
