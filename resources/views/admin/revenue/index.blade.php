@@ -341,7 +341,13 @@
             for(i=1; i<=13; i++){
               $(api.column(i).footer()).html(
                 api.column(i).data().reduce(function ( a, b ) {
-                    return a + b;
+                    if(i==1 || i==2 || i==3){ 
+                      var sum = a + b;
+                      return sum;
+                    } else {
+                      var sum = parseFloat(a) + parseFloat(b);
+                      return sum.toFixed(2);
+                    }
                 }, 0)
               );
             }
