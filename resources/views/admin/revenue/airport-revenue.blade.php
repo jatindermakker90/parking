@@ -135,12 +135,12 @@
 <script type="text/javascript">
   $(document).ready(function(){
     $('#data_collection').DataTable({
-      "paging"      : true,
+      "paging"      : false,
       "pageLength"  : 10,
       "lengthChange": false,
       "searching"   : true,
       "ordering"    : true,
-      "info"        : true,
+      "info"        : false,
       "autoWidth"   : false,
       "responsive"  : true,
       "processing"  : true,
@@ -149,8 +149,8 @@
       "ajax"        :"{{ url('admin/booking/booking-revenue-airport') }}",
       "columns"     : [
             {
-              data: 'company_title',         
-              name: 'company_title',   
+              data: 'airport_name',         
+              name: 'airport_name',   
               orderable: false,
               render: function ( data, type, row) {
                 if(type === 'sort'){
@@ -161,8 +161,8 @@
               }
             },
             {
-              data: 'normal_booking',
-              name: 'normal_booking', 
+              data: 'total_normal_booking',
+              name: 'total_normal_booking', 
               orderable: true,
               render: function ( data, type, row) {
                 if(type === 'sort'){
@@ -173,8 +173,8 @@
               }
             },
             {
-              data: 'discounted_booking',
-              name: 'discounted_booking', 
+              data: 'total_discount_booking',
+              name: 'total_discount_booking', 
               orderable: true,
               render: function ( data, type, row) {
                 if(type === 'sort'){
@@ -193,138 +193,6 @@
                     return data;
                 }else{
                     return  data??'NA';
-                }
-              }
-            },
-            {
-              data: 'quote_price',
-              name: 'quote_price', 
-              orderable: true,
-              render: function ( data, type, row) {
-                if(type === 'sort'){
-                    return data;
-                }else{
-                    return  data??'NA';
-                }
-              }
-            },
-            {
-              data: 'discount_price',
-              name: 'discount_price', 
-              orderable: true,
-              render: function ( data, type, row) {
-                if(type === 'sort'){
-                    return data;
-                }else{
-                    return  data??'NA';
-                }
-              }
-            },
-            {
-              data: 'cancellation_charge',
-              name: 'cancellation_charge', 
-              orderable: true,
-              render: function ( data, type, row) {
-                if(type === 'sort'){
-                    return data;
-                }else{
-                    return  data??'NA';
-                }
-              }
-            },
-            {
-              data: 'sms_charge',
-              name: 'sms_charge', 
-              orderable: true,
-              render: function ( data, type, row) {
-                if(type === 'sort'){
-                    return data;
-                }else{
-                    return  data??'NA';
-                }
-              }
-            },
-            {
-              data: 'postal_charge',
-              name: 'postal_charge',
-              orderable: true,
-              render: function ( data, type, row) {
-                if(type == 'display'){
-                    return data;
-                }else if(type === 'sort'){
-                    return data;
-                }else{
-                    return data;
-                }
-              }
-            },
-            {
-              data: 'admin_charge',
-              name: 'admin_charge',
-              orderable: true,
-              render: function ( data, type, row) {
-                if(type == 'display'){
-                    return data;
-                }else if(type === 'sort'){
-                    return data;
-                }else{
-                    return data;
-                }
-              }
-            },
-            {
-              data: 'extras',
-              name: 'extras',
-              orderable: true,
-              render: function ( data, type, row) {
-                if(type == 'display'){
-                    return data;
-                }else if(type === 'sort'){
-                    return data;
-                }else{
-                    return data;
-                }
-              }
-            },
-            {
-              data: 'total_amount',
-              name: 'total_amount',
-              orderable: true,
-              render: function ( data, type, row) {
-                if(type == 'display'){
-                    return data;
-                }else if(type === 'sort'){
-                    return data;
-                }else{
-                    return data;
-                }
-              }
-            },
-            {
-              data: 'commission',
-              name: 'commission',
-              orderable: true,
-              render: function ( data, type, row) {
-                if(type == 'display'){
-                    return data;
-                }else if(type === 'sort'){
-                    return data;
-                }else{
-                    return data;
-                }
-              }
-            },
-            {
-              data: 'payout_amount',
-              name: 'payout_amount',
-              orderable: true,
-              render: function ( data, type, row) {
-                if(type == 'display'){
-                    return data;
-                }else if(type === 'sort'){
-                    return data;
-                }else{
-                    return data;
                 }
               }
             },

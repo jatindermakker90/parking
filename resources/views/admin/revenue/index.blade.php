@@ -142,12 +142,12 @@
 <script type="text/javascript">
   $(document).ready(function(){
     $('#data_collection').DataTable({
-      "paging"      : true,
+      "paging"      : false,
       "pageLength"  : 10,
       "lengthChange": false,
       "searching"   : true,
       "ordering"    : true,
-      "info"        : true,
+      "info"        : false,
       "autoWidth"   : false,
       "responsive"  : true,
       "processing"  : true,
