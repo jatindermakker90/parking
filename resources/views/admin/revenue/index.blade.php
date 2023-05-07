@@ -73,6 +73,26 @@
           </thead>
           <tbody>
           </tbody>
+          <thead>
+          <tr>
+            <th></th>
+            <th>Normal Bookings</th>
+            <th>Discounted Bookings</th>
+            <th>Total Bookings</th>
+            <th>Quote </th>
+            <th>Discounted Price</th>
+            <th>Cancelation</th>
+            <th>SMS Cover</th>
+            <th>Total Postal</th>
+            <th>Admin Charges</th>
+            <th>Extras</th>
+            <th>Total Amount</th>
+            <th>Commission</th>
+            <th>Payed Amount</th>
+          </tr>
+          </thead>
+          <tbody>
+          </tbody>
         </table>
       </div>
     </div>
