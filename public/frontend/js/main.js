@@ -1,1 +1,130 @@
-!function(e){function r(r){for(var n,l,i=r[0],p=r[1],a=r[2],c=0,s=[];c<i.length;c++)l=i[c],Object.prototype.hasOwnProperty.call(o,l)&&o[l]&&s.push(o[l][0]),o[l]=0;for(n in p)Object.prototype.hasOwnProperty.call(p,n)&&(e[n]=p[n]);for(f&&f(r);s.length;)s.shift()();return u.push.apply(u,a||[]),t()}function t(){for(var e,r=0;r<u.length;r++){for(var t=u[r],n=!0,i=1;i<t.length;i++){var p=t[i];0!==o[p]&&(n=!1)}n&&(u.splice(r--,1),e=l(l.s=t[0]))}return e}var n={},o={1:0},u=[];function l(r){if(n[r])return n[r].exports;var t=n[r]={i:r,l:!1,exports:{}};return e[r].call(t.exports,t,t.exports,l),t.l=!0,t.exports}l.m=e,l.c=n,l.d=function(e,r,t){l.o(e,r)||Object.defineProperty(e,r,{enumerable:!0,get:t})},l.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},l.t=function(e,r){if(1&r&&(e=l(e)),8&r)return e;if(4&r&&"object"==typeof e&&e&&e.__esModule)return e;var t=Object.create(null);if(l.r(t),Object.defineProperty(t,"default",{enumerable:!0,value:e}),2&r&&"string"!=typeof e)for(var n in e)l.d(t,n,function(r){return e[r]}.bind(null,n));return t},l.n=function(e){var r=e&&e.__esModule?function(){return e.default}:function(){return e};return l.d(r,"a",r),r},l.o=function(e,r){return Object.prototype.hasOwnProperty.call(e,r)},l.p="https://www.parking4you.co.uk/build/";var i=window.webpackJsonp=window.webpackJsonp||[],p=i.push.bind(i);i.push=r,i=i.slice();for(var a=0;a<i.length;a++)r(i[a]);var f=p;t()}([]);
+(function ($) {
+    "use strict";
+    
+    // loader
+    var loader = function () {
+        setTimeout(function () {
+            if ($('#loader').length > 0) {
+                $('#loader').removeClass('show');
+            }
+        }, 1);
+    };
+    loader();
+    
+    // Back to top button
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 200) {
+            $('.back-to-top').fadeIn('slow');
+        } else {
+            $('.back-to-top').fadeOut('slow');
+        }
+    });
+    $('.back-to-top').click(function () {
+        $('html, body').animate({scrollTop: 0}, 1500, 'easeInOutExpo');
+        return false;
+    });
+    
+    
+    // Sticky Navbar
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 90) {
+            $('.nav-bar').addClass('nav-sticky');
+            $('.carousel, .page-header').css("margin-top", "73px");
+        } else {
+            $('.nav-bar').removeClass('nav-sticky');
+            $('.carousel, .page-header').css("margin-top", "0");
+        }
+    });
+    
+    
+    // Dropdown on mouse hover
+    $(document).ready(function () {
+        function toggleNavbarMethod() {
+            if ($(window).width() > 992) {
+                $('.navbar .dropdown').on('mouseover', function () {
+                    $('.dropdown-toggle', this).trigger('click');
+                }).on('mouseout', function () {
+                    $('.dropdown-toggle', this).trigger('click').blur();
+                });
+            } else {
+                $('.navbar .dropdown').off('mouseover').off('mouseout');
+            }
+        }
+        toggleNavbarMethod();
+        $(window).resize(toggleNavbarMethod);
+    });
+
+    
+    // Main carousel
+    $(".carousel .owl-carousel").owlCarousel({
+        autoplay: true,
+        animateOut: 'fadeOut',
+        animateIn: 'fadeIn',
+        items: 1,
+        smartSpeed: 300,
+        dots: false,
+        loop: true,
+        nav : true,
+        navText : [
+            '<i class="fa fa-angle-left" aria-hidden="true"></i>',
+            '<i class="fa fa-angle-right" aria-hidden="true"></i>'
+        ]
+    });
+
+    
+    // Facts counter
+    $('[data-toggle="counter-up"]').counterUp({
+        delay: 10,
+        time: 2000
+    });
+
+
+    // Testimonials carousel
+    $(".testimonials-carousel").owlCarousel({
+        center: true,
+        autoplay: true,
+        smartSpeed: 2000,
+        dots: true,
+        loop: true,
+        responsive: {
+            0:{
+                items:1
+            },
+            576:{
+                items:1
+            },
+            768:{
+                items:2
+            },
+            992:{
+                items:3
+            }
+        }
+    });
+    
+    
+    // Related post carousel
+    $(".related-slider").owlCarousel({
+        autoplay: true,
+        dots: false,
+        loop: true,
+        nav : true,
+        navText : [
+            '<i class="fa fa-angle-left" aria-hidden="true"></i>',
+            '<i class="fa fa-angle-right" aria-hidden="true"></i>'
+        ],
+        responsive: {
+            0:{
+                items:1
+            },
+            576:{
+                items:1
+            },
+            768:{
+                items:2
+            }
+        }
+    });
+    
+})(jQuery);
+

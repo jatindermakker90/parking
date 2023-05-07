@@ -12,7 +12,7 @@ class DashboardController extends WebController
 {
 
    public function index(){
-      return view('frontend.index');
+      return view('frontend.layout');
    }
 
 
