@@ -152,12 +152,30 @@ class RevenueController extends Controller
 
     public function getairportrevenuepage(Request $request){
       if ($request->ajax()) {
-          $booking = Bookings::with(['airport']);
+          $booking = Airport::where('airport_status',config('constant.STATUS.ACTIVE'));
           $booking->orderBy('id', 'desc');
           $booking_data = $booking->get();
 
           return Datatables::of($booking_data)
                   ->addIndexColumn()
+                  ->addColumn('airport_name',function($row){
+                    return $row->airport_name;
+                  })
+                  ->addColumn('total_normal_booking',function($row){
+                    $normalbooking_count = 0;
+                    $normalbooking_count = Bookings::where('airport_id',$row->id)->where('discount_code','=',null)->count();
+                    return $normalbooking_count;
+                  })
+                  ->addColumn('total_discount_booking',function($row){
+                    $discountedbooking_count = 0;
+                    $discountedbooking_count = Bookings::where('airport_id',$row->id)->where('discount_code','!=',null)->count();
+                    return $discountedbooking_count;
+                  })
+                  ->addColumn('total_booking',function($row){
+                    $totalbooking_count = 0;
+                    $totalbooking_count = Bookings::where('airport_id',$row->id)->count();
+                    return $totalbooking_count;
+                  })
                   ->editColumn('created_at', function($row){
                       return date("d-m-Y", strtotime($row->created_at));;
                   })
