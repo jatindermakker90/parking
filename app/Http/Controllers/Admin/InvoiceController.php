@@ -6,7 +6,8 @@ use DataTables;
 use Validator;
 use App\Models\User;
 use App\Models\Invoice;
-use App\Models\Products;
+use App\Models\Airport;
+use App\Models\Company;
 use Illuminate\Http\Request;
 
 class InvoiceController extends WebController
@@ -18,14 +19,14 @@ class InvoiceController extends WebController
      */
       public function index(Request $request){
 
-        $data            = Invoice::where('status','!=',config('constant.STATUS.DELETED'));
+        $data            = Invoice::where('inoice_status','!=',config('constant.STATUS.DELETED'));
         $product_query   = new Invoice();
         $product         = $product_query->all();
         if ($request->ajax()) {
             return Datatables::of($data)
                     ->addColumn('status_name',function($row){
-                        $modify_url = route('change_product_status',[$row->id]);
-                        if($row->status)
+                        $modify_url = route('change_invoice_status',[$row->id]);
+                        if($row->inoice_status)
                         $btn = '<input type="checkbox" name="change_status" checked data-bootstrap-switch data-off-color="danger" data-on-color="success"  data-on-text="ACTIVE" data-off-text="INACTIVE" data-href ="'.$modify_url.'">';
                         else
                         $btn = '<input type="checkbox" name="change_status" data-bootstrap-switch data-off-color="danger" data-on-color="success"  data-on-text="ACTIVE" data-off-text="INACTIVE" data-href ="'.$modify_url.'">';
@@ -43,7 +44,9 @@ class InvoiceController extends WebController
                     ->rawColumns(['action','status_name'])
                     ->make(true);
         }
-        return view('admin.invoices.index')->with(['title' => 'Invoice', "header" => "Invoice Listing"]);
+        $airports   = Airport::where('airport_status',config('constant.STATUS.ACTIVE'))->get();
+        $companies  = Company::where('company_status','!=',config('constant.STATUS.DELETED'))->get();
+        return view('admin.invoices.index')->with(['title' => 'Invoice', "header" => "Invoice Listing","airports" => $airports,"companies" => $companies]);
        
     }
 
@@ -68,15 +71,7 @@ class InvoiceController extends WebController
     {
           
         $validator = Validator::make($request->all(), [
-            'name'                     => 'required',
-            'discpline_name'           => 'required',
-            'group'                    => 'required',
-            'sub_group'                => 'required',
-            'test_performed'           => 'required',
-            'test_method'              => 'required',
-            'range_test_detection'     => 'required',
-            'mu_value'                 => 'required',
-            'test_status'              => 'required',
+            'full_name'                     => 'required',
         ]);
    
         if($validator->fails()){
@@ -108,9 +103,9 @@ class InvoiceController extends WebController
      */
     public function edit($n_id,Request $request)
     {
-        $product         = Invoice::where('id',$product_id)->first();
-        $header          = 'Edit '.$product->name. " Invoice";
-        return view('admin.products.edit')->with(['title' =>'Invoice', "header" => $header,'product' => $product]);
+        $invoice         = Invoice::where('id',$product_id)->first();
+        $header          = 'Edit '.$invoice->name. " Invoice";
+        return view('admin.invoices.edit')->with(['title' =>'Invoice', "header" => $header,'product' => $invoice]);
     }
 
     /**
@@ -120,38 +115,10 @@ class InvoiceController extends WebController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $product_id)
+    public function update(Request $request, $invoice_id)
     {
-        $validator = Validator::make($request->all(), [
-            'product_id'               => 'required|exists:products,id',
-            'name'                     => 'required',
-            'discpline_name'           => 'required',
-            'group'                    => 'required',
-            'sub_group'                => 'required',
-            'test_performed'           => 'required',
-            'test_method'              => 'required',
-            'range_test_detection'     => 'required',
-            'mu_value'                 => 'required',
-            'test_status'              => 'required',
-        ]);
-   
-        if($validator->fails()){
-           return redirect()->back()->withErrors($validator);      
-        }
-
-        $save_products = Products::where('id',$product_id)->first();
-        $save_products->name = $request->has('name') ? $request->name : null;
-        $save_products->discpline_name = $request->has('discpline_name') ? $request->discpline_name : null;
-        $save_products->group = $request->has('group') ? $request->group : null;
-        $save_products->sub_group = $request->has('sub_group') ? $request->sub_group : null;
-        $save_products->test_performed = $request->has('test_performed') ? $request->test_performed : null;
-        $save_products->test_method = $request->has('test_method') ? $request->test_method : null;
-        $save_products->range_test_detection = $request->has('range_test_detection') ? $request->range_test_detection : null;
-        $save_products->mu_value = $request->has('mu_value') ? $request->mu_value : null;
-        $save_products->test_status = $request->has('test_status') ? $request->test_status : null;
-        $save_products->save();
-
-        return redirect()->route('products.index')->with(['success' => 'Invoice updated successfully']);
+        
+        return redirect()->route('invoices.index')->with(['success' => 'Invoice updated successfully']);
     }
 
     /**
@@ -160,9 +127,9 @@ class InvoiceController extends WebController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($product_id,Request $request)
+    public function destroy($invoice_id,Request $request)
     {
-        Products::where('id',$product_id)->delete();
+        Invoice::where('id',$invoice_id)->delete();
         $message         = "Invoice deleted fetched successfully";
         return $this->sendSuccess([],$message,200);
     }
@@ -173,13 +140,13 @@ class InvoiceController extends WebController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function changeProductsStatus($product_id,Request $request)
+    public function changeProductsStatus($invoice_id,Request $request)
     {
 
-        $request->merge(['product_id' => $product_id]);
+        $request->merge(['invoice_id' => $invoice_id]);
 
         $validator = Validator::make($request->all(), [
-            'product_id'       => 'required|exists:products,id',
+            'invoice_id'       => 'required|exists:invoices,id',
         ]);
    
         if($validator->fails()){
@@ -188,13 +155,13 @@ class InvoiceController extends WebController
 
         $status = $request->has('status') ? $request->status : null;
 
-        $products = Products::where('id',$product_id)->first();
+        $products = Invoice::where('id',$product_id)->first();
         if($request->has('status') && ($status == 'true')){
-         $products->status = config('constant.STATUS.ACTIVE');
+         $products->inoice_status = config('constant.STATUS.ACTIVE');
          $products->save();
         }
         if($status == 'false'){
-         $products->status = config('constant.STATUS.INACTIVE');
+         $products->inoice_status = config('constant.STATUS.INACTIVE');
          $products->save();
         }
 

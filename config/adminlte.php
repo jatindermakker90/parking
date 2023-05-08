@@ -400,7 +400,7 @@ return [
             'submenu' => [
                 [
                     'text'        => 'Company Invoice',
-                    'url'         => '#',
+                    'url'         => 'admin/invoices',
                 ],
             ],
         ],
