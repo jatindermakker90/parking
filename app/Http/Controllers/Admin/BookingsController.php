@@ -645,7 +645,6 @@ class BookingsController extends WebController
         $companies  = Company::with(['operation'])->where('company_status', config('constant.STATUS.ACTIVE'))
                             ->where('airport_id', $request->select_airport)
                             ->get();
-
         if($companies->count() > 0){
             foreach ($companies as $key => $value) {
               if(isset($value->operation->weekdays)){
