@@ -403,7 +403,7 @@
             <div class="item">
                 <div class="item-blk">
                     <div class="image">
-                        <img src="{{ env('IMAGE_URL').$value->logo_id; }}">
+                        <img src="{{ asset('storage/'.$value->logo_id) }}">
                     </div>
                     <div class="content">
                         <h4>{{$value->company_title}}</h4>
