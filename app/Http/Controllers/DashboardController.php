@@ -12,7 +12,14 @@ class DashboardController extends WebController
 {
 
    public function index(){
-      return view('frontend.layout');
+      $companies = Company::with(['operation', 'airport', 'terminal'])
+                    ->where('company_status','!=',config('constant.STATUS.DELETED'))
+                    ->whereNotNull('company_status')
+                    ->inRandomOrder()
+                    ->take(5)
+                    ->get();
+
+      return view('frontend.index',compact('companies'));
    }
 
 

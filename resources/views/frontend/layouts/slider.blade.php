@@ -1,54 +1,57 @@
-<section class="slider_section ">
-      <div class="container">
-        <div class="detail-box col-md-9 mx-auto px-0">
-          <h1>
-            Finding Parking Lots Made Easy
-          </h1>
-          <p>
-            Necessitatibus non ducimus hic dolor? Maiores itaque vitae sit blanditiis porro, a expedita ex. Totam vel sed obcaecati. Placeat maxime asperiores deleniti tenetur officiis laboriosam laborum a nihil quisquam quis!
-          </p>
-        </div>
-        <div class="find_form_container">
-          <form action="#">
-            <div class="form-row">
-              <div class="col-md-4 px-0">
-                <div class="form-group">
-                  <label for="">Select Parking</label>
-                  <div class="input-group">
-                    <select class="form-control">
-                      <option data-display="Highway Park">Highway Park</option>
-                      <option value="1">Highway Park</option>
-                      <option value="2">Highway Park</option>
-                      <option value="3">Highway Park</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4 px-0">
-                <div class="form-group ">
-                  <label for="">Your Name</label>
-                  <div class="input-group">
-                    <input type="text" class="form-control" placeholder="John doe" />
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4 px-0">
-                <div class="form-group">
-                  <label for="">Your Mobile Number</label>
-                  <div class="input-group ">
-                    <input type="text" class="form-control" placeholder="01 2345678910" />
-                  </div>
-                </div>
-              </div>
+<section class=" slider_section ">
+  <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+      <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active">01</li>
+      <li data-target="#carouselExampleIndicators" data-slide-to="1">02</li>
+    </ol>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <div class="container">
+          <div class="detail-box">
+            <h1>
+
+              The Best <br>
+              Deals For Parking lots
+            </h1>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+            </p>
+            <div>
+              <a href="">
+                Contact us
+              </a>
             </div>
-            <div class="btn-box">
-              <button type="submit" class="">
-                <span>
-                  Search Now
-                </span>
-              </button>
-            </div>
-          </form>
+          </div>
         </div>
       </div>
-    </section>
+      <div class="carousel-item">
+        <div class="container">
+          <div class="detail-box">
+            <h1>
+
+              The Best <br>
+              Deals For Parking lots
+            </h1>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+            </p>
+            <div>
+              <a href="">
+                Contact us
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+
+</section>
