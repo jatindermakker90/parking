@@ -114,6 +114,7 @@ Route::prefix('admin')->group(function () {
         Route::resource('invoices',                            InvoiceController::class);
         Route::get('change/invoice/status/{table_id}',           [InvoiceController::class, 'changeInvoiceStatus'])->name('change_invoice_status');
         Route::get('check/company',           [InvoiceController::class, 'checkairportbasecompany'])->name('search_company');
+        Route::get('company/base/data',           [InvoiceController::class, 'companyIDBaseData'])->name('company_base_data');
 
        // ========================== User =====================================//
         Route::get('/user/all',                                 [UserController::class, 'index'])->name('user_list');
