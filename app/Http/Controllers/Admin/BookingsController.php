@@ -17,6 +17,7 @@ use App\Models\CompanyType;
 use App\Models\ServiceType;
 use App\Models\VehicleDetails;
 use App\Models\Payment;
+use App\Models\Invoice;
 
 use Carbon\Carbon;
 
@@ -916,6 +917,18 @@ class BookingsController extends WebController
           $payment->paid_amount = $request->totalPaidAmount;
           $payment->payment_method = $request->payment_method;
           $payment->transaction_id = $request->transaction_id;
+          $invoice = new Invoice();
+          $invoice->ref_no = $booking->ref_id;
+          $invoice->e_date = $booking->dep_date_time;
+          $invoice->r_date = $booking->return_date_time;
+          $invoice->sur_name = $booking->first_name;
+          $invoice->first_name = $booking->last_name;
+          $invoice->gross_amount = $booking->price;
+          $invoice->invoice_status = '1';
+          $invoice->booking_id = $booking->id;
+          $invoice->company_id = $booking->company_id;
+          $invoice->airport_id = $booking->airport_id;  
+          $invoice->save();
           if($payment->save()){
             $booking->save();
             return redirect()->route('bookings.index');

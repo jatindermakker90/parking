@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Models\Invoice;
 use App\Models\Airport;
 use App\Models\Company;
+use App\Models\Bookings;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 
 class InvoiceController extends WebController
@@ -18,36 +20,64 @@ class InvoiceController extends WebController
      * @return \Illuminate\Http\Response
      */
       public function index(Request $request){
+        $data_query = Company::with(['operation', 'airport', 'terminal'])
+        ->where('company_status','!=',config('constant.STATUS.DELETED'))
+        ->whereNotNull('company_status')
+        ->get();
+        //$user = Auth::user();
 
-        $data            = Invoice::where('inoice_status','!=',config('constant.STATUS.DELETED'));
-        $product_query   = new Invoice();
-        $product         = $product_query->all();
         if ($request->ajax()) {
-            return Datatables::of($data)
-                    ->addColumn('status_name',function($row){
-                        $modify_url = route('change_invoice_status',[$row->id]);
-                        if($row->inoice_status)
-                        $btn = '<input type="checkbox" name="change_status" checked data-bootstrap-switch data-off-color="danger" data-on-color="success"  data-on-text="ACTIVE" data-off-text="INACTIVE" data-href ="'.$modify_url.'">';
-                        else
-                        $btn = '<input type="checkbox" name="change_status" data-bootstrap-switch data-off-color="danger" data-on-color="success"  data-on-text="ACTIVE" data-off-text="INACTIVE" data-href ="'.$modify_url.'">';
-                        return $btn;
-                    })
-                    ->addColumn('action', function($row){
-                           $view_url    =  route('invoice.show',[$row->id]);
-                           $edit_url    =  route('invoices.edit',[$row->id]);
-                           $delete_url  =  route('invoices.destroy',[$row->id]);
-                           $btn  = '<a href="'.$view_url.'" class="view btn btn-success btn-sm mr-2"><i class="fa fa-eye" aria-hidden="true"></i></a>';
-                          // $btn = '<a href="'.$edit_url.'" class="edit btn btn-warning btn-sm mr-2"><i class="fa fa-edit" aria-hidden="true"></i></a>';
-                           //$btn .= '<a href="'.$delete_url.'" class="delete btn btn-danger btn-sm mr-2 delete_record" data-type ="'.$row->country.' Country""><i class="fa fa-trash" aria-hidden="true"></i></a>';
-                           return $btn;
-                    })
-                    ->rawColumns(['action','status_name'])
-                    ->make(true);
+        return Datatables::of($data_query)
+                ->addIndexColumn()
+                ->addColumn('total_booking',function($row){
+                    $totalbooking_count = 0;
+                    $totalbooking_count = Bookings::where('company_id',$row->id)->count();
+                    return $totalbooking_count;
+                })
+                ->addColumn('total_amount',function($row){
+                    $total_amount = 0;
+                    $temp = 0;
+                    $booking_ids = Bookings::where('company_id',$row->id)->get();
+                    foreach($booking_ids as $booking_id){
+                        $temp = Payment::select('total_price')->where('booking_id',$booking_id->id)->pluck('total_price')->first();
+                        $total_amount = $total_amount + $temp;
+                    }
+                    if($total_amount != 0){
+                        $total_amount = number_format($total_amount,2);
+                    }
+                    return $total_amount;
+                })
+                ->addColumn('commission',function($row){
+                    $commission = 0;
+                    return $commission;
+                })
+                ->addColumn('payout_amount',function($row){
+                    $payout_amount = 0;
+                    return $payout_amount;
+                })
+                ->rawColumns([
+                    'total_amount',
+                    ])
+                ->make(true);
+            }
+      $airports   = Airport::where('airport_status',config('constant.STATUS.ACTIVE'))->get();
+      $companies  = Company::where('company_status','!=',config('constant.STATUS.DELETED'))->get();
+      return view('admin.invoices.index')->with([
+          'title' => 'Invoice',
+          "header" => "Invoice Manager",
+          "airports" => $airports,
+          "companies" => $companies
+      ]);
+    }
+
+    public function checkairportbasecompany(Request $request){
+        if ($request->ajax()) {
+            $companies = Company::select('id', 'company_title')->where('airport_id', $request->airport_id)->get();
+            
+            $response['companies']         = $companies;
+            $message                       = "Companies fetched successfully";
+            return $this->sendSuccess($response,$message,200);
         }
-        $airports   = Airport::where('airport_status',config('constant.STATUS.ACTIVE'))->get();
-        $companies  = Company::where('company_status','!=',config('constant.STATUS.DELETED'))->get();
-        return view('admin.invoices.index')->with(['title' => 'Invoice', "header" => "Invoice Listing","airports" => $airports,"companies" => $companies]);
-       
     }
 
     /**
