@@ -79,6 +79,86 @@
           </tr>
         </tfoot>
         </table>
+        <div id="second" style="display:none;">
+          <div class="row">
+              <br>
+              <div class="col-lg-12">
+                  <h1> Manchester</h1>
+                  <p><strong>Email : </strong>airportservicesmanchester@gmail.com</p>
+                  <p><strong>Phone : </strong>07391588329</p>
+              </div>
+          </div>
+          <hr class="hr-normal">
+          <div class="row">
+              <div class="col-lg-10">
+                  <b> Manchester</b>
+              </div>
+              <div class="col-lg-2">
+                  <b>Date: 20 May 2023</b>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-lg-10">
+                  <b>Manchester, Manchester </b>
+              </div>
+              <div class="col-lg-2">
+                  <b></b>
+              </div>
+          </div>
+          <hr class="hr-normal">
+          <div class="row">
+              <div "col-lg-12"="">
+                  <h1 style="text-align:center;">REF NO: 17520: Invoice for the month of  </h1>
+              </div>
+          </div>
+          <table id="data_collection2" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+              <th>Company Name</th>
+              <th>Total Bookings</th>
+              <th>Gross Amount</th>
+              <th>Commission</th>
+              <th>Net Payable</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot>
+            <tr>
+              <th>Total</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </tfoot>
+          </table>
+          <hr class="hr-normal">
+          <div class="row">
+              <div class="col-lg-10">
+                  <b>GRAND TOTAL</b>
+              </div>
+              <div class="col-lg-2">
+                  <b>£1221.91</b>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-lg-10">
+                  <b>LESS COMMISSION</b>
+              </div>
+              <div class="col-lg-2">
+                  <b>366.573</b>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-lg-10">
+                  <b>NET AMOUNT PAYABLE INCLUSIVE VAT</b>
+              </div>
+              <div class="col-lg-2">
+                  <b>£855.337</b>
+              </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -154,6 +234,10 @@
         }
       });
 
+    });
+    $(document).on('change','#company',function(e){
+     $("#data_collection").hide();
+     $("#second").show();
     });
     // Date Selection
     var today = new Date();
