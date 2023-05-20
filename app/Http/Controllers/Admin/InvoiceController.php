@@ -80,6 +80,42 @@ class InvoiceController extends WebController
         }
     }
 
+    public function companyIDBaseData(Request $request){
+        if ($request->ajax()) {
+            $booking = Bookings::with(['vehicle', 'company', 'airport', 'payment']);
+
+            if($request->selected_company && $request->selected_company != null){
+                $booking->where('company_id', $request->selected_company);
+            }
+
+            if($request->start_date && $request->start_date != null){
+                $booking->where('dep_date_time','>=',$request->start_date);
+            }
+            if($request->end_date && $request->end_date != null){
+                $booking->where('return_date_time','<=',$request->end_date);
+            }
+
+            $booking->where('payment_status',1)->orderBy('id', 'desc');
+            $booking_data = $booking->get();
+            return Datatables::of($booking_data)
+                    ->addIndexColumn()
+                    ->editColumn('created_at', function($row){
+                        return date("d-m-Y", strtotime($row->created_at));;
+                    })
+                    ->editColumn('dep_date_time', function($row){
+                        return date("d-m-Y", strtotime($row->updated_dep_date_time));;
+                    })
+                    ->editColumn('return_date_time', function($row){
+                        return date("d-m-Y", strtotime($row->updated_return_date_time));;
+                    })
+                    ->addColumn('price', function($row){
+                        return number_format($row->price,2);
+                    })
+                    ->make(true);
+            // return $this->sendSuccess($response,$message,200);
+        }
+    }
+
     /**
      * Show the form for creating a new country resource.
      *

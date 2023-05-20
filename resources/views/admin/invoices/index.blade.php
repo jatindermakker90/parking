@@ -114,24 +114,15 @@
           <table id="data_collection2" class="table table-bordered table-striped">
             <thead>
             <tr>
-              <th>Company Name</th>
-              <th>Total Bookings</th>
-              <th>Gross Amount</th>
-              <th>Commission</th>
-              <th>Net Payable</th>
+              <th>Ref No</th>
+              <th>E Date</th>
+              <th>R Date</th>
+              <th>STAY</th>
+              <th>SURNAME</th>
+              <th>FIRSTNAME</th>
+              <th>AMOUNT</th>
             </tr>
             </thead>
-            <tbody>
-            </tbody>
-            <tfoot>
-            <tr>
-              <th>Total</th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-            </tr>
-          </tfoot>
           </table>
           <hr class="hr-normal">
           <div class="row">
@@ -208,6 +199,20 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
 <script type="text/javascript">
   $(document).ready(function(){
+    // Date Selection
+    var today = new Date();
+    var time   = $('#reservationtime').val();
+    var start_time = null;
+    var end_time   = null;
+    var selected_airport = null;
+    var selected_company = null;
+
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    today = mm + '/' + dd + '/' + yyyy;
+    searchData();
+
     $(document).on('change','#search_select_airport',function(e){
       let targetEle = $(e.target);
       let selectedAirport = targetEle.val();
@@ -236,22 +241,13 @@
 
     });
     $(document).on('change','#company',function(e){
-     $("#data_collection").hide();
-     $("#second").show();
+      $("#data_collection").hide();
+      let targetEle = $(e.target);
+      selected_company = targetEle.val();
+      $('#data_collection2').dataTable().fnDestroy();
+      getData();
+      $("#second").show();
     });
-    // Date Selection
-    var today = new Date();
-    var time   = $('#reservationtime').val();
-    var start_time = null;
-    var end_time   = null;
-    var selected_airport = null;
-    var selected_company = null;
-
-    var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-    var yyyy = today.getFullYear();
-    today = mm + '/' + dd + '/' + yyyy;
-    searchData();
 
     $('#reservationtime').daterangepicker({
        timePicker: false,
@@ -368,6 +364,120 @@
               );
             }
         }
+     });
+    }
+    function getData(){
+      let start_date      = start_time ?? '';
+      let end_date        = end_time ?? '';
+      $('#data_collection2').DataTable({
+      "paging"      : false,
+      "pageLength"  : 10,
+      "lengthChange": false,
+      "searching"   : false,
+      "ordering"    : true,
+      "info"        : false,
+      "autoWidth"   : false,
+      "responsive"  : true,
+      "processing"  : true,
+      "serverSide"  : true,
+      
+      "ajax"        :"{{ url('admin/company/base/data') }}?start_date="+start_date+"&end_date="+end_date+"&selected_company="+selected_company,
+      "columns"     : [
+            {
+              data: 'ref_id',         
+              name: 'ref_id',   
+              orderable: false,
+              render: function ( data, type, row) {
+                if(type === 'sort'){
+                    return data;
+                }else{
+                    return  data??'NA';
+                }
+              }
+            },
+            {
+              data: 'dep_date_time',
+              name: 'dep_date_time', 
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type === 'sort'){
+                    return data;
+                }else{
+                    return  data??'NA';
+                }
+              }
+            },
+            {
+              data: 'return_date_time',
+              name: 'return_date_time',
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type == 'display'){
+                    return data;
+                }else if(type === 'sort'){
+                    return data;
+                }else{
+                    return data;
+                }
+              }
+            },
+            {
+              data: 'total_days',
+              name: 'total_days',
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type == 'display'){
+                    return data;
+                }else if(type === 'sort'){
+                    return data;
+                }else{
+                    return data;
+                }
+              }
+            },
+            {
+              data: 'last_name',
+              name: 'last_name',
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type == 'display'){
+                    return data;
+                }else if(type === 'sort'){
+                    return data;
+                }else{
+                    return data;
+                }
+              }
+            },
+            {
+              data: 'first_name',
+              name: 'first_name',
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type == 'display'){
+                    return data;
+                }else if(type === 'sort'){
+                    return data;
+                }else{
+                    return data;
+                }
+              }
+            },
+            {
+              data: 'price',
+              name: 'price',
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type == 'display'){
+                    return data;
+                }else if(type === 'sort'){
+                    return data;
+                }else{
+                    return data;
+                }
+              }
+            },
+        ]
      });
     }
   });
