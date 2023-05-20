@@ -6,27 +6,20 @@
           <div class="col-sm-6">
             <h1>{{ $title }}</h1>
           </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <!-- <a href ="{{ route('invoices.create') }}">
-              <button type="button" class="btn btn-block btn-primary"> + Add {{ $title }}</button> -->
-              </a>
-            </ol>
-          </div>
         </div>
         <div class="row">
-            <div class="col-sm-3">
+            <div class="col-md-3">
                 <div class="form-group">
-                    <label>Search:</label>
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text" id ="search_text"><i class="fa fa-search"></i></span>
-                      </div>
-                      <input type="text" class="form-control float-right" placeholder="Type your keywords here" id ="search">
+                  <label>From/To:</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="far fa-clock"></i></span>
                     </div>
+                    <input type="text" class="form-control float-right" id="reservationtime" placeholder="Please select date range">
+                  </div>
                 </div>
             </div>
-            <div class="col-sm-3">
+            <div class="col-md-3">
                 <div class="form-group">
                     <label for="search_select_airport">Airport:</label>
                     <select class="form-control select2" name ="search_select_airport" id ="search_select_airport">
@@ -38,68 +31,83 @@
                 </div>
             </div>
             <div class="col-sm-3">
-                <div class="form-group">
-                    <label for="search_select_company">Company:</label>
-                    <select class="form-control select2" name ="search_select_company" id ="search_select_company">
-                    <option value="">All</option>
-                    @foreach ($companies ?? '' as $company_key => $company_value)
-                      <option value="{{ $company_value->id }}">{{ $company_value->company_title }}</option>
-                    @endforeach
-                </select>
-                </div>
+              <div class="form-group {{ $errors->has('company') ? 'has-error' : '' }}">
+                  <label for="company">Suppliers</label>
+                  <select class="form-control select2" style="width: 100%;" name="company" id="company">
+                      <option value=""></option>
+                  </select>
+                  @if ($errors->first('company'))
+                      <span class="form-error">{{ $errors->first('company') }}</span>
+                  @endif
+              </div>
             </div>
             <div class="col-sm-3">
                 <div class="form-group">
-                  <label>From/To:</label>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="far fa-clock"></i></span>
-                    </div>
-                    <input type="text" class="form-control float-right" id="reservationtime" placeholder="Please select date range">
-                  </div>
-                  <!-- /.input group -->
+                    <a style="margin-top: 30px;" class="btn btn-primary" target="_blank" href="invoices_supplier_excell_generator_all.php?from=2023-05-01&amp;to=2023-05-10&amp;air_id="><i class="fa fa-print"></i> Export to Excel</a>
                 </div>
             </div>
         </div>
       </div>
-  <div class="row">
-          <div class="col-12">
-            <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">{{ $header }}</h3>
-              </div>
-            
-              <!-- /.card-header -->
-              <div class="card-body">
-                <table id="data_collection" class="table table-bordered table-striped">
-                  <thead>
-                  <tr>
-                    <th>Sr No.</th>
-                    <th>Ref No.</th>
-                    <th>E Date</th>
-                    <th>R Date</th>
-                    <th>Surname</th>
-                    <th>First Name</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  </tbody>
-                </table>
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-          </div>
-          <!-- /.col -->
-        </div>
+@stop
+@section('content')
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">{{ $header }}</h3>
+      </div>
+      <div class="card-body">
+        <table id="data_collection" class="table table-bordered table-striped">
+          <thead>
+          <tr>
+            <th>Company Name</th>
+            <th>Total Bookings</th>
+            <th>Gross Amount</th>
+            <th>Commission</th>
+            <th>Net Payable</th>
+          </tr>
+          </thead>
+          <tbody>
+          </tbody>
+          <tfoot>
+          <tr>
+            <th>Total</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
+        </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
 @stop
 @section('css')
 <link rel="stylesheet" href="{{ asset('vendor/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset('vendor/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset('vendor/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset('vendor/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+<style>
+  .jqueryValidation{
+    border: 1px solid red !important;
+  }
+  .validationFail{
+    color: red;
+    display: none;
+  }
+  .tab-pane{
+    padding-top: 30px;
+    padding-bottom: 30px;
+  }
+  #get_updated_price_warrning{
+    color: red;
+    display: none;
+    font-size: 20px;
+  }
+</style>
+
 @stop
 @section('js')
 <!-- DataTables  & Plugins -->
@@ -114,27 +122,46 @@
 <script src="{{ asset('vendor/pdfmake/vfs_fonts.js') }}"></script>
 <script src="{{ asset('vendor/datatables-buttons/js/buttons.html5.min.js') }}"></script>
 <script src="{{ asset('vendor/datatables-buttons/js/buttons.print.min.js') }}"></script>
-<script src="{{ asset('vendor/datatables-buttons/js/buttons.colVis.min.js') }}"></script> 
-<script src="{{ asset('vendor/bootstrap-switch/js/bootstrap-switch.min.js') }}"></script> 
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="{{ asset('vendor/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+<script src="{{ asset('vendor/bootstrap-switch/js/bootstrap-switch.min.js') }}"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
 <script type="text/javascript">
+  $(document).ready(function(){
+    $(document).on('change','#search_select_airport',function(e){
+      let targetEle = $(e.target);
+      let selectedAirport = targetEle.val();
+      let apiUrl = "{{ route('search_company') }}";
+      let href = `${apiUrl}?airport_id=${selectedAirport}`;
 
-$(document).ready(function(){
+      console.log(`selected selectedAirport`, selectedAirport, `apiUrl:: `, apiUrl);
 
-     $('.select2').select2();
-    let changeStatusModel = $('#change_status_modal').modal({
-      keyboard: false
-    })
+      $.get(href, function(data) {
+        console.log(`airport:: `, data)
+        var message = null;
+        var response_status  = data.success;
+        let respData = data.result.companies;
+        if(data.success){
+          if(respData.length > 0){
+            let html = `<option value="">Select company</option>`;
+            respData.forEach(element => {
+              html += `<option value="${element.id}">${element.company_title}</option>`
+            });
+            $('#company').html(html);
+          }
+        }else{
+          
+        }
+      });
+
+    });
+    // Date Selection
     var today = new Date();
     var time   = $('#reservationtime').val();
     var start_time = null;
     var end_time   = null;
-    var search = null;
     var selected_airport = null;
     var selected_company = null;
-    var booking_status = null;
 
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -142,188 +169,123 @@ $(document).ready(function(){
     today = mm + '/' + dd + '/' + yyyy;
     searchData();
 
-  $('#reservationtime').daterangepicker({
+    $('#reservationtime').daterangepicker({
        timePicker: false,
        autoUpdateInput: false,
        locale: {
         format: 'MM/DD/YYYY',
         cancelLabel: 'Clear'
       }
-  },function(start, end) {
-    console.log("Start time",start.format('Y-M-D'));
-      console.log("end time",end.format('Y-M-D'));
-      start_time = `${start.format('Y-M-D')} 00:00:00`;
-      end_time   = `${end.format('Y-M-D')} 23:59:59`;
-      $("#reservationtime").val(start.format('MM/DD/YYYY')+"-"+end.format('MM/DD/YYYY'));
-      $('#data_collection').dataTable().fnDestroy();
-      searchData();
-  });
-
-  $(document).on('click','.cancelBtn',function(){
-    $("#reservationtime").val("");
-    start_time = "";
-    end_time = "";
-    $('#data_collection').dataTable().fnDestroy();
-    searchData();
-  });
-
-  $(document).on('click','#search_text',function(){
-    search = $('#search').val();
-    $('#data_collection').dataTable().fnDestroy();
-    searchData();
-  });
-
-  $(document).on('change', '#search_select_airport', (e) => {
-    selected_airport = $(e.target).val();
-    $('#data_collection').dataTable().fnDestroy();
-    searchData();
-  })
-
-  $(document).on('change', '#search_select_company', (e) => {
-    selected_company = $(e.target).val();
-    $('#data_collection').dataTable().fnDestroy();
-    searchData();
-  })
-
-  $(document).on('change', '#search_booking_status', (e) => {
-    booking_status = $(e.target).val();
-    $('#data_collection').dataTable().fnDestroy();
-    searchData();
-  })
-    
-  
-
+    },function(start, end) {
+        start_time = `${start.format('Y-M-D')} 00:00:00`;
+        end_time   = `${end.format('Y-M-D')} 23:59:59`;
+        $("#reservationtime").val(start.format('MM/DD/YYYY')+"-"+end.format('MM/DD/YYYY'));
+        $('#data_collection').dataTable().fnDestroy();
+        searchData();
+    });
 
     function searchData(){
-           $('#data_collection').DataTable({
-          "paging"      : true,
-          "pageLength"  : 10,
-          "lengthChange": false,
-          "searching"   : false,
-          "ordering"    : true,
-          "info"        : true,
-          "autoWidth"   : false,
-          "responsive"  : true,
-          "processing"  : true,
-          "serverSide"  : true,
-          "ajax"        :"{{ url('admin/invoices') }}",
-          "columns"     : [
-                {
-                  data: 'id',         
-                  name: 'id',   
-                  orderable: true
-                },
-                {
-                  data: 'ref_no',
-                  name: 'ref_no', 
-                  orderable: true
-                },
-                {
-                  data: 'e_date',
-                  name: 'e_date',
-                  orderable: true
-                },
-                {
-                  data: 'r_date',
-                  name: 'r_date',
-                  orderable: true,
-                  searchable: true
-                },
-                {
-                  data: 'sur_name',
-                  name: 'sur_name',
-                  orderable: true,
-                  searchable: true
-                },
-                {
-                  data: 'first_name',
-                  name: 'first_name',
-                  orderable: true,
-                  searchable: true
-                },
-                {
-                  data: 'status_name',
-                  name: 'status_name',
-                  render: function ( data, type, row) {
-                    if(type == 'display'){
-                        return data;
-                    }else if(type === 'sort'){
-                        return data;
-                    }else{
-                        return data;
+      let start_date      = start_time ?? '';
+      let end_date        = end_time ?? '';
+      $('#data_collection').DataTable({
+      "paging"      : false,
+      "pageLength"  : 10,
+      "lengthChange": false,
+      "searching"   : false,
+      "ordering"    : true,
+      "info"        : false,
+      "autoWidth"   : false,
+      "responsive"  : true,
+      "processing"  : true,
+      "serverSide"  : true,
+      
+      "ajax"        :"{{ url('admin/invoices') }}?start_date="+start_date+"&end_date="+end_date,
+      "columns"     : [
+            {
+              data: 'company_title',         
+              name: 'company_title',   
+              orderable: false,
+              render: function ( data, type, row) {
+                if(type === 'sort'){
+                    return data;
+                }else{
+                    return  data??'NA';
+                }
+              }
+            },
+            {
+              data: 'total_booking',
+              name: 'total_booking', 
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type === 'sort'){
+                    return data;
+                }else{
+                    return  data??'NA';
+                }
+              }
+            },
+            {
+              data: 'total_amount',
+              name: 'total_amount',
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type == 'display'){
+                    return data;
+                }else if(type === 'sort'){
+                    return data;
+                }else{
+                    return data;
+                }
+              }
+            },
+            {
+              data: 'commission',
+              name: 'commission',
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type == 'display'){
+                    return data;
+                }else if(type === 'sort'){
+                    return data;
+                }else{
+                    return data;
+                }
+              }
+            },
+            {
+              data: 'payout_amount',
+              name: 'payout_amount',
+              orderable: true,
+              render: function ( data, type, row) {
+                if(type == 'display'){
+                    return data;
+                }else if(type === 'sort'){
+                    return data;
+                }else{
+                    return data;
+                }
+              }
+            },
+        ], 
+        footerCallback: function( tfoot, data, start, end, display ) {
+            var api = this.api();
+            for(i=1; i<=4; i++){
+              $(api.column(i).footer()).html(
+                api.column(i).data().reduce(function ( a, b ) {
+                    if(i==1){ 
+                      var sum = a + b;
+                      return sum;
+                    } else {
+                      var sum = parseFloat(a) + parseFloat(b);
+                      return sum.toFixed(2);
                     }
-                  }
-                },
-                {
-                  data: 'action',
-                  name: 'action', 
-                  orderable: false,
-                  searchable: false
-                },
-          ],
-          fnDrawCallback: function (oSettings, json) {
-
-              $("input[data-bootstrap-switch]").bootstrapSwitch({
-                  'state':$(this).prop('checked'),
-                    onSwitchChange: function(e, state) {
-                      var status   = state;
-                      var href     = $(this).data('href')+"?status="+status;
-                      $.get(href, function(data) {
-                        var message = null;
-                        var response_status  = data.success;
-                        if(data.success){
-                          message = data.message;
-                        }else{
-                          message = data.message;
-                        }
-                        Swal.fire({
-                            title: message,
-                            showDenyButton: false,
-                            showCancelButton: false,
-                            confirmButtonText: `OK`,
-                            }).then((result) => {
-                              window.location.reload();
-                           
-                            });
-                        });
-                    }
-              });
-              
-          } 
-      });
-  }
-  
-  $(document).on('click','.delete_record',function(e){
-
-    e.preventDefault();
-      var delete_type     = $(this).data('type');
-      var delete_message  = 'Do you want to delete '+delete_type+'?';
-      var success_message = delete_type+' deleted successfully';
-      var deny_message    = delete_type+' not deleted.';
-      var href            = $(this).attr('href');
-      Swal.fire({
-          title: delete_message,
-          showDenyButton: false,
-          showCancelButton: true,
-          confirmButtonText: `OK`,
-          }).then((result) => {
-            if (result.isConfirmed) {
-              $.ajax({
-                url: href,
-                type: 'DELETE',
-                success:function(data){
-                //  console.log(data);
-                   Swal.fire(success_message, '', 'success');
-                   window.location.reload();
-                },
-              });
-
-            } else if (result.isDenied) {
-              Swal.fire(deny_message, '', 'info')
+                }, 0)
+              );
             }
-      });
+        }
+     });
+    }
   });
-    
-});
 </script>
 @stop
