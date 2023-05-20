@@ -80,6 +80,14 @@ class InvoiceController extends WebController
         }
     }
 
+    public function companyIDBaseMetaData(Request $request){
+        if ($request->ajax()) {
+            $companies = Company::where('id', $request->selected_company)->first();
+            $message = "Information Reterived";
+            return $this->sendSuccess($companies,$message,200);
+        }
+    }
+
     public function companyIDBaseData(Request $request){
         if ($request->ajax()) {
             $booking = Bookings::with(['vehicle', 'company', 'airport', 'payment']);

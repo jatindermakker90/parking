@@ -83,15 +83,15 @@
           <div class="row">
               <br>
               <div class="col-lg-12">
-                  <h1> Manchester</h1>
-                  <p><strong>Email : </strong>airportservicesmanchester@gmail.com</p>
+                  <h1 id="company_name"> Manchester</h1>
+                  <p id="email_pro"></p>
                   <p><strong>Phone : </strong>07391588329</p>
               </div>
           </div>
           <hr class="hr-normal">
           <div class="row">
               <div class="col-lg-10">
-                  <b> Manchester</b>
+                  <b id="company_name"> Manchester</b>
               </div>
               <div class="col-lg-2">
                   <b>Date: 20 May 2023</b>
@@ -99,7 +99,7 @@
           </div>
           <div class="row">
               <div class="col-lg-10">
-                  <b>Manchester, Manchester </b>
+                  <b id="company_name">Manchester, Manchester </b>
               </div>
               <div class="col-lg-2">
                   <b></b>
@@ -204,7 +204,7 @@
     var time   = $('#reservationtime').val();
     var start_time = null;
     var end_time   = null;
-    var selected_airport = null;
+    var selectedAirport = null;
     var selected_company = null;
 
     var dd = String(today.getDate()).padStart(2, '0');
@@ -215,7 +215,7 @@
 
     $(document).on('change','#search_select_airport',function(e){
       let targetEle = $(e.target);
-      let selectedAirport = targetEle.val();
+      selectedAirport = targetEle.val();
       let apiUrl = "{{ route('search_company') }}";
       let href = `${apiUrl}?airport_id=${selectedAirport}`;
 
@@ -245,7 +245,8 @@
       let targetEle = $(e.target);
       selected_company = targetEle.val();
       $('#data_collection2').dataTable().fnDestroy();
-      getData();
+      loadMetaInfo();
+      loadDataTable();
       $("#second").show();
     });
 
@@ -366,7 +367,25 @@
         }
      });
     }
-    function getData(){
+
+    function loadMetaInfo(){
+      let apiUrl = "{{ route('company_base_metadata') }}";
+      let href = `${apiUrl}?selected_company=${selected_company}`;
+      $.get(href, function(data) {
+        console.log(`airport:: `, data)
+        var message = null;
+        var response_status  = data.success;
+        let respData = data.result;
+        if(data.success){
+            $('#company_name').val(respData.company_title);
+            let html = '<strong>Email : </strong>'+respData.company_email;
+            $('#email_pro').html(html);
+        }else{
+          
+        }
+      });
+    }
+    function loadDataTable(){
       let start_date      = start_time ?? '';
       let end_date        = end_time ?? '';
       $('#data_collection2').DataTable({
