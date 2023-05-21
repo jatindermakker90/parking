@@ -48,8 +48,18 @@ class InvoiceController extends WebController
                     return $total_amount;
                 })
                 ->addColumn('commission',function($row){
-                    $commission = 0;
-                    return $commission;
+                    $total_amount = 0;
+                    $temp = 0;
+                    $booking_ids = Bookings::where('company_id',$row->id)->get();
+                    foreach($booking_ids as $booking_id){
+                        $temp = Payment::select('total_price')->where('booking_id',$booking_id->id)->pluck('total_price')->first();
+                        $total_amount = $total_amount + $temp;
+                        $total_amount = ($total_amount * $row->company_commission)/100;
+                    }
+                    if($total_amount != 0){
+                        $total_amount = number_format($total_amount,2);
+                    }
+                    return $total_amount;
                 })
                 ->addColumn('payout_amount',function($row){
                     $payout_amount = 0;
