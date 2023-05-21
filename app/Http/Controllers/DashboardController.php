@@ -24,11 +24,21 @@ class DashboardController extends WebController
 
 
    public function about(){
-      return view('frontend.about');
+       $companies = Company::with(['operation', 'airport', 'terminal'])
+                    ->where('company_status','!=',config('constant.STATUS.DELETED'))
+                    ->whereNotNull('company_status')
+                    ->inRandomOrder()
+                    ->take(5)
+                    ->get();
+      return view('frontend.about',compact('companies'));
    }
 
    public function faq(){
       return view('frontend.faq');
+   }
+
+   public function terms(){
+      return view('frontend.terms_conditions');
    }
 
    public function contactUs(){

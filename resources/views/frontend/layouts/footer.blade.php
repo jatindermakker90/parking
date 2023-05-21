@@ -5,7 +5,7 @@
         <div class="fot-lft">
           <div class="fot-logo">
             <a herf="">
-              <img src="{{ asset('frontend/images/cp_logo.jpg') }}"> 
+              <img src="{{ asset('frontend/images/cp_logo.png') }}"> 
             
             </a>
           </div>
@@ -20,25 +20,19 @@
               <div class="fot-col one">
                 <h6>Airports</h6>
                 <ul class="nav-list">
-                  <li><a href="#">Airport Parking</a></li>
-                  <li><a href="#">Gatwick Airport</a></li>
-                  <li><a href="#">Heathrow Airport</a></li>
-                  <li><a href="#">Manchester Airport</a></li>
-                  <li><a href="#">Stansted Airport</a></li>
-                  <li><a href="#">Birmingham Airport</a></li>
-                  <li><a href="#">Bristol Airport</a></li>
+                   @foreach($airports as $key => $value)
+                  <li><a href="#">{{$value->airport_name}} Airport</a></li>
+                  @endforeach
                 </ul>
               </div>
               <div class="fot-col two">
                 <h6>Navigation</h6>
                 <ul class="nav-list">
-                  <li><a href="#">Usefull Links</a></li>
-                  <li><a href="#">Terms & Conditions</a></li>
-                  <li><a href="#">Privacy Policy</a></li>
-                  <li><a href="#">Refund-policy</a></li>
-                  <li><a href="#">Contact Us</a></li>
-                  <li><a href="#">Reviews</a></li>
-                  <li><a href="#">About</a></li>
+                  <li><a href="{{url('/')}}">Home</a></li>
+                  <li><a href="{{url('/')}}">Airport Parking</a></li>
+                  <li><a href="{{url('faq')}}">FAQ's</a></li>
+                  <li><a href="{{url('about')}}">About</a></li>
+                  <li><a href="{{url('terms')}}">Terms & Conditions</a></li>
                 </ul>
               </div>
             </div>

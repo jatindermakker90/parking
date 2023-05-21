@@ -51,6 +51,7 @@ use App\Http\Controllers\DashboardController;
  Route::get('/',  [DashboardController::class, 'index']);
  Route::get('/about',  [DashboardController::class, 'about']);
  Route::get('/faq',  [DashboardController::class, 'faq']);
+ Route::get('/terms',  [DashboardController::class, 'terms']);
  Route::get('/contact-us',  [DashboardController::class, 'contactUs']);
  Route::get('/airport/{airport_id}',  [DashboardController::class, 'getAirportDetails']);
 
