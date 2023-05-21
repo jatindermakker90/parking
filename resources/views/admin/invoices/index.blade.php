@@ -83,15 +83,15 @@
           <div class="row">
               <br>
               <div class="col-lg-12">
-                  <h1 id="company_name"> Manchester</h1>
+                  <h1 id="company_name1"></h1>
                   <p id="email_pro"></p>
-                  <p><strong>Phone : </strong>07391588329</p>
+                  <p id="contact_no"></p>
               </div>
           </div>
           <hr class="hr-normal">
           <div class="row">
               <div class="col-lg-10">
-                  <b id="company_name"> Manchester</b>
+                  <b id="company_name2"></b>
               </div>
               <div class="col-lg-2">
                   <b>Date: 20 May 2023</b>
@@ -99,7 +99,7 @@
           </div>
           <div class="row">
               <div class="col-lg-10">
-                  <b id="company_name">Manchester, Manchester </b>
+                  <b id="company_name3"></b>
               </div>
               <div class="col-lg-2">
                   <b></b>
@@ -108,7 +108,7 @@
           <hr class="hr-normal">
           <div class="row">
               <div "col-lg-12"="">
-                  <h1 style="text-align:center;">REF NO: 17520: Invoice for the month of  </h1>
+                  <h1 style="text-align:center;">Invoice  </h1>
               </div>
           </div>
           <table id="data_collection2" class="table table-bordered table-striped">
@@ -130,7 +130,7 @@
                   <b>GRAND TOTAL</b>
               </div>
               <div class="col-lg-2">
-                  <b>£1221.91</b>
+                  <b>N/A</b>
               </div>
           </div>
           <div class="row">
@@ -138,7 +138,7 @@
                   <b>LESS COMMISSION</b>
               </div>
               <div class="col-lg-2">
-                  <b>366.573</b>
+                  <b>N/A</b>
               </div>
           </div>
           <div class="row">
@@ -146,7 +146,7 @@
                   <b>NET AMOUNT PAYABLE INCLUSIVE VAT</b>
               </div>
               <div class="col-lg-2">
-                  <b>£855.337</b>
+                  <b>N/A</b>
               </div>
           </div>
         </div>
@@ -377,9 +377,13 @@
         var response_status  = data.success;
         let respData = data.result;
         if(data.success){
-            $('#company_name').val(respData.company_title);
-            let html = '<strong>Email : </strong>'+respData.company_email;
-            $('#email_pro').html(html);
+          for($i=1; $i<=3; $i++){
+            document.getElementById("company_name"+$i).innerHTML = respData.company_title;
+          }
+            let email_html = '<strong>Email : </strong>'+respData.company_email;
+            $('#email_pro').html(email_html);
+            let contact_html = '<strong>Phone : </strong>'+respData.company_phone;
+            $('#contact_no').html(contact_html);
         }else{
           
         }
