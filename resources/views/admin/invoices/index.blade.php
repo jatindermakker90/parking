@@ -43,7 +43,7 @@
             </div>
             <div class="col-sm-3">
                 <div class="form-group">
-                    <a style="margin-top: 30px;" class="btn btn-primary" target="_blank" href="invoices_supplier_excell_generator_all.php?from=2023-05-01&amp;to=2023-05-10&amp;air_id="><i class="fa fa-print"></i> Export to Excel</a>
+                    <button onclick="window.print()" style="margin-top: 30px;" class="btn btn-primary"><i class="fa fa-print"></i> Print</button>
                 </div>
             </div>
         </div>
