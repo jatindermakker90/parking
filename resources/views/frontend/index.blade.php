@@ -403,7 +403,7 @@
             <div class="item">
                 <div class="item-blk">
                     <div class="image">
-                        <img src="{{ asset('storage/'.$value->logo_id) }}">
+                        <img src="{{ Storage::url('profile-image/'.$value->logo_id) }}">
                     </div>
                     <div class="content">
                         <h4>{{$value->company_title}}</h4>
@@ -430,7 +430,9 @@
 @section('js_section')
 <script type="text/javascript">
 $(document).ready(function(){
-        $('select').select2();
+        if($('.select').length){
+          $('select').select2();
+        }
         $("#drop_off_date").datepicker();
         $("#pick_up_date").datepicker();
         $("#we-serving").owlCarousel({

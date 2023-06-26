@@ -11,11 +11,11 @@
                 <div class="time-details">
                     <ul class="main-navigation">
                         <li><a href="{{url('/')}}">Home</a></li>
-                        <li><a href="{{url('/')}}">Airport Parking</a></li>
+                        <li><a href="{{url('parking')}}">Airport Parking</a></li>
                         <li><a href="{{url('faq')}}">FAQ's</a></li>
                         <li><a href="{{url('about')}}">About</a></li>
                         <li><a href="{{url('terms')}}">Terms & Conditions</a></li>
-                        <li><a href="#">Contact</a></li>
+                        <li><a href="{{url('contact-us')}}">Contact</a></li>
                     </ul>
                 </div>
             </div>

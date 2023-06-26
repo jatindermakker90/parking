@@ -58,7 +58,7 @@ class CompanyController extends WebController
                     })
                     ->editColumn('logo_id', function($row){
                         if($row->logo_id != 1){
-                            $path = env('IMAGE_URL').$row->logo_id;
+                            $path = \Storage::url("profile-image/".$row->logo_id);
                             
                             return '<img height="50" width="100" src="'.$path.'" />';
                             // return '<div>'.$path.'</div>';

@@ -50,6 +50,7 @@ use App\Http\Controllers\DashboardController;
 
  Route::get('/',  [DashboardController::class, 'index']);
  Route::get('/about',  [DashboardController::class, 'about']);
+ Route::get('/parking',  [DashboardController::class, 'parking']);
  Route::get('/faq',  [DashboardController::class, 'faq']);
  Route::get('/terms',  [DashboardController::class, 'terms']);
  Route::get('/contact-us',  [DashboardController::class, 'contactUs']);

@@ -12,24 +12,24 @@
 
         <div>
             <h2>Section : 2 Cancellation Cover</h2>
-            <ul><li><strong>5.1</strong>Should a customer wish to cancel they must do so at least 24 hours prior to their departure date in order to be eligible for refund minus the admin fee. The cancellation cover only allows the booking to be cancelled 24 hours prior to departure date and does not waive off the admin fee.</li><li><strong>5.1</strong>No refund will be issued if the cancellation notice is received in less than 24 hours from the departure date.</li><li><strong>5.1</strong>Cancellation Cover does not apply for bookings made the same day, booked for the following day or in certain products where stated.</li><li><strong>5.1</strong>Booking Fees, Cancellation cover and SMS Charges are non-refundable.</li></ul>
+            <ul><li><strong>2.1</strong>Should a customer wish to cancel they must do so at least 24 hours prior to their departure date in order to be eligible for refund minus the admin fee. The cancellation cover only allows the booking to be cancelled 24 hours prior to departure date and does not waive off the admin fee.</li><li><strong>2.2</strong>No refund will be issued if the cancellation notice is received in less than 24 hours from the departure date.</li><li><strong>2.3</strong>Cancellation Cover does not apply for bookings made the same day, booked for the following day or in certain products where stated.</li><li><strong>2.4</strong>Booking Fees, Cancellation cover and SMS Charges are non-refundable.</li></ul>
         </div>
         <ul class="in-btm-cnt">
             <li>
                 <div class="icn">
-                    <img src="./images/blue-map.svg">
+                    <img src="{{ asset('frontend/images/blue-map.svg') }}">
                 </div>
-                <p>Compare parking needs Ltd, 15 Person Road, Pound Hill, Crawley</p>
+                <p>Compare Parking Needs Ltd, 15 Person Road, Pound Hill, Crawley</p>
             </li>
             <li>
                 <div class="icn">
-                    <img src="./images/blue-phone.svg">
+                    <img src="{{ asset('frontend/images/blue-phone.svg') }}">
                 </div>
                 <p>03335678902</p>
             </li>
             <li>
                 <div class="icn">
-                    <img src="./images/blue-mail.svg">
+                    <img src="{{ asset('frontend/images/blue-mail.svg') }}">
                 </div>
                 <p>info@airportcheapparking.co.uk</p>
             </li>
@@ -41,7 +41,9 @@
 @section('js_section')
 <script type="text/javascript">
 $(document).ready(function(){
-        $('select').select2();
+        if($('.select').length){
+          $('select').select2();
+        }
         $("#drop_off_date").datepicker();
         $("#pick_up_date").datepicker();
         $("#we-serving").owlCarousel({

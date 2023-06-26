@@ -41,8 +41,18 @@ class DashboardController extends WebController
       return view('frontend.terms_conditions');
    }
 
+   public function parking(){
+        $companies = Company::with(['operation', 'airport', 'terminal'])
+                    ->where('company_status','!=',config('constant.STATUS.DELETED'))
+                    ->whereNotNull('company_status')
+                    ->inRandomOrder()
+                    ->take(5)
+                    ->get();
+      return view('frontend.parking',compact('companies'));
+   }
+
    public function contactUs(){
-      return view('frontend.contact_us');
+      return view('frontend.contact');
    }
 
    public function getAirportDetails(Request $request,$airport_id){

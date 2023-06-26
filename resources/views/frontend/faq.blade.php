@@ -102,7 +102,9 @@
 @section('js_section')
 <script type="text/javascript">
 $(document).ready(function(){
-        $('select').select2();
+        if($('.select').length){
+          $('select').select2();
+        }
         $("#drop_off_date").datepicker();
         $("#pick_up_date").datepicker();
         $("#we-serving").owlCarousel({
