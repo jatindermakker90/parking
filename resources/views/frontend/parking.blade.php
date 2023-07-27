@@ -10,7 +10,7 @@
                     <p>When it comes to parking your vehicle, We provide cost-effective and hassle-free options. We aim to spare your valuable time and hard-earned money, allowing you to focus on the things that matter most during your travels.</p>
                     <p>Generally, we focus on providing Park and Ride and Meet and Greet parking services at 
                         @foreach($airports as $key => $value)
-                         <a href="airport/{{$value->id}}">{{$value->airport_name}} Airport @if($key != ($airports->count() - 1)) {{","}}@endif</a>
+                         <a href="{{ url('airport/'.$value->id) }}">{{$value->airport_name}} Airport @if($key != ($airports->count() - 1)) {{","}}@endif</a>
                         @endforeach
                     .</p>
                 </div>
@@ -383,7 +383,7 @@
                         <div class="more-content">
                             <p> Parking Solution provides you the cost-effective services, Park and Ride and Meet and Greet. Book with us to get the cheapest price deals and also one of the best and trustable service </p>
                         </div>
-                        <div class="btn-container"><a href="/gatwick-airport-parking" target="_blank"
+                        <div class="btn-container"><a href="{{url('airport/'.$value->id)}}" target="_blank"
                         class="read-more-btn">Read more</a>
                         </div>
                     </div>

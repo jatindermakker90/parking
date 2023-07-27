@@ -383,7 +383,7 @@
                         <div class="more-content">
                             <p> Parking Solution provides you the cost-effective services, Park and Ride and Meet and Greet. Book with us to get the cheapest price deals and also one of the best and trustable service </p>
                         </div>
-                        <div class="btn-container"><a href="/gatwick-airport-parking" target="_blank"
+                        <div class="btn-container"><a href="{{url('airport/'.$value->id)}}" target="_blank"
                         class="read-more-btn">Read more</a>
                         </div>
                     </div>
