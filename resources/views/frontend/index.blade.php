@@ -333,7 +333,7 @@
             </div>
             <div class="cnt-blk">
                 <div class="tp-hdg">
-                    <h2>Why to Book with <span>Cheap Airport Parking?</span></h2>
+                    <h2>Why to Book with <span>Airport Parking Solution?</span></h2>
                 </div>
                 <div class="booking-list-container">
                         <ul class="cnt-list"><span class="blue-dot"></span>
@@ -381,7 +381,7 @@
                             </div>
                         </div>
                         <div class="more-content">
-                            <p> Cheap Parking provides you the cost-effective services, Park and Ride and Meet and Greet. Book with us to get the cheapest price deals and also one of the best and trustable service </p>
+                            <p> Parking Solution provides you the cost-effective services, Park and Ride and Meet and Greet. Book with us to get the cheapest price deals and also one of the best and trustable service </p>
                         </div>
                         <div class="btn-container"><a href="/gatwick-airport-parking" target="_blank"
                         class="read-more-btn">Read more</a>

@@ -27,7 +27,7 @@
             <div class="col-55 cnt-blk">
                 <h2>Best Parking Deals: Our paramount purpose 🎉</h2>
                 <div class="description">
-                    <p><strong>Cheap Airport Parking</strong> has been conceived with the ambition to provide
+                    <p><strong>Airport Parking Solution</strong> has been conceived with the ambition to provide
                         travellers with practically affordable and hassle-free car parking options. We are a
                         comparison website with multiple top-tier car parking affiliates offering car parking
                     services in all of the United Kingdom's significant and bustling airports.</p>
